@@ -5,7 +5,7 @@ var app = {
 
 		model.getData(function(data){
 			console.log(data);
-			UI.createD3Graph(data.mots);
+			UI.d3.createGraph(data.mots);
 		});
 
 		model.getNodes(function(nodes){
