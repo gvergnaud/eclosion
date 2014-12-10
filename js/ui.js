@@ -24,7 +24,7 @@ var UI = {
 		var color = d3.scale.category20();
 
 		var force = d3.layout.force()
-		    .charge(-5000)
+		    .charge(-500)
 		    .linkDistance(30)
 		    .size([width, height]);
 

@@ -20,8 +20,6 @@ var model = {
 		return model.words.nodes[Math.ceil(Math.random()*(model.words.nodes.length))-1].name;
 	},
 
-	
-
 	getNodeFromWord: function(word){
 
 		var node = false;
@@ -45,32 +43,60 @@ var model = {
 		return node;
 	},
 
+	getNodeFromIndex: function(index){
+
+		var node = false;
+
+		var BreakException = {};
+
+		try {
+
+			model.words.nodes.forEach(function(element, index){
+				if(index === element.index){
+					node = element;
+					throw BreakException;
+				}
+			});
+
+		} catch(e) {
+
+		    if (e !== BreakException) throw e;
+		}
+
+		return node;
+	},
+
+
 	// CREATE
 	createNode: function(newWord){
-		var newWordIndex = model.words.nodes.length;
 		var newNode = {
 			name: newWord,
 			index: model.words.nodes.length,
-			nbLinks: 1
+			nbLinks: 0
 		};
 
 		model.words.nodes.push(newNode);
 
 		this.firebase.child('nodes').set(model.words.nodes);
 
-		return newWordIndex;
+		return newNode;
 	},
 
-	createLink: function(source, target){
+	createLink: function(sourceNode, targetNode){
 		var newLink = {
-			source: source,
-			target: target,
+			source: sourceNode.index,
+			target: targetNode.index,
 			value: 1
 		};
 
-		model.words.links.push(newLink)
+		//incrémente le nb de laison des nodes cocernés
 
-		this.firebase.child('links').set(model.words.links);
+		model.words.nodes[sourceNode.index].nbLinks += 1;
+		model.words.nodes[targetNode.index].nbLinks += 1;
+
+		model.words.links.push(newLink);
+
+		this.firebase.set(model.words);
 	},
 
 	// ADD
@@ -84,14 +110,12 @@ var model = {
 
 			var node = model.getNodeFromWord(newWord),
 				proposedNode = model.getNodeFromWord(proposedWord);
-			console.log(proposedNode);
 
 			if(node){ //le mot est déjà present dans le tableau nodes
 
 				console.log('le mot est déjà present dans le tableau nodes');
 
 				var link = model.areLinked(node, proposedNode);
-				console.log(link);
 
 				if(link){// les deux mots sont déjà liés entre eux
 
@@ -107,17 +131,17 @@ var model = {
 					//on ajoute une liaison entre les deux mots
 
 					if(node.index > proposedNode.index){
-						model.createLink(node.index,  proposedNode.index);
+						model.createLink(node, proposedNode);
 					}else{
-						model.createLink(proposedNode.index, node.index);
+						model.createLink(proposedNode, node);
 					}
 				}
 			}else{ //le mot n'est n'est pas présent dans le tableau nodes
 
 				//on ajoute le mot dans le tableau nodes, et on ajoute une liaison entre newWord et proposedWord
-				var newWordIndex = model.createNode(newWord);
+				var newNode = model.createNode(newWord);
 
-				model.createLink(newWordIndex, proposedNode.index);
+				model.createLink(newNode, proposedNode);
 			}
 		}else{ //le mot n'est pas français
 
