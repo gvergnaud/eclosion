@@ -13,6 +13,7 @@ var UI = {
 	
 	d3: {
 		createGraph: function(words){
+
 			var self = this;
 			var width = window.innerWidth,
 				height = window.innerHeight;
@@ -41,17 +42,17 @@ var UI = {
 			    .append('svg:g')
 			    	 .style("background-color", "black");
 			
-			    
 			this.svg.append('svg:rect')
 			    .attr('width', width)
 			    .attr('height', height)
 			    .attr('fill', 'black');
+			    
 			force
 				.nodes(words.nodes)
 				.links(words.links)
 				.start();
 	
-			var link = this.svg.selectAll(".link")
+			var link = this.svg.selectAll(".link")// Remettre this et non self
 				.data(words.links)
 				.enter().append("line")
 				.attr("class", "link")
@@ -101,6 +102,28 @@ var UI = {
 			  "translate(" + d3.event.translate + ")"
 			  + " scale(" + d3.event.scale + ")"
 			);
-		}
+		}//,
+		
+		/*addNode : function(data){
+			var node = this.svg.selectAll("g.node")
+	            .data(data);
+	
+	        var nodeEnter = node.enter().append("circle")
+	         	.attr("class", "node")
+	         	.style('fill', "white")
+	         	.attr("r", 3)//function(d) { return Math.sqrt(d.liaison); })
+	         	.call(force.drag);
+	
+	        nodeEnter.append("text")
+			     .attr("text-anchor", "middle")
+			     .style("font-size", "12px")
+			     .style("fill", "white")
+			     .attr("transform","translate(0, -10)")
+			     .text(function(d) {
+			       return d.name;
+			     });
+	
+	        node.exit().remove();
+		}*/
 	}
 };
