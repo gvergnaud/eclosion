@@ -7,3 +7,14 @@
 	stroke: #c1c1c1;
 	stroke-opacity: .6;
 }
+
+#addContribution{
+	z-index: 10;
+	position: relative;
+}
+
+#wordGraph{
+	position: absolute;
+	top:0;
+	left:0;
+}

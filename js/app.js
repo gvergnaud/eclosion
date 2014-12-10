@@ -6,7 +6,6 @@ var app = {
 		model.initFirebase();
 
 		model.getData(function(words){
-			console.log(words);
 			UI.createD3Graph(words);
 		});
 

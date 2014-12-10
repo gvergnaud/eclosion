@@ -10,7 +10,6 @@ var model = {
 		this.firebase.on('value', function (snapshot) {
 			//GET DATA
 			model.words = snapshot.val();
-			console.log(model.words);
 			calback.call(this, model.words);
 		});
 	},
@@ -36,14 +35,17 @@ var model = {
 
 		if(model.isAFrenchWord(newWord)){
 			//le mot est français
+			console.log('le mot est français');
 			var node = model.isInNodes(newWord);
 
 			if(node){
 				//le mot est déjà present dans le tableau nodes
+				console.log('le mot est déjà present dans le tableau nodes');
 				var link = model.areLinked(newWord, previousWord);
-
+				console.log(link);
 				if(link){
 					// les deux mots sont déjà liés entre eux
+					console.log('les deux mots sont déjà liés entre eux');
 					//on ajoute 1 à la value de la liaison link
 					link.element.value += 1;
 					
@@ -81,33 +83,60 @@ var model = {
 	},
 
 	isInNodes: function(word){
-		model.words.nodes.forEach(function(element, index){
-			if(word.name === element.name){
-				return {
-					index: index,
-					element: element
-				};
-			}
-		});
 
-		return false;
-	},
+		var node = false;
 
-	areLinked: function(newWord, previousWord){
-		var newWordIndex = model.words.nodes.indexOf(newWord),
-			previousWordIndex = model.words.nodes.indexOf(previousWord);
+		var BreakException = {};
 
-		function areLinked(source, target){
-			model.words.links.forEach(function(element, index){
-				if(element.source === source && element.target === target){
-					return {
+		try {
+
+			model.words.nodes.forEach(function(element, index){
+				if(word.name.toLowerCase() === element.name.toLowerCase()){
+					node = {
 						index: index,
 						element: element
 					};
+					throw BreakException;
 				}
 			});
 
-			return false;
+		} catch(e) {
+
+		    if (e !== BreakException) throw e;
+		}
+
+		return node;
+	},
+
+	areLinked: function(newWord, previousWord){
+		console.log(newWord);
+		console.log(previousWord);
+		var newWordIndex = model.words.nodes.indexOf(newWord),
+			previousWordIndex = previousWord.index;
+
+		function areLinked(source, target){
+			var link = false;
+
+			var BreakException = {};
+
+			try {
+
+				model.words.links.forEach(function(element, index){
+					if(element.source === source && element.target === target){
+						link = {
+							index: index,
+							element: element
+						};
+						throw BreakException;
+					}
+				});
+
+			} catch(e) {
+
+			    if (e !== BreakException) throw e;
+			}
+
+			return link;
 		}
 		
 		if(newWordIndex > previousWordIndex){
