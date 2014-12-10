@@ -22,12 +22,13 @@ var UI = {
 			var color = d3.scale.category20();
 	
 			var force = d3.layout.force()
-			    .charge(-120)
-			    .linkDistance(300)
+			    .charge(-5000)
+			    .linkDistance(30)
 			    .size([width, height]);
 	
 			this.svg = d3.select("#wordGraph").attr("width", width) 
 			    .attr("pointer-events", "all")
+			    .style("background-color", "black")
 			    .attr("height", height)
 			    	.call(d3.behavior.zoom().on("zoom", function(){
 			    		self.redrawGraph();
@@ -36,12 +37,15 @@ var UI = {
 				    	console.log("end");
 			    	}))
 			    .append('svg:g')
-			    .append('svg:g');
+			    	 .style("background-color", "black")
+			    .append('svg:g')
+			    	 .style("background-color", "black");
+			
 			    
 			this.svg.append('svg:rect')
 			    .attr('width', width)
 			    .attr('height', height)
-			    .attr('fill', 'white');
+			    .attr('fill', 'black');
 			force
 				.nodes(words.nodes)
 				.links(words.links)
@@ -51,44 +55,32 @@ var UI = {
 				.data(words.links)
 				.enter().append("line")
 				.attr("class", "link")
+				.style("stroke", "white")
 				.style("stroke-width", function(d) { return Math.sqrt(d.value); });
-	
-			/*var node = this.svg.selectAll(".node")
-				.data(words.nodes)
-				.enter().append("circle")
-				.attr("class", "node")
-				.attr("r", 3)
-				.call(force.drag);*/
 				
 			var node = this.svg.append("g")
 	           .selectAll("node")
 	           .data(words.nodes)
-	           .enter().append("circle")
-	           .call(force.drag)
+	           .enter()
 	           
 	           // Add one g element for each data node here.
-	           .append("g")
-	           
-	           // Position the g element like the circle element used to be.
-	           .attr("transform", function(d, i) {
-	           
-	             // Set d.x and d.y here so that other elements can use it. d is 
-	             // expected to be an object here.
-	             d.x = i * 70 + 50,
-	             d.y = height / 2;
-	             return "translate(" + d.x + "," + d.y + ")"; 
-	         });
+	           .append("g");
 	         
 	         node.append("circle")
 	         	.attr("class", "node")
-	         	.attr("r", 3);
+	         	.style('fill', "white")
+	         	.attr("r", 3)//function(d) { return Math.sqrt(d.liaison); })
+	         	.call(force.drag);
 
 			// Add a text element to the previously added g element.
 			node.append("text")
 			     .attr("text-anchor", "middle")
+			     .style("font-size", "12px")
+			     .style("fill", "white")
+			     .attr("transform","translate(0, -10)")
 			     .text(function(d) {
 			       return d.name;
-			});
+			     });
 	
 			force.on("tick", function() {
 				link.attr("x1", function(d) { return d.source.x; })
@@ -97,7 +89,10 @@ var UI = {
 					.attr("y2", function(d) { return d.target.y; });
 	
 				node.attr("cx", function(d) { return d.x; })
-					.attr("cy", function(d) { return d.y; });
+					.attr("cy", function(d) { return d.y; })
+					.attr("transform", function(d) {
+			            return "translate(" + d.x + "," + d.y + ")";
+			        }); 
 			});
 		},
 		
