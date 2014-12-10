@@ -11,6 +11,10 @@ var UI = {
 		this.wordGraph.style.height = window.innerHeight;
 	},
 
+	printWord: function(word){
+		document.querySelector('#proposedWord').innerText = word;
+	},
+
 	createD3Graph: function(mots){
 		var width = window.innerWidth,
 			height = window.innerHeight;
@@ -20,7 +24,7 @@ var UI = {
 		var color = d3.scale.category20();
 
 		var force = d3.layout.force()
-		    .charge(-120)
+		    .charge(-5000)
 		    .linkDistance(30)
 		    .size([width, height]);
 
