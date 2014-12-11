@@ -2,6 +2,11 @@ var model = {
 
 	words: false,
 
+	user: {
+		age: 'unknown',
+		sexe: 'unknown'
+	},
+
 	// INIT
 	initFirebase: function(){
 		this.firebase = new Firebase('https://torid-inferno-6438.firebaseio.com/mots');
@@ -66,13 +71,113 @@ var model = {
 		return node;
 	},
 
+	//ApplyFilters
+	applyFilters: function(filters, callback){
+
+		//Compatibilité IE pour la methode filter de Array
+		if (!Array.prototype.filter) {
+			Array.prototype.filter = function(fun /*, thisp*/) {
+				var len = this.length >>> 0;
+				if (typeof fun != "function"){
+					throw new TypeError();
+				}
+
+				var res = [];
+				var thisp = arguments[1];
+				for (var i = 0; i < len; i++) {
+					if (i in this) {
+						var val = this[i]; // in case fun mutates this
+						if (fun.call(thisp, val, i, this)){
+							res.push(val);
+						}
+					}
+				}
+				return res;
+			};
+		}
+
+		var words = model.words;
+
+		var filteredWords = {};
+
+		if(filters.sexe && filters.age){
+
+			filteredWords.nodes = words.nodes.filter(function (node) {
+				return	node.sexe && node.sexe === filters.sexe &&
+						node.age && node.age === filters.age;
+			});
+
+		}else if(filters.sexe){
+
+			filteredWords.nodes = words.nodes.filter(function (node) {
+				return	node.sexe && node.sexe === filters.sexe;
+			});
+
+		}else if(filters.age){
+
+			filteredWords.nodes = words.nodes.filter(function (node) {
+				return	node.age && node.age === filters.age;
+			});
+		}
+
+		filteredWords.links = words.links.filter(function (link) {
+
+			return	(function(link){
+
+				var ok = false;
+				var BreakException = {};
+
+				try{
+					filteredWords.nodes.forEach(function(node, index){
+						if(link.source === node.index){
+							ok = true;
+							throw BreakException;
+						}
+					});
+
+				} catch(e) {
+					if (e !== BreakException) throw e;
+				}
+
+				return ok;
+
+			})(link) 
+
+			&&
+
+			(function(link){
+
+				var ok = false;
+				var BreakException = {};
+
+				try{
+					filteredWords.nodes.forEach(function(node, index){
+						if(link.target === node.index){
+							ok = true;
+							throw BreakException;
+						}
+					});
+
+				} catch(e) {
+					if (e !== BreakException) throw e;
+				}
+
+				return ok;
+
+			})(link);
+		});
+
+		callback.call(this, filteredWords);
+	},
 
 	// CREATE
 	createNode: function(newWord){
 		var newNode = {
 			name: newWord,
 			index: model.words.nodes.length,
-			nbLinks: 0
+			nbLinks: 0,
+			sexe: model.user.sexe,
+			age: model.user.age
 		};
 
 		model.words.nodes.push(newNode);

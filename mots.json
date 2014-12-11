@@ -4,12 +4,16 @@
             {
                 "name":"Pizza",
                 "index": 0,
-                "nbLinks": 1
+                "nbLinks": 1,
+                "sexe": "male",
+                "age": 24
             },
             {
                 "name":"Mozarella",
                 "index": 1,
-                "nbLinks": 1
+                "nbLinks": 1,
+                "sexe": "female",
+                "age": 35
             }
         ],
         "links":[

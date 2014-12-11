@@ -15,7 +15,8 @@ var UI = {
 		document.querySelector('#proposedWord').innerText = word;
 	},
 
-	createD3Graph: function(mots){
+	createD3Graph: function(words){
+		
 		var width = window.innerWidth,
 			height = window.innerHeight;
 
@@ -31,18 +32,18 @@ var UI = {
 		var svg = d3.select("#wordGraph");
 
 		force
-			.nodes(mots.nodes)
-			.links(mots.links)
+			.nodes(words.nodes)
+			.links(words.links)
 			.start();
 
 		var link = svg.selectAll(".link")
-			.data(mots.links)
+			.data(words.links)
 			.enter().append("line")
 			.attr("class", "link")
 			.style("stroke-width", function(d) { return Math.sqrt(d.value); });
 
 		var node = svg.selectAll(".node")
-			.data(mots.nodes)
+			.data(words.nodes)
 			.enter().append("circle")
 			.attr("class", "node")
 			.attr("r", 5)
