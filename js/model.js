@@ -263,11 +263,35 @@ var model = {
 		}
 	},
 
-
 	// TEST
 	isAFrenchWord: function(word){
 		//TODO check si le mot est français, api google translate ?
-		return true;
+		ajax("../res/liste.de.mots.francais.frgut.txt", function(data){
+			var dico = data.split(/\n/g); // On analyse ligne par ligne
+			var drapeau = 0;
+			var ligne = 0;
+			// Répéter tant que le mot n'a pas été trouvé ou que le dictionnaire n'a pas été lu entièrement.
+			do {
+				if (dico[ligne] == word) { // Si mot trouvé
+					drapeau = 1; // drapeau pour sortir de la boucle si on a trouvé le mot
+					return true;
+				}
+				ligne++; 
+			} while(drapeau == 0 && ligne != dico.length);
+			if (drapeau == 0) {
+				return false;
+			}
+	    });
+	},
+
+	ajax:function(fichier, callback){
+		var xmlhttp = new XMLHttpRequest();
+		xmlhttp.onreadystatechange = function(){
+			if (xmlhttp.readyState==4 && xmlhttp.status==200)
+				if(typeof callback !="undefined"){callback(xmlhttp.responseText);}
+		};
+		xmlhttp.open("GET", fichier, true);
+		xmlhttp.send(null);
 	},
 
 	areLinked: function(node, proposedNode){
