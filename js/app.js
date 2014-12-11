@@ -7,6 +7,8 @@ var app = {
 		sexe: false
 	},
 
+	create: false,
+
 	init: function(){
 
 		UI.init();
@@ -25,12 +27,21 @@ var app = {
 			if(app.filters.sexe || app.filters.age){
 
 				model.applyFilters(words, app.filters, function(filteredWords){
-					
-					UI.createD3Graph( filteredWords );
+					if(app.create === false){
+						UI.d3.createGraph( filteredWords );
+						app.create = true;
+					}else{
+						UI.d3.updateGraph( filteredWords );
+					}
 				});
 
 			}else{
-				UI.createD3Graph(words);
+				if(app.create === false){
+					UI.d3.createGraph( words );
+					app.create = true;
+				}else{
+					UI.d3.updateGraph( words );
+				}
 			}
 			
 			//récupère un mot au hasard pour faire contribuer l'utilisateur
@@ -47,11 +58,11 @@ var app = {
 
 				model.applyFilters(words, app.filters, function(filteredWords){
 							
-					UI.createD3Graph( filteredWords );
+					UI.d3.createGraph( filteredWords );
 				});
 
 			}else{
-				UI.createD3Graph(words);
+				UI.d3.createGraph( words );
 			}
 		});
 	},
