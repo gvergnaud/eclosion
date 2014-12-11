@@ -21,6 +21,14 @@ var model = {
 		});
 	},
 
+	getDataOnce: function(callback){
+		this.firebase.once("value", function(data) {
+			//GET DATA
+			model.words = snapshot.val();
+			calback.call(this, snapshot.val());
+		});
+	},
+
 	getRandomWord: function(){
 		return model.words.nodes[Math.ceil(Math.random()*(model.words.nodes.length))-1].name;
 	},
@@ -72,7 +80,7 @@ var model = {
 	},
 
 	//ApplyFilters
-	applyFilters: function(filters, callback){
+	applyFilters: function(words, filters, callback){
 
 		//Compatibilité IE pour la methode filter de Array
 		if (!Array.prototype.filter) {
@@ -95,8 +103,6 @@ var model = {
 				return res;
 			};
 		}
-
-		var words = model.words;
 
 		var filteredWords = {};
 
@@ -129,7 +135,8 @@ var model = {
 
 				try{
 					filteredWords.nodes.forEach(function(node, index){
-						if(link.source === node.index){
+						if(link.source === index){
+							link.source = index;
 							ok = true;
 							throw BreakException;
 						}
@@ -152,7 +159,8 @@ var model = {
 
 				try{
 					filteredWords.nodes.forEach(function(node, index){
-						if(link.target === node.index){
+						if(link.target === index){
+							link.target = index;
 							ok = true;
 							throw BreakException;
 						}
@@ -168,6 +176,7 @@ var model = {
 		});
 
 		callback.call(this, filteredWords);
+
 	},
 
 	// CREATE

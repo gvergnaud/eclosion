@@ -16,7 +16,7 @@ var UI = {
 	},
 
 	createD3Graph: function(words){
-		
+
 		var width = window.innerWidth,
 			height = window.innerHeight;
 

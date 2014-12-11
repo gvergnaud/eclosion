@@ -10,29 +10,16 @@ var app = {
 
 		model.initFirebase();
 
-		this.filters.sexe = 'unknown';
+		this.filters.sexe = false;
 		this.filters.age = false;
 
 		model.getData(function(words){
-			
 			//Crée le graph avec D3.js
 			if(app.filters.sexe || app.filters.age){
 
-				model.applyFilters(app.filters, function(filteredWords){
-
-					function clone(obj) {
-					    if (null == obj || "object" != typeof obj) return obj;
-					    var copy = obj.constructor();
-					    for (var attr in obj) {
-					        if (obj.hasOwnProperty(attr)) copy[attr] = obj[attr];
-					    }
-					    return copy;
-					}
-					console.log(filteredWords);
-					var test = clone(filteredWords);
-					console.log(test);
-					UI.createD3Graph( test );
-					console.log(model.words)
+				model.applyFilters(words, app.filters, function(filteredWords){
+					
+					UI.createD3Graph( filteredWords );
 				});
 
 			}else{
@@ -50,6 +37,15 @@ var app = {
 		});*/
 
 		document.querySelector('#addContribution').addEventListener('keypress', app.addContribution);
+
+		var sexeFilterElements = document.querySelectorAll('.filter.sexe');
+		
+		[].forEach.call(sexeFilterElements, function(element){
+			element.addEventListener('change', function(e){
+				console.log(e);
+				//app.addFilter('sexe', e.target)
+			});
+		});
 	},
 
 	addContribution: function(e){
@@ -62,6 +58,28 @@ var app = {
 			}
 
 		}
+	},
+
+	addFilter: function(filter, value){
+
+		console.log(e);
+
+		app.filters[filter] = value;
+				
+		// model.getDataOnce(function(words){
+
+		// 	if(app.filters.sexe || app.filters.age){
+
+		// 		model.applyFilters(words, app.filters, function(filteredWords){
+							
+		// 			UI.createD3Graph( filteredWords );
+		// 		});
+
+		// 	}else{
+		// 		UI.createD3Graph(words);
+		// 	}
+
+		// });
 	}
 };
 
