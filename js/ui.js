@@ -77,7 +77,7 @@ var UI = {
 	         node.append("circle")
 	         	.attr("class", "node")
 	         	.style('fill', "white")
-	         	.attr("r", 3)//function(d) { return Math.sqrt(d.liaison); })
+	         	.attr("r", function(d) { return Math.sqrt(d.nbLinks); })
 	         	.call(self.force.drag);
 
 			// Ajout d'un texte pour les noeuds
