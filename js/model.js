@@ -135,7 +135,7 @@ var model = {
 
 				try{
 					filteredWords.nodes.forEach(function(node, index){
-						if(link.source === index){
+						if(link.source === node.index){
 							link.source = index;
 							ok = true;
 							throw BreakException;
@@ -159,7 +159,7 @@ var model = {
 
 				try{
 					filteredWords.nodes.forEach(function(node, index){
-						if(link.target === index){
+						if(link.target === node.index){
 							link.target = index;
 							ok = true;
 							throw BreakException;
