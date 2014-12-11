@@ -13,19 +13,19 @@ var model = {
 	},
 
 	// GET
-	getData: function(calback){
+	getData: function(callback){
 		this.firebase.on('value', function (snapshot) {
 			//GET DATA
 			model.words = snapshot.val();
-			calback.call(this, snapshot.val());
+			callback.call(this, snapshot.val());
 		});
 	},
 
 	getDataOnce: function(callback){
-		this.firebase.once("value", function(data) {
+		this.firebase.once("value", function (snapshot) {
 			//GET DATA
 			model.words = snapshot.val();
-			calback.call(this, snapshot.val());
+			callback.call(this, snapshot.val());
 		});
 	},
 
@@ -191,7 +191,7 @@ var model = {
 
 		model.words.nodes.push(newNode);
 
-		this.firebase.child('nodes').set(model.words.nodes);
+		//this.firebase.child('nodes').set(model.words.nodes); //pose des problèmes sur l'ajout d'un node sans recharger le graph
 
 		return newNode;
 	},
