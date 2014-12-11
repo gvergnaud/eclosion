@@ -14,7 +14,7 @@ var app = {
 		UI.init();
 
 		model.initFirebase();
-		
+
 		model.initDictionaire();
 
 		app.watchData();
@@ -68,7 +68,8 @@ var app = {
 			}
 		});
 	},
-
+	
+	//Filters
 	addContribution: function(e){
 		if(e.keyCode == 13){
 			if(this.value){
@@ -81,6 +82,7 @@ var app = {
 		}
 	},
 
+	//Filters 
 	addFilter: function(filter, value){
 
 		app.filters[filter] = value;

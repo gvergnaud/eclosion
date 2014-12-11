@@ -309,7 +309,7 @@ var model = {
 		}
 	},
 
-	ajax:function(fichier, callback){
+	ajax: function(fichier, callback){
 		var xmlhttp = new XMLHttpRequest();
 		xmlhttp.onreadystatechange = function(){
 			if (xmlhttp.readyState==4 && xmlhttp.status==200)
