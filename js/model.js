@@ -7,13 +7,28 @@ var model = {
 		sexe: 'unknown'
 	},
 
+	//Toolbox
+
+	toolbox: {
+		ajax: function(fichier, callback){
+			var xmlhttp = new XMLHttpRequest();
+			xmlhttp.onreadystatechange = function(){
+				if (xmlhttp.readyState==4 && xmlhttp.status==200)
+					if(typeof callback !="undefined"){callback.call(this, xmlhttp.responseText);}
+			};
+			xmlhttp.open("GET", fichier, true);
+			xmlhttp.setRequestHeader("Content-Type", "charset=utf-8");
+			xmlhttp.send(null);
+		}
+	},
+
 	// INIT
 	initFirebase: function(){
 		this.firebase = new Firebase('https://torid-inferno-6438.firebaseio.com/mots');
 	},
 
 	initDictionaire: function(){
-		model.ajax("res/liste.de.mots.francais.frgut.txt", function(data){
+		model.toolbox.ajax("res/liste.de.mots.francais.frgut.txt", function(data){
 			model.dico = data.split(/\n/g); // On analyse ligne par ligne
 		});
 	},
@@ -84,6 +99,7 @@ var model = {
 
 		return node;
 	},
+
 
 	//ApplyFilters
 	applyFilters: function(words, filters, callback){
@@ -223,7 +239,7 @@ var model = {
 	addContribution: function(newWord, proposedWord){
 
 		if(!newWord || !proposedWord) { console.log('argument manquant pour addContribution'); return; }
-		
+
 		if(model.isAFrenchWord(newWord)){ //le mot est français
 
 			console.log('le mot est français');
@@ -305,17 +321,6 @@ var model = {
 			
 			return true;
 		}
-	},
-
-	ajax: function(fichier, callback){
-		var xmlhttp = new XMLHttpRequest();
-		xmlhttp.onreadystatechange = function(){
-			if (xmlhttp.readyState==4 && xmlhttp.status==200)
-				if(typeof callback !="undefined"){callback.call(this, xmlhttp.responseText);}
-		};
-		xmlhttp.open("GET", fichier, true);
-		xmlhttp.setRequestHeader("Content-Type", "charset=utf-8");
-		xmlhttp.send(null);
 	},
 
 	areLinked: function(node, proposedNode){
