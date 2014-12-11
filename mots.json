@@ -2,14 +2,14 @@
     "mots":{
         "nodes":[
             {
-                "name":"Pizza",
+                "name":"bonheur",
                 "index": 0,
                 "nbLinks": 1,
                 "sexe": "male",
                 "age": 24
             },
             {
-                "name":"Mozarella",
+                "name":"cinema",
                 "index": 1,
                 "nbLinks": 1,
                 "sexe": "female",
