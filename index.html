@@ -28,6 +28,11 @@
             <input type="radio" class="filter sexe" name="sexe" value="male" onChange="app.addFilter('sexe', 'male')">homme<br>
             <input type="radio" class="filter sexe" name="sexe" value="female" onChange="app.addFilter('sexe', 'female')">femmme<br>
             <input type="radio" class="filter sexe" name="sexe" value="unknown" onChange="app.addFilter('sexe', 'unknown')">inconnu<br>
+
+            <label>age :</label>
+            <input type="radio" class="filter age" name="age" onChange="app.addFilter('age', {min: 0, max: 25})">- 25ans <br>
+            <input type="radio" class="filter age" name="age" onChange="app.addFilter('age', {min: 25, max: 45})">25 - 45ans <br>
+            <input type="radio" class="filter age" name="age" onChange="app.addFilter('age', {min: 45, max: 150})">+ 40ans<br>
             <button class="reset">reset</button>
         </div>
 

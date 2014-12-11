@@ -30,7 +30,7 @@ var UI = {
 	
 			this.force = d3.layout.force()
 				.gravity(.05)
-			    .charge(-5000)
+			    .charge(-500)
 			    .linkDistance(30)
 			    .size([width, height]);
 			

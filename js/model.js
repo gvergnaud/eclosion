@@ -132,7 +132,7 @@ var model = {
 
 			filteredWords.nodes = words.nodes.filter(function (node) {
 				return	node.sexe && node.sexe === filters.sexe &&
-						node.age && node.age === filters.age;
+						node.age && filters.age.min <= node.age && node.age < filters.age.max;
 			});
 
 		}else if(filters.sexe){
@@ -144,7 +144,7 @@ var model = {
 		}else if(filters.age){
 
 			filteredWords.nodes = words.nodes.filter(function (node) {
-				return	node.age && node.age === filters.age;
+				return	node.age && filters.age.min <= node.age && node.age < filters.age.max;
 			});
 		}
 
@@ -304,7 +304,7 @@ var model = {
 					ligne++; 
 				}
 				
-				return true;
+				return drapeau;
 			});
 
 		}else{
@@ -319,7 +319,7 @@ var model = {
 				ligne++; 
 			}
 			
-			return true;
+			return drapeau;
 		}
 	},
 

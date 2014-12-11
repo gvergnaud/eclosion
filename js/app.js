@@ -86,7 +86,7 @@ var app = {
 	addFilter: function(filter, value){
 
 		app.filters[filter] = value;
-		
+
 		app.reloadData();		
 	},
 
