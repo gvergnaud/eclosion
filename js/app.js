@@ -14,6 +14,8 @@ var app = {
 		UI.init();
 
 		model.initFirebase();
+		
+		model.initDictionaire();
 
 		app.watchData();
 

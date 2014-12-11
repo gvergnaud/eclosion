@@ -12,6 +12,12 @@ var model = {
 		this.firebase = new Firebase('https://torid-inferno-6438.firebaseio.com/mots');
 	},
 
+	initDictionaire: function(){
+		model.ajax("res/liste.de.mots.francais.frgut.txt", function(data){
+			model.dico = data.split(/\n/g); // On analyse ligne par ligne
+		});
+	},
+
 	// GET
 	getData: function(callback){
 		this.firebase.on('value', function (snapshot) {
@@ -218,7 +224,9 @@ var model = {
 
 		if(!newWord || !proposedWord) { console.log('argument manquant pour addContribution'); return; }
 
-		if(model.isAFrenchWord(newWord)){ //le mot est français
+		var isFrench = model.isAFrenchWord(newWord);
+		console.log(isFrench);
+		if(isFrench){ //le mot est français
 
 			console.log('le mot est français');
 
@@ -260,37 +268,55 @@ var model = {
 		}else{ //le mot n'est pas français
 
 			//TODO message d'erreur
+			console.log('le mot n\'est pas français');
 		}
 	},
 
 	// TEST
 	isAFrenchWord: function(word){
 		//TODO check si le mot est français, api google translate ?
-		model.ajax("res/liste.de.mots.francais.frgut.txt", function(data){
-			var dico = data.split(/\n/g); // On analyse ligne par ligne
-			var drapeau = 0;
+		
+		if(!model.dico){
+
+			model.ajax("res/liste.de.mots.francais.frgut.txt", function(data){
+				model.dico = data.split(/\n/g); // On analyse ligne par ligne
+				var drapeau = false;
+				var ligne = 0;
+				// Répéter tant que le mot n'a pas été trouvé ou que le dictionnaire n'a pas été lu entièrement.
+				while(drapeau === false && ligne < model.dico.length){
+					if (model.dico[ligne].trim() == word) { // Si mot trouvé
+						drapeau = true; // drapeau pour sortir de la boucle si on a trouvé le mot
+					}
+					ligne++; 
+				}
+				
+				return true;
+			});
+
+		}else{
+
+			var drapeau = false;
 			var ligne = 0;
 			// Répéter tant que le mot n'a pas été trouvé ou que le dictionnaire n'a pas été lu entièrement.
-			do {
-				if (dico[ligne] == word) { // Si mot trouvé
-					drapeau = 1; // drapeau pour sortir de la boucle si on a trouvé le mot
-					return true;
+			while(drapeau === false && ligne < model.dico.length){
+				if (model.dico[ligne].trim() == word) { // Si mot trouvé
+					drapeau = true; // drapeau pour sortir de la boucle si on a trouvé le mot
 				}
 				ligne++; 
-			} while(drapeau == 0 && ligne != dico.length);
-			if (drapeau == 0) {
-				return false;
 			}
-	    });
+			
+			return true;
+		}
 	},
 
 	ajax:function(fichier, callback){
 		var xmlhttp = new XMLHttpRequest();
 		xmlhttp.onreadystatechange = function(){
 			if (xmlhttp.readyState==4 && xmlhttp.status==200)
-				if(typeof callback !="undefined"){callback(xmlhttp.responseText);}
+				if(typeof callback !="undefined"){callback.call(this, xmlhttp.responseText);}
 		};
 		xmlhttp.open("GET", fichier, true);
+		xmlhttp.setRequestHeader("Content-Type", "charset=utf-8");
 		xmlhttp.send(null);
 	},
 
