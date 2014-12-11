@@ -223,10 +223,8 @@ var model = {
 	addContribution: function(newWord, proposedWord){
 
 		if(!newWord || !proposedWord) { console.log('argument manquant pour addContribution'); return; }
-
-		var isFrench = model.isAFrenchWord(newWord);
-		console.log(isFrench);
-		if(isFrench){ //le mot est français
+		
+		if(model.isAFrenchWord(newWord)){ //le mot est français
 
 			console.log('le mot est français');
 
