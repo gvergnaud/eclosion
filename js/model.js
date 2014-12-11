@@ -266,7 +266,7 @@ var model = {
 	// TEST
 	isAFrenchWord: function(word){
 		//TODO check si le mot est français, api google translate ?
-		ajax("../res/liste.de.mots.francais.frgut.txt", function(data){
+		model.ajax("res/liste.de.mots.francais.frgut.txt", function(data){
 			var dico = data.split(/\n/g); // On analyse ligne par ligne
 			var drapeau = 0;
 			var ligne = 0;
