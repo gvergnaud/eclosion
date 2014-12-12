@@ -89,10 +89,20 @@ var app = {
 				model.applyFilters(words, app.filters, function(filteredWords){
 							
 					UI.d3.createGraph( filteredWords );
+
+					//redraw pour eviter les problèmes de zoom
+					UI.d3.svg.call(d3.behavior.zoom().scaleExtent([0.25, 3]).on("zoom", function(){
+						UI.d3.redrawGraph();
+					}));
 				});
 
 			}else{
 				UI.d3.createGraph( words );
+				
+				//redraw pour eviter les problèmes de zoom
+				UI.d3.svg.call(d3.behavior.zoom().scaleExtent([0.25, 3]).on("zoom", function(){
+					UI.d3.redrawGraph();
+				}));
 			}
 		});
 	},
@@ -138,7 +148,7 @@ var app = {
 
 	searchNode: function(e){
 		var value = this.value;
-		
+
 		if(value){
 			var matches = model.words.nodes.filter(function (node) {
 				return	node.name.substring(0, value.length) === value;
