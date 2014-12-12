@@ -208,11 +208,11 @@ var UI = {
 	        
 	        this.svg.select("g").select("g").transition().duration(1500).attr("transform",
 			  "translate(" + x + " ," + y + ")"
-			 + "scale(1.3)"
+			 + "scale(1.5)"
 			);
 			
 			// On redéfini le zoom avec ses nouvelles valeurs d'origines
-			this.svg.call(d3.behavior.zoom().scale(1.3).translate([x, y]).scaleExtent([0.25, 3]).on("zoom", function(){
+			this.svg.call(d3.behavior.zoom().scale(1.5).translate([x, y]).scaleExtent([0.25, 3]).on("zoom", function(){
 		    		UI.d3.redrawGraph();
 		    		// Dessiner le zoom sur barre verticale, d3.event.scale
 		    }));
