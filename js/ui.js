@@ -17,7 +17,7 @@ var UI = {
 	
 	d3: {
 		previousWords : false,
-		nodeSizeCoefficient : 3,
+		nodeSizeCoefficient : 10,
 		
 		createGraph: function(words){
 			var self = this;
@@ -117,14 +117,6 @@ var UI = {
 			  "translate(" + d3.event.translate + ")"
 			  + " scale(" + d3.event.scale + ")"
 			);
-			
-			this.svg.selectAll(".nodes>g>circle").each(function(d, i){		
-				var r = d3.select(this).attr("r");
-				//var newR = 1/2 * r / d3.event.scale ;
-				//d3.select(this).attr("r", newR);
-			});
-			
-			this.svg.selectAll(".nodes>g").select("text").style("font-size", "20px");
 		},
 		
 		updateGraph : function(words){
@@ -199,23 +191,38 @@ var UI = {
 			// Dessiner le zoom sur barre verticale, d3.event.scale
 		},
 		
-		searchNode : function(unselected, selected){
+		searchNode : function(selectedVal){
 			var self = this;
-	            
-	        // On calcule le x et y du translate
-	        var x = (window.innerWidth / 2) - selected.attr("cx");
-	        var y = (window.innerHeight / 2) - selected.attr("cy");
-	        
-	        this.svg.select("g").select("g").transition().duration(1500).attr("transform",
-			  "translate(" + x + " ," + y + ")"
-			 + "scale(1.5)"
-			);
 			
-			// On redéfini le zoom avec ses nouvelles valeurs d'origines
-			this.svg.call(d3.behavior.zoom().scale(1.5).translate([x, y]).scaleExtent([0.25, 3]).on("zoom", function(){
-		    		UI.d3.redrawGraph();
-		    		// Dessiner le zoom sur barre verticale, d3.event.scale
-		    }));
+			var node = this.svg.selectAll(".nodes>g");
+			
+			var unselected = node.filter(function (d, i) {
+	            return d.name != selectedVal;
+	        });
+	        
+	        var selected = node.filter(function (d, i) {
+	            return d.name == selectedVal;
+	        });
+	        
+	        if(selected[0].length > 0){
+	        
+				// On calcule le x et y du translate
+		        var x = (window.innerWidth / 2) - selected.attr("cx");
+		        var y = (window.innerHeight / 2) - selected.attr("cy");
+		        
+		        this.svg.select("g").select("g").transition().duration(1500).attr("transform",
+				  "translate(" + x + " ," + y + ")"
+				 + "scale(1.3)"
+				);
+				
+				// On redéfini le zoom avec ses nouvelles valeurs d'origines
+				this.svg.call(d3.behavior.zoom().scale(1.3).translate([x, y]).scaleExtent([0.25, 3]).on("zoom", function(){
+			    		UI.d3.redrawGraph();
+			    		// Dessiner le zoom sur barre verticale, d3.event.scale
+			    }));
+			}else{
+				console.log("Pas de mots trouvés");
+			}
 		}
 	}
 };

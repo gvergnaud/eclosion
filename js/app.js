@@ -27,7 +27,7 @@ var app = {
 			app.graphCreated = true;
 			app.proposeRandomWord();
 			
-			UI.d3.svg.call(d3.behavior.zoom().on("zoom", function(){
+			UI.d3.svg.call(d3.behavior.zoom().scaleExtent([0.25, 3]).on("zoom", function(){
 				UI.d3.redrawGraph();
 			}));
 			
@@ -98,16 +98,7 @@ var app = {
 	
 	searchNode : function(){
 		var selectedVal = document.getElementById("search").value;
-		var node = UI.d3.svg.selectAll(".nodes>g");
-		
-		// Recherche de nodes
-		model.searchNode(selectedVal, node, function(unselected, selected){
-			if(selected[0].length > 0){
-				UI.d3.searchNode(unselected, selected);
-			}else{
-				console.log("Pas de mots trouvés");
-			}
-		});
+		UI.d3.searchNode(selectedVal);
 	},
 
 	proposeRandomWord: function(){
