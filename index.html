@@ -14,6 +14,7 @@
 
         <link rel="stylesheet" href="css/reset.css">
         <link rel="stylesheet" href="css/styles.css">
+        <link rel="stylesheet" href="font/flaticon.css" media="all">
     </head>
     <body>
         <!--[if lt IE 7]>
@@ -42,6 +43,33 @@
 		   	<input list="searchAutoComplete" id="search" placeholder="recherche">
             <datalist id="searchAutoComplete"></datalist>
 		</div>
+
+        <!-- Menu de navigation gauche -->
+        <nav role="navigation" id="lateral-navigation">
+            <div class="left-nav">
+                <i class="flaticons flaticon-magnifying47"></i> 
+                <div class="hidden-option" id="searchWord">
+                    <!-- Menu caché pour la recherche -->
+                    <button class="closeMenu">X</button>
+                    <form id="searchWord">
+                        <input type="text" id="searchInput" placeholder="Rechercher un mot" />
+                    </form>
+                </div>
+            </div>
+            <div class="left-nav">
+                <i class="flaticons flaticon-pen29"></i> 
+                <div class="hidden-option" id="searchWord">
+                    <!-- Menu caché pour contribuer en ajoutant un mot -->
+                </div>
+            </div>
+            <div class="left-nav">
+                <i class="flaticons flaticon-filled9"></i> 
+                <div class="hidden-option" id="searchWord">
+                    <!-- Menu caché pour filtrer la vue -->
+                </div>
+            </div>
+        </nav>
+
         <svg id="wordGraph"></svg>
 		
 

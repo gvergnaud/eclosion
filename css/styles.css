@@ -82,3 +82,40 @@ p.notification.show{
 	-moz-transform: translateY(0%);
 	-webkit-transform: translateY(0%);
 }
+
+/* Menu de navigation latéral gauche : Recherche de mot, ajout de mot, filtes */
+#lateral-navigation {
+	width: 70px;
+}
+#lateral-navigation:hover .left-nav:nth-child(1),
+#lateral-navigation:hover .left-nav:nth-child(2){
+	margin-bottom: 0;
+	border-bottom: 2px solid #fff;
+}
+.left-nav {
+	position: relative;
+	width: 70px;
+	height: 70px;
+	margin-bottom: 2px;
+	background: #E0E0E0;
+}
+.left-nav:hover {
+	background: #fff;
+}
+.left-nav .hidden-option {
+	display: none;
+}
+.left-nav:hover .hidden-option {
+	display: block;
+	position: absolute;
+	top: 0;
+	left: 70px; /* Largeur du conteneur parent */
+	width: 1200px;
+	height: 214px;
+	background-color: #fff;
+	opacity: 0.95;
+}
+.flaticons {
+	height: 70px;
+	line-height: 70px;
+}
