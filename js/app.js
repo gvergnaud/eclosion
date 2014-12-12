@@ -40,8 +40,9 @@ var app = {
 			app.proposeRandomWord();
 		});
 
-		document.querySelector('#addContribution').addEventListener('keypress', app.addContribution);
-		document.querySelector('div.filters button.reset').addEventListener('click', app.resetFilters);
+		document.querySelector('#addContribution').addEventListener('keypress', app.addContribution, false);
+		document.querySelector('#search').addEventListener('keyup', app.searchNode, false);
+		document.querySelector('div.filters button.reset').addEventListener('click', app.resetFilters, false);
 	},
 
 	createCustomEvents: function(){
@@ -95,11 +96,6 @@ var app = {
 			}
 		});
 	},
-	
-	searchNode : function(){
-		var selectedVal = document.getElementById("search").value;
-		UI.d3.searchNode(selectedVal);
-	},
 
 	proposeRandomWord: function(){
 		//récupère un mot au hasard pour faire contribuer l'utilisateur
@@ -123,7 +119,7 @@ var app = {
 		}
 	},
 
-	//Filters 
+	//User interaction
 	addFilter: function(filter, value){
 
 		app.filters[filter] = value;
@@ -138,7 +134,33 @@ var app = {
 		
 		app.reloadData();		
 		
-	}
+	},
+
+	searchNode: function(e){
+		var value = this.value;
+		
+		if(value){
+			var matches = model.words.nodes.filter(function (node) {
+				return	node.name.substring(0, value.length) === value;
+			});
+		}
+
+		var datalist = document.getElementById('searchAutoComplete');
+
+		datalist.innerHTML = '';
+
+		matches.forEach(function(match){
+			var option = document.createElement('option');
+			option.innerHTML = match.name;
+			datalist.appendChild(option);
+		});
+
+		if(e.keyCode === 13){
+			var selectedVal = document.getElementById("search").value;
+			UI.d3.searchNode(selectedVal);
+			this.value = '';
+		}
+	},
 };
 
 app.init();
