@@ -22,6 +22,7 @@ var app = {
 		app.watchData();
 		
 		//lorsque le graph principale a été crée
+
 		document.addEventListener('graphready', function (e) {
 			console.log(e);
 			app.graphCreated = true;
