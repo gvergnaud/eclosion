@@ -2,6 +2,8 @@ var model = {
 
 	words: false,
 
+	dico: false,
+
 	user: {
 		age: 'unknown',
 		sexe: 'unknown'
@@ -34,7 +36,7 @@ var model = {
 	},
 
 	// GET
-	getData: function(callback){
+	watchData: function(callback){
 		this.firebase.on('value', function (snapshot) {
 			//GET DATA
 			model.words = snapshot.val();
@@ -289,26 +291,7 @@ var model = {
 	// TEST
 	isAFrenchWord: function(word){
 		//TODO check si le mot est français, api google translate ?
-		
-		if(!model.dico){
-
-			model.ajax("res/liste.de.mots.francais.frgut.txt", function(data){
-				model.dico = data.split(/\n/g); // On analyse ligne par ligne
-				var drapeau = false;
-				var ligne = 0;
-				// Répéter tant que le mot n'a pas été trouvé ou que le dictionnaire n'a pas été lu entièrement.
-				while(drapeau === false && ligne < model.dico.length){
-					if (model.dico[ligne].trim() == word) { // Si mot trouvé
-						drapeau = true; // drapeau pour sortir de la boucle si on a trouvé le mot
-					}
-					ligne++; 
-				}
-				
-				return drapeau;
-			});
-
-		}else{
-
+		function isFrench(){
 			var drapeau = false;
 			var ligne = 0;
 			// Répéter tant que le mot n'a pas été trouvé ou que le dictionnaire n'a pas été lu entièrement.
@@ -318,8 +301,12 @@ var model = {
 				}
 				ligne++; 
 			}
-			
+				
 			return drapeau;
+		}
+
+		if(model.dico){
+			return isFrench();
 		}
 	},
 

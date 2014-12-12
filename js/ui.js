@@ -104,6 +104,8 @@ var UI = {
 			});
 			
 			this.previousWords = words;
+
+			document.dispatchEvent(app.event.graphReady);
 		},
 		
 		redrawGraph : function(){
