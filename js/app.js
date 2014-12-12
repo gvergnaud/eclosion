@@ -17,7 +17,7 @@ var app = {
 
 		model.initFirebase();
 
-		model.initDictionaire();
+		model.getDico();
 
 		app.watchData();
 
@@ -27,6 +27,10 @@ var app = {
 			app.proposeRandomWord();
 		}, false);
 
+		document.addEventListener('usercontribution', function (e) {
+			app.proposeRandomWord();
+		});
+
 		document.querySelector('#addContribution').addEventListener('keypress', app.addContribution);
 		document.querySelector('div.filters button.reset').addEventListener('click', app.resetFilters);
 	},
@@ -34,9 +38,10 @@ var app = {
 	createCustomEvents: function(){
 		// Crée l'evenement
 		app.event.graphReady = document.createEvent('Event');
-
-		// Défini graphready comme nom d'evenement
 		app.event.graphReady.initEvent('graphready', true, true);
+
+		app.event.userContribution = document.createEvent('Event');
+		app.event.userContribution.initEvent('usercontribution', true, true);
 	},
 
 	watchData: function(){
@@ -98,6 +103,8 @@ var app = {
 				model.addContribution(this.value, app.proposedWord);
 				
 				this.value = '';
+
+				document.dispatchEvent(app.event.userContribution);
 			}
 
 		}

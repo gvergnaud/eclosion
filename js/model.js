@@ -29,7 +29,7 @@ var model = {
 		this.firebase = new Firebase('https://torid-inferno-6438.firebaseio.com/mots');
 	},
 
-	initDictionaire: function(){
+	getDico: function(){
 		model.toolbox.ajax("res/liste.de.mots.francais.frgut.txt", function(data){
 			model.dico = data.split(/\n/g); // On analyse ligne par ligne
 		});
