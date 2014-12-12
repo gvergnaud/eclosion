@@ -21,7 +21,7 @@ var app = {
 
 		app.watchData();
 		
-		//lorsque le graph principale a �t� cr�e
+		//lorsque le graph principale a été crée
 
 		document.addEventListener('graphready', function (e) {
 			app.graphCreated = true;
@@ -46,7 +46,7 @@ var app = {
 	},
 
 	createCustomEvents: function(){
-		// Crée l'evenement
+		// CrÃ©e l'evenement
 		app.event.graphReady = document.createEvent('Event');
 		app.event.graphReady.initEvent('graphready', true, true);
 
@@ -56,26 +56,26 @@ var app = {
 
 	watchData: function(){
 		model.watchData(function(words){
-			//Crée le graph avec D3.js
+			//CrÃ©e le graph avec D3.js
 			if(app.filters.sexe || app.filters.age){
 
 				model.applyFilters(words, app.filters, function(filteredWords){
 					
-					if(!app.graphCreated){ //si le graph n'est pas créé on le crée
+					if(!app.graphCreated){ //si le graph n'est pas crÃ©Ã© on le crÃ©e
 						UI.d3.createGraph( filteredWords );
 						app.graphCreated = true;
 
-					}else{ //si il est créé on update
+					}else{ //si il est crÃ©Ã© on update
 						UI.d3.updateGraph( filteredWords );
 					}
 				});
 
 			}else{
-				if(!app.graphCreated){ //si le graph n'est pas créé on le crée
+				if(!app.graphCreated){ //si le graph n'est pas crÃ©Ã© on le crÃ©e
 					UI.d3.createGraph( words );
 					app.graphCreated = true;
 
-				}else{ //si il est créé on update
+				}else{ //si il est crÃ©Ã© on update
 					UI.d3.updateGraph( words );
 				}
 			}
@@ -90,7 +90,7 @@ var app = {
 							
 					UI.d3.createGraph( filteredWords );
 
-					//redraw pour eviter les probl�mes de zoom
+					//redraw pour eviter les problèmes de zoom
 					UI.d3.svg.call(d3.behavior.zoom().scaleExtent([0.25, 3]).on("zoom", function(){
 						UI.d3.redrawGraph();
 					}));
@@ -99,7 +99,7 @@ var app = {
 			}else{
 				UI.d3.createGraph( words );
 				
-				//redraw pour eviter les probl�mes de zoom
+				//redraw pour eviter les problèmes de zoom
 				UI.d3.svg.call(d3.behavior.zoom().scaleExtent([0.25, 3]).on("zoom", function(){
 					UI.d3.redrawGraph();
 				}));
@@ -108,7 +108,7 @@ var app = {
 	},
 
 	proposeRandomWord: function(){
-		//récupère un mot au hasard pour faire contribuer l'utilisateur
+		//rÃ©cupÃ¨re un mot au hasard pour faire contribuer l'utilisateur
 		app.proposedWord = model.getRandomWord();
 
 		UI.printWord(app.proposedWord);
@@ -119,7 +119,9 @@ var app = {
 		if(e.keyCode == 13){
 			if(this.value){
 
-				model.addContribution(this.value, app.proposedWord);
+				model.addContribution(this.value, app.proposedWord, function(error){
+					UI.notification('error', error);
+				});
 				
 				this.value = '';
 

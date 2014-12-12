@@ -237,7 +237,7 @@ var model = {
 	},
 
 	// ADD
-	addContribution: function(newWord, proposedWord){
+	addContribution: function(newWord, proposedWord, errorCallback){
 
 		if(!newWord || !proposedWord) { console.log('argument manquant pour addContribution'); return; }
 
@@ -283,7 +283,9 @@ var model = {
 		}else{ //le mot n'est pas français
 
 			//TODO message d'erreur
-			console.log('le mot n\'est pas français');
+			var error = 'le mot n\'est pas français';
+			console.log(error);
+			errorCallback.call(this, error);
 		}
 	},
 
