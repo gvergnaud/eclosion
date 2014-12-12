@@ -25,15 +25,21 @@
         </div>
         <div class="filters">
             <label>sexe :</label>
-            <input type="radio" class="filter sexe" name="sexe" value="male" onChange="app.addFilter('sexe', 'male')">male<br>
-            <input type="radio" class="filter sexe" name="sexe" value="female" onChange="app.addFilter('sexe', 'female')">female<br>
+            
+            <input type="radio" class="filter sexe" name="sexe" value="male" onChange="app.addFilter('sexe', 'male')">homme<br>
+            <input type="radio" class="filter sexe" name="sexe" value="female" onChange="app.addFilter('sexe', 'female')">femme<br>
+            <input type="radio" class="filter sexe" name="sexe" value="unknown" onChange="app.addFilter('sexe', 'unknown')">inconnu<br>
+
+            <label>age :</label>
+            <input type="radio" class="filter age" name="age" onChange="app.addFilter('age', {min: 0, max: 25})">- 25ans <br>
+            <input type="radio" class="filter age" name="age" onChange="app.addFilter('age', {min: 25, max: 45})">25 - 45ans <br>
+            <input type="radio" class="filter age" name="age" onChange="app.addFilter('age', {min: 45, max: 150})">+ 40ans<br>
             <button class="reset">reset</button>
         </div>
         <div class="ui-widget">
 		   	<input id="search">
 		    <button type="button" onclick="app.searchNode()">Search</button>
 		</div>
-
         <svg id="wordGraph"></svg>
 		
         <script src="http://d3js.org/d3.v3.min.js"></script>

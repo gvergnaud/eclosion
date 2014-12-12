@@ -7,62 +7,77 @@ var app = {
 		sexe: false
 	},
 
-	create: false,
+	event: {},
 
 	init: function(){
+
+		app.createCustomEvents();
 
 		UI.init();
 
 		model.initFirebase();
 
-		app.watchData(function(){
-			app.svg = UI.d3.svg;
-			
-			app.svg.call(d3.behavior.zoom().scaleExtent([0.25, 3]).on("zoom", function(){
-	    		UI.d3.redrawGraph();
-	    		UI.d3.defineZoom();
-		    }));
+		model.getDico();
+
+		app.watchData();
+		
+		//lorsque le graph principale a été crée
+		document.addEventListener('graphready', function (e) {
+			console.log(e);
+			app.graphCreated = true;
+			app.proposeRandomWord();
+			//remove l'event listener
+			e.target.removeEventListener(e.type, arguments.callee);
+		}, false);
+
+		//lorsque l'utilisateur ajoute un mot
+		document.addEventListener('usercontribution', function (e) {
+			app.proposeRandomWord();
 		});
 
 		document.querySelector('#addContribution').addEventListener('keypress', app.addContribution);
 		document.querySelector('div.filters button.reset').addEventListener('click', app.resetFilters);
 	},
 
-	watchData: function(callback){
-		model.getData(function(words){
-		
-			//Crée le graph avec D3.js
+	createCustomEvents: function(){
+		// CrÃ©e l'evenement
+		app.event.graphReady = document.createEvent('Event');
+		app.event.graphReady.initEvent('graphready', true, true);
+
+		app.event.userContribution = document.createEvent('Event');
+		app.event.userContribution.initEvent('usercontribution', true, true);
+	},
+
+	watchData: function(){
+		model.watchData(function(words){
+			//CrÃ©e le graph avec D3.js
 			if(app.filters.sexe || app.filters.age){
 
 				model.applyFilters(words, app.filters, function(filteredWords){
-					if(app.create === false){
+					
+					if(!app.graphCreated){ //si le graph n'est pas crÃ©Ã© on le crÃ©e
 						UI.d3.createGraph( filteredWords );
-						app.create = true;
-					}else{
+						app.graphCreated = true;
+
+					}else{ //si il est crÃ©Ã© on update
 						UI.d3.updateGraph( filteredWords );
 					}
 				});
 
 			}else{
-				if(app.create === false){
+				if(!app.graphCreated){ //si le graph n'est pas crÃ©Ã© on le crÃ©e
 					UI.d3.createGraph( words );
-					app.create = true;
-				}else{
+					app.graphCreated = true;
+
+				}else{ //si il est crÃ©Ã© on update
 					UI.d3.updateGraph( words );
 				}
 			}
-			
-			//récupère un mot au hasard pour faire contribuer l'utilisateur
-			app.proposedWord = model.getRandomWord();
-
-			UI.printWord(app.proposedWord);
-			callback.call(this);
 		});
 	},
 
 	reloadData: function(){
 		model.getDataOnce(function(words){
-
 			if(app.filters.sexe || app.filters.age){
 
 				model.applyFilters(words, app.filters, function(filteredWords){
@@ -75,7 +90,29 @@ var app = {
 			}
 		});
 	},
+	
+	searchNode : function(){
+		var selectedVal = document.getElementById("search").value;
+		var node = UI.d3.svg.selectAll(".nodes>g");
+		
+		// Recherche de nodes
+		model.searchNode(selectedVal, node, function(unselected, selected){
+			if(selected[0].length > 0){
+				UI.d3.searchNode(unselected, selected);
+			}else{
+				console.log("Pas de mots trouvés");
+			}
+		});
+	},
 
+	proposeRandomWord: function(){
+		//rÃ©cupÃ¨re un mot au hasard pour faire contribuer l'utilisateur
+		app.proposedWord = model.getRandomWord();
+
+		UI.printWord(app.proposedWord);
+	},
+	
+	//Filters
 	addContribution: function(e){
 		if(e.keyCode == 13){
 			if(this.value){
@@ -83,15 +120,18 @@ var app = {
 				model.addContribution(this.value, app.proposedWord);
 				
 				this.value = '';
+
+				document.dispatchEvent(app.event.userContribution);
 			}
 
 		}
 	},
 
+	//Filters 
 	addFilter: function(filter, value){
 
 		app.filters[filter] = value;
-		
+
 		app.reloadData();		
 	},
 
@@ -102,20 +142,6 @@ var app = {
 		
 		app.reloadData();		
 		
-	},
-	
-	searchNode : function(){
-		var selectedVal = document.getElementById("search").value;
-		var node = app.svg.selectAll(".nodes>g");
-		
-		// Recherche de nodes
-		model.searchNode(selectedVal, node, function(unselected, selected){
-			if(selected[0].length > 0){
-				UI.d3.searchNode(unselected, selected);
-			}else{
-				console.log("Pas de mots trouvés");
-			}
-		});
 	}
 };
 

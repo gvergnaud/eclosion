@@ -2,9 +2,25 @@ var model = {
 
 	words: false,
 
+	dico: false,
 	user: {
 		age: 'unknown',
 		sexe: 'unknown'
+	},
+	
+	//Toolbox
+
+	toolbox: {
+		ajax: function(fichier, callback){
+			var xmlhttp = new XMLHttpRequest();
+			xmlhttp.onreadystatechange = function(){
+				if (xmlhttp.readyState==4 && xmlhttp.status==200)
+					if(typeof callback !="undefined"){callback.call(this, xmlhttp.responseText);}
+			};
+			xmlhttp.open("GET", fichier, true);
+			xmlhttp.setRequestHeader("Content-Type", "charset=utf-8");
+			xmlhttp.send(null);
+		}
 	},
 
 	// INIT
@@ -12,8 +28,14 @@ var model = {
 		this.firebase = new Firebase('https://torid-inferno-6438.firebaseio.com/mots');
 	},
 
+	getDico: function(){
+		model.toolbox.ajax("res/liste.de.mots.francais.frgut.txt", function(data){
+			model.dico = data.split(/\n/g); // On analyse ligne par ligne
+		});
+	},
+
 	// GET
-	getData: function(callback){
+	watchData: function(callback){
 		this.firebase.on('value', function (snapshot) {
 			//GET DATA
 			model.words = snapshot.val();
@@ -79,10 +101,11 @@ var model = {
 		return node;
 	},
 
+
 	//ApplyFilters
 	applyFilters: function(words, filters, callback){
 
-		//Compatibilité IE pour la methode filter de Array
+		//CompatibilitÃ© IE pour la methode filter de Array
 		if (!Array.prototype.filter) {
 			Array.prototype.filter = function(fun /*, thisp*/) {
 				var len = this.length >>> 0;
@@ -110,7 +133,7 @@ var model = {
 
 			filteredWords.nodes = words.nodes.filter(function (node) {
 				return	node.sexe && node.sexe === filters.sexe &&
-						node.age && node.age === filters.age;
+						node.age && filters.age.min <= node.age && node.age < filters.age.max;
 			});
 
 		}else if(filters.sexe){
@@ -122,7 +145,7 @@ var model = {
 		}else if(filters.age){
 
 			filteredWords.nodes = words.nodes.filter(function (node) {
-				return	node.age && node.age === filters.age;
+				return	node.age && filters.age.min <= node.age && node.age < filters.age.max;
 			});
 		}
 
@@ -135,7 +158,7 @@ var model = {
 
 				try{
 					filteredWords.nodes.forEach(function(node, index){
-						if(link.source === index){
+						if(link.source === node.index){
 							link.source = index;
 							ok = true;
 							throw BreakException;
@@ -159,7 +182,7 @@ var model = {
 
 				try{
 					filteredWords.nodes.forEach(function(node, index){
-						if(link.target === index){
+						if(link.target === node.index){
 							link.target = index;
 							ok = true;
 							throw BreakException;
@@ -191,7 +214,7 @@ var model = {
 
 		model.words.nodes.push(newNode);
 
-		//this.firebase.child('nodes').set(model.words.nodes); //pose des problèmes sur l'ajout d'un node sans recharger le graph
+		//this.firebase.child('nodes').set(model.words.nodes); //pose des problÃ¨mes sur l'ajout d'un node sans recharger le graph
 
 		return newNode;
 	},
@@ -215,7 +238,7 @@ var model = {
 			value: 1
 		};
 
-		//incrémente le nb de laison des nodes cocernés
+		//incrÃ©mente le nb de laison des nodes cocernÃ©s
 
 		model.words.nodes[sourceNode.index].nbLinks += 1;
 		model.words.nodes[targetNode.index].nbLinks += 1;
@@ -230,29 +253,29 @@ var model = {
 
 		if(!newWord || !proposedWord) { console.log('argument manquant pour addContribution'); return; }
 
-		if(model.isAFrenchWord(newWord)){ //le mot est français
+		if(model.isAFrenchWord(newWord)){ //le mot est franÃ§ais
 
-			console.log('le mot est français');
+			console.log('le mot est franÃ§ais');
 
 			var node = model.getNodeFromWord(newWord),
 				proposedNode = model.getNodeFromWord(proposedWord);
 
-			if(node){ //le mot est déjà present dans le tableau nodes
+			if(node){ //le mot est dÃ©jÃ  present dans le tableau nodes
 
-				console.log('le mot est déjà present dans le tableau nodes');
+				console.log('le mot est dÃ©jÃ  present dans le tableau nodes');
 
 				var link = model.areLinked(node, proposedNode);
 
-				if(link){// les deux mots sont déjà liés entre eux
+				if(link){// les deux mots sont dÃ©jÃ  liÃ©s entre eux
 
-					console.log('les deux mots sont déjà liés entre eux');
+					console.log('les deux mots sont dÃ©jÃ  liÃ©s entre eux');
 
-					//on ajoute 1 à la value de la liaison link
+					//on ajoute 1 Ã  la value de la liaison link
 					link.element.value += 1;
 					
 					this.firebase.child('links').child(link.index).set(link.element);
 
-				}else{ //les deux mots ne sont pas liés entre eux
+				}else{ //les deux mots ne sont pas liÃ©s entre eux
 
 					//on ajoute une liaison entre les deux mots
 
@@ -262,24 +285,40 @@ var model = {
 						model.createLink(proposedNode, node);
 					}
 				}
-			}else{ //le mot n'est n'est pas présent dans le tableau nodes
+			}else{ //le mot n'est n'est pas prÃ©sent dans le tableau nodes
 
 				//on ajoute le mot dans le tableau nodes, et on ajoute une liaison entre newWord et proposedWord
 				var newNode = model.createNode(newWord);
 
 				model.createLink(newNode, proposedNode);
 			}
-		}else{ //le mot n'est pas français
+		}else{ //le mot n'est pas franÃ§ais
 
 			//TODO message d'erreur
+			console.log('le mot n\'est pas franÃ§ais');
 		}
 	},
 
-
 	// TEST
 	isAFrenchWord: function(word){
-		//TODO check si le mot est français, api google translate ?
-		return true;
+		//TODO check si le mot est franÃ§ais, api google translate ?
+		function isFrench(){
+			var drapeau = false;
+			var ligne = 0;
+			// RÃ©pÃ©ter tant que le mot n'a pas Ã©tÃ© trouvÃ© ou que le dictionnaire n'a pas Ã©tÃ© lu entiÃ¨rement.
+			while(drapeau === false && ligne < model.dico.length){
+				if (model.dico[ligne].trim() == word) { // Si mot trouvÃ©
+					drapeau = true; // drapeau pour sortir de la boucle si on a trouvÃ© le mot
+				}
+				ligne++; 
+			}
+				
+			return drapeau;
+		}
+
+		if(model.dico){
+			return isFrench();
+		}
 	},
 
 	areLinked: function(node, proposedNode){
