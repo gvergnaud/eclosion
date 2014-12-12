@@ -17,6 +17,8 @@ var app = {
 
 		model.initFirebase();
 
+		model.initUser();
+
 		model.getDico();
 
 		app.watchData();
@@ -37,7 +39,7 @@ var app = {
 
 		// lorsque les données sont mises à jour
 		document.addEventListener('dataupdate', function(){
-			UI.printGlobalData(model.words.nodes.length,  model.words.links.length, 4);
+			UI.printGlobalData(model.words.nodes.length,  model.words.links.length, model.words.contributors);
 		}, false);
 
 		//lorsque l'utilisateur ajoute un mot

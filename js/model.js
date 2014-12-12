@@ -3,10 +3,6 @@ var model = {
 	words: false,
 
 	dico: false,
-	user: {
-		age: 'unknown',
-		sexe: 'unknown'
-	},
 	
 	//Toolbox
 
@@ -28,13 +24,31 @@ var model = {
 		this.firebase = new Firebase('https://torid-inferno-6438.firebaseio.com/mots');
 	},
 
+	initUser: function(){
+
+		var user = JSON.parse(localStorage.getItem('EchoUser'));
+
+		if(!user){
+			user = {
+				age: 'unknown',
+				sexe: 'unknown'
+			};
+
+			localStorage.setItem('EchoUser', JSON.stringify(user));
+
+			model.newUser = true;
+		}
+
+		this.user = user;
+	},
+
+	// GET
 	getDico: function(){
 		model.toolbox.ajax("res/liste.de.mots.francais.frgut.txt", function(data){
 			model.dico = data.split(/\n/g); // On analyse ligne par ligne
 		});
 	},
 
-	// GET
 	watchData: function(callback){
 		this.firebase.on('value', function (snapshot) {
 			//GET DATA
@@ -152,10 +166,8 @@ var model = {
 		filteredWords.links = words.links.filter(function (link) {
 
 			return	(function(link){
-
 				var ok = false;
 				var BreakException = {};
-
 				try{
 					filteredWords.nodes.forEach(function(node, index){
 						if(link.source === node.index){
@@ -164,22 +176,17 @@ var model = {
 							throw BreakException;
 						}
 					});
-
 				} catch(e) {
 					if (e !== BreakException) throw e;
 				}
-
 				return ok;
-
 			})(link) 
 
 			&&
 
 			(function(link){
-
 				var ok = false;
 				var BreakException = {};
-
 				try{
 					filteredWords.nodes.forEach(function(node, index){
 						if(link.target === node.index){
@@ -188,13 +195,10 @@ var model = {
 							throw BreakException;
 						}
 					});
-
 				} catch(e) {
 					if (e !== BreakException) throw e;
 				}
-
 				return ok;
-
 			})(link);
 		});
 
@@ -244,6 +248,11 @@ var model = {
 		if(model.isAFrenchWord(newWord)){ //le mot est français
 
 			console.log('le mot est français');
+			
+			// si l'utilisateur est nouveau
+			if(model.newUser){
+				model.words.contributors += 1;
+			}
 
 			var node = model.getNodeFromWord(newWord),
 				proposedNode = model.getNodeFromWord(proposedWord);
