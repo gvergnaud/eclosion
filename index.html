@@ -19,8 +19,20 @@
         <!--[if lt IE 7]>
             <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
-
-        <input id="addContribution" type="text" placeholder="ajouter un mot" required />
+        <div class="contribution">
+            <p id="proposedWord"></p>
+            <input id="addContribution" type="text" placeholder="ajouter un mot" required />
+        </div>
+        <div class="filters">
+            <label>sexe :</label>
+            <input type="radio" class="filter sexe" name="sexe" value="male" onChange="app.addFilter('sexe', 'male')">male<br>
+            <input type="radio" class="filter sexe" name="sexe" value="female" onChange="app.addFilter('sexe', 'female')">female<br>
+            <button class="reset">reset</button>
+        </div>
+        <div class="ui-widget">
+		   	<input id="search">
+		    <button type="button" onclick="app.searchNode()">Search</button>
+		</div>
 
         <svg id="wordGraph"></svg>
 		
