@@ -20,13 +20,17 @@ var app = {
 		model.getDico();
 
 		app.watchData();
-
+		
+		//lorsque le graph principale a été crée
 		document.addEventListener('graphready', function (e) {
 			console.log(e);
 			app.graphCreated = true;
 			app.proposeRandomWord();
+			//remove l'event listener
+			e.target.removeEventListener(e.type, arguments.callee);
 		}, false);
 
+		//lorsque l'utilisateur ajoute un mot
 		document.addEventListener('usercontribution', function (e) {
 			app.proposeRandomWord();
 		});
@@ -74,7 +78,6 @@ var app = {
 
 	reloadData: function(){
 		model.getDataOnce(function(words){
-
 			if(app.filters.sexe || app.filters.age){
 
 				model.applyFilters(words, app.filters, function(filteredWords){
@@ -84,6 +87,20 @@ var app = {
 
 			}else{
 				UI.d3.createGraph( words );
+			}
+		});
+	},
+	
+	searchNode : function(){
+		var selectedVal = document.getElementById("search").value;
+		var node = UI.d3.svg.selectAll(".nodes>g");
+		
+		// Recherche de nodes
+		model.searchNode(selectedVal, node, function(unselected, selected){
+			if(selected[0].length > 0){
+				UI.d3.searchNode(unselected, selected);
+			}else{
+				console.log("Pas de mots trouvés");
 			}
 		});
 	},

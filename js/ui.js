@@ -17,6 +17,7 @@ var UI = {
 	
 	d3: {
 		previousWords : false,
+		nodeSizeCoefficient : 3,
 		
 		createGraph: function(words){
 			var self = this;
@@ -34,20 +35,18 @@ var UI = {
 			    .linkDistance(30)
 			    .size([width, height]);
 			
-			// CrÃ©ation du SVG
+			// Création du SVG
 			this.svg = d3.select("#wordGraph").attr("width", width) 
 			    .attr("pointer-events", "all")
 			    .style("background-color", "black")
-			    .attr("height", height)
-			    	.call(d3.behavior.zoom().on("zoom", function(){
-			    		self.redrawGraph();
-			    	}))
+			    .attr("height", height);
+		    	
+		    this.g = this.svg.append('svg:g')
+			   	.style("background-color", "black")
 			    .append('svg:g')
-			    	 .style("background-color", "black")
-			    .append('svg:g')
-			    	 .style("background-color", "black");
+			    .style("background-color", "black");
 			
-			this.svg.append('svg:rect')
+			this.g.append('svg:rect')
 			    .attr('width', width)
 			    .attr('height', height)
 			    .attr('fill', 'black');
@@ -57,8 +56,8 @@ var UI = {
 				.links(words.links)
 				.start();
 			
-			// CrÃ©ation des liens entre les noeuds
-			var link = this.svg.append("g")
+			// Création des liens entre les noeuds
+			var link = this.g.append("g")
 				.attr("class", "links")
 				.selectAll("link")
 				.data(words.links)
@@ -67,25 +66,28 @@ var UI = {
 				.style("stroke", "white")
 				.style("stroke-width", function(d) { return Math.sqrt(d.value); });
 				
-			// CrÃ©ation des noeuds
-			var node = this.svg.append("g").attr("class", "nodes")
-	           .selectAll("node")
-	           .data(words.nodes)
-	           .enter()
-	           .append("g");
+			// Création des noeuds
+			var node = this.g.append("g").attr("class", "nodes")
+	           	.selectAll("node")
+				.data(words.nodes)
+				.enter()
+				.append("g");
 	         
-	         node.append("circle")
+			node.append("circle")
 	         	.attr("class", "node")
+	         	.attr("pointer-events", "drag")
 	         	.style('fill', "white")
-	         	.attr("r", function(d) { return Math.sqrt(d.nbLinks); })
+	         	.attr("r", function(d) {return Math.sqrt(d.nbLinks) * self.nodeSizeCoefficient; })
 	         	.call(self.force.drag);
 
 			// Ajout d'un texte pour les noeuds
 			node.append("text")
 			     .attr("text-anchor", "middle")
-			     .style("font-size", "12px")
+			     .style("font-size", function(d) {return Math.sqrt(d.nbLinks) * 10 + "px"; })
 			     .style("fill", "white")
-			     .attr("transform","translate(0, -10)")
+			     .attr("transform",function(d) {
+			            return "translate(0," + -(Math.sqrt(d.nbLinks) * (self.nodeSizeCoefficient + 2)) + ")";
+			        })
 			     .text(function(d) {
 			       return d.name;
 			     });
@@ -104,15 +106,25 @@ var UI = {
 			});
 			
 			this.previousWords = words;
-
+			
 			document.dispatchEvent(app.event.graphReady);
 		},
 		
 		redrawGraph : function(){
-			this.svg.attr("transform",
+			var self = this;
+			
+			this.svg.select("g").select("g").attr("transform",
 			  "translate(" + d3.event.translate + ")"
 			  + " scale(" + d3.event.scale + ")"
 			);
+			
+			this.svg.selectAll(".nodes>g>circle").each(function(d, i){		
+				var r = d3.select(this).attr("r");
+				//var newR = 1/2 * r / d3.event.scale ;
+				//d3.select(this).attr("r", newR);
+			});
+			
+			this.svg.selectAll(".nodes>g").select("text").style("font-size", "20px");
 		},
 		
 		updateGraph : function(words){
@@ -127,7 +139,9 @@ var UI = {
 					this.previousWords.links.push(words.links[words.links.length - 1]);
 				}
 				
+				// Sinon il y a eu ajout d'un nouveau links seulement
 				else if(this.previousWords.links.length < words.links.length){
+				
 					// Ajout du dernier links
 					this.previousWords.links.push(words.links[words.links.length - 1]);
 				}
@@ -145,18 +159,21 @@ var UI = {
 		        var node = this.svg.select(".nodes").selectAll("g")
 		            .data(self.previousWords.nodes);
 		
-		        var nodeEnter = node.enter().append("g")
-		        	.append("circle")
+		        var nodeEnter = node.enter().append("g");
+		        
+		        nodeEnter.append("circle")
 		            .attr("class", "node")
 		            .style('fill', "white")
-					.attr("r", 3)//function(d) { return Math.sqrt(d.liaison); })
+					.attr("r", function(d) {return Math.sqrt(d.nbLinks) * self.nodeSizeCoefficient; })
 		            .call(self.force.drag);
 		
-		        node.append("text")
+		        nodeEnter.append("text")
 		            .attr("text-anchor", "middle")
-				    .style("font-size", "12px")
+				    .style("font-size", function(d) {return Math.sqrt(d.nbLinks) * 10 + "px";})
 				    .style("fill", "white")
-				    .attr("transform","translate(0, -10)")
+				    .attr("transform",function(d) {
+			            return "translate(0," + -(Math.sqrt(d.nbLinks) * (self.nodeSizeCoefficient + 2)) + ")";
+			        })
 				    .text(function(d) {
 					    return d.name;
 				    });
@@ -164,18 +181,41 @@ var UI = {
 		        node.exit().remove();
 		
 		        this.force.on("tick", function() {
-		          link.attr("x1", function(d) { return d.source.x; })
-		              .attr("y1", function(d) { return d.source.y; })
-		              .attr("x2", function(d) { return d.target.x; })
-		              .attr("y2", function(d) { return d.target.y; });
+		         	 link.attr("x1", function(d) { return d.source.x; })
+		         	 	.attr("y1", function(d) { return d.source.y; })
+		         	 	.attr("x2", function(d) { return d.target.x; })
+		         	 	.attr("y2", function(d) { return d.target.y; });
 		
-		          node.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+		             node.attr("cx", function(d) { return d.x; })
+						.attr("cy", function(d) { return d.y; })
+						.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
 		        });
-		
-		        
-					
+			
 			    this.force.start();
 			}
+		},
+		
+		defineZoom : function(){
+			// Dessiner le zoom sur barre verticale, d3.event.scale
+		},
+		
+		searchNode : function(unselected, selected){
+			var self = this;
+	            
+	        // On calcule le x et y du translate
+	        var x = (window.innerWidth / 2) - selected.attr("cx");
+	        var y = (window.innerHeight / 2) - selected.attr("cy");
+	        
+	        this.svg.select("g").select("g").transition().duration(1500).attr("transform",
+			  "translate(" + x + " ," + y + ")"
+			 + "scale(1.3)"
+			);
+			
+			// On redéfini le zoom avec ses nouvelles valeurs d'origines
+			this.svg.call(d3.behavior.zoom().scale(1.3).translate([x, y]).scaleExtent([0.25, 3]).on("zoom", function(){
+		    		UI.d3.redrawGraph();
+		    		// Dessiner le zoom sur barre verticale, d3.event.scale
+		    }));
 		}
 	}
 };

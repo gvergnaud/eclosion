@@ -3,12 +3,11 @@ var model = {
 	words: false,
 
 	dico: false,
-
 	user: {
 		age: 'unknown',
 		sexe: 'unknown'
 	},
-
+	
 	//Toolbox
 
 	toolbox: {
@@ -218,6 +217,18 @@ var model = {
 		//this.firebase.child('nodes').set(model.words.nodes); //pose des problèmes sur l'ajout d'un node sans recharger le graph
 
 		return newNode;
+	},
+	
+	searchNode : function(selectedVal, node, callback){
+		var unselected = node.filter(function (d, i) {
+	            return d.name != selectedVal;
+	        });
+	        
+        var selected = node.filter(function (d, i) {
+            return d.name == selectedVal;
+        });
+
+		callback.call(this, unselected, selected);
 	},
 
 	createLink: function(sourceNode, targetNode){
