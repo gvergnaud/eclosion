@@ -26,6 +26,11 @@ var app = {
 		document.addEventListener('graphready', function (e) {
 			app.graphCreated = true;
 			app.proposeRandomWord();
+			
+			UI.d3.svg.call(d3.behavior.zoom().on("zoom", function(){
+				UI.d3.redrawGraph();
+			}));
+			
 			//remove l'event listener
 			e.target.removeEventListener(e.type, arguments.callee);
 		}, false);
