@@ -22,10 +22,14 @@ var app = {
 		app.watchData();
 		
 		//lorsque le graph principale a été crée
+
 		document.addEventListener('graphready', function (e) {
-			console.log(e);
 			app.graphCreated = true;
 			app.proposeRandomWord();
+			
+			UI.d3.svg.call(d3.behavior.zoom().scaleExtent([0.25, 3]).on("zoom", function(){
+				UI.d3.redrawGraph();
+			}));
 			//remove l'event listener
 			e.target.removeEventListener(e.type, arguments.callee);
 		}, false);
@@ -93,16 +97,7 @@ var app = {
 	
 	searchNode : function(){
 		var selectedVal = document.getElementById("search").value;
-		var node = UI.d3.svg.selectAll(".nodes>g");
-		
-		// Recherche de nodes
-		model.searchNode(selectedVal, node, function(unselected, selected){
-			if(selected[0].length > 0){
-				UI.d3.searchNode(unselected, selected);
-			}else{
-				console.log("Pas de mots trouvés");
-			}
-		});
+		UI.d3.searchNode(selectedVal);
 	},
 
 	proposeRandomWord: function(){

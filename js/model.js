@@ -218,18 +218,6 @@ var model = {
 
 		return newNode;
 	},
-	
-	searchNode : function(selectedVal, node, callback){
-		var unselected = node.filter(function (d, i) {
-	            return d.name != selectedVal;
-	        });
-	        
-        var selected = node.filter(function (d, i) {
-            return d.name == selectedVal;
-        });
-
-		callback.call(this, unselected, selected);
-	},
 
 	createLink: function(sourceNode, targetNode){
 		var newLink = {
