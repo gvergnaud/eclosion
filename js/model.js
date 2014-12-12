@@ -237,7 +237,7 @@ var model = {
 	},
 
 	// ADD
-	addContribution: function(newWord, proposedWord, errorCallback){
+	addContribution: function(newWord, proposedWord, successCallback, errorCallback){
 
 		if(!newWord || !proposedWord) { console.log('argument manquant pour addContribution'); return; }
 
@@ -263,6 +263,8 @@ var model = {
 					
 					this.firebase.child('links').child(link.index).set(link.element);
 
+					successCallback.call(this);
+
 				}else{ //les deux mots ne sont pas liés entre eux
 
 					//on ajoute une liaison entre les deux mots
@@ -272,6 +274,8 @@ var model = {
 					}else{
 						model.createLink(proposedNode, node);
 					}
+
+					successCallback.call(this);
 				}
 			}else{ //le mot n'est n'est pas présent dans le tableau nodes
 
@@ -279,6 +283,8 @@ var model = {
 				var newNode = model.createNode(newWord);
 
 				model.createLink(newNode, proposedNode);
+
+				successCallback.call(this);
 			}
 		}else{ //le mot n'est pas français
 
