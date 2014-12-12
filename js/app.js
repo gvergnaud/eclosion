@@ -24,7 +24,6 @@ var app = {
 		//lorsque le graph principale a été crée
 
 		document.addEventListener('graphready', function (e) {
-			console.log(e);
 			app.graphCreated = true;
 			app.proposeRandomWord();
 			//remove l'event listener
