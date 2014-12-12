@@ -21,12 +21,16 @@ var app = {
 
 		app.watchData();
 
+		//lorsque le graph principale à été crée
 		document.addEventListener('graphready', function (e) {
 			console.log(e);
 			app.graphCreated = true;
 			app.proposeRandomWord();
+			//remove l'event listener
+			e.target.removeEventListener(e.type, arguments.callee);
 		}, false);
 
+		//lorsque l'utilisateur ajoute un mot
 		document.addEventListener('usercontribution', function (e) {
 			app.proposeRandomWord();
 		});
