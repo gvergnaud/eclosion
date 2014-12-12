@@ -22,23 +22,28 @@ var app = {
 		app.watchData();
 		
 		//lorsque le graph principale a été crée
-
 		document.addEventListener('graphready', function (e) {
+
 			app.graphCreated = true;
+
 			app.proposeRandomWord();
-			
+
 			UI.d3.svg.call(d3.behavior.zoom().scaleExtent([0.25, 3]).on("zoom", function(){
 				UI.d3.redrawGraph();
 			}));
-			
 			//remove l'event listener
 			e.target.removeEventListener(e.type, arguments.callee);
+		}, false);
+
+		// lorsque les données sont mises à jour
+		document.addEventListener('dataupdate', function(){
+			UI.printGlobalData(model.words.nodes.length,  model.words.links.length, 4);
 		}, false);
 
 		//lorsque l'utilisateur ajoute un mot
 		document.addEventListener('usercontribution', function (e) {
 			app.proposeRandomWord();
-		});
+		}, false);
 
 		document.querySelector('#addContribution').addEventListener('keypress', app.addContribution, false);
 		document.querySelector('#search').addEventListener('keyup', app.searchNode, false);
@@ -49,6 +54,9 @@ var app = {
 		// CrÃ©e l'evenement
 		app.event.graphReady = document.createEvent('Event');
 		app.event.graphReady.initEvent('graphready', true, true);
+
+		app.event.dataUpdate = document.createEvent('Event');
+		app.event.dataUpdate.initEvent('dataupdate', true, true);
 
 		app.event.userContribution = document.createEvent('Event');
 		app.event.userContribution.initEvent('usercontribution', true, true);
@@ -79,6 +87,8 @@ var app = {
 					UI.d3.updateGraph( words );
 				}
 			}
+
+			document.dispatchEvent(app.event.dataUpdate);
 		});
 	},
 
@@ -104,6 +114,8 @@ var app = {
 					UI.d3.redrawGraph();
 				}));
 			}
+
+			document.dispatchEvent(app.event.dataUpdate);
 		});
 	},
 
@@ -119,13 +131,17 @@ var app = {
 		if(e.keyCode == 13){
 			if(this.value){
 
-				model.addContribution(this.value, app.proposedWord, function(error){
-					UI.notification('error', error);
-				});
+				model.addContribution(this.value, app.proposedWord, 
+					function(){ //success
+						document.dispatchEvent(app.event.userContribution);
+					},
+					function(error){
+						UI.notification('error', error);
+					}
+				);
 				
 				this.value = '';
 
-				document.dispatchEvent(app.event.userContribution);
 			}
 
 		}

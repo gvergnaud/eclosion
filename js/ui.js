@@ -17,6 +17,12 @@ var UI = {
 		document.querySelector('#proposedWord').innerText = word;
 	},
 
+	printGlobalData: function(nbWords, nbConnections, nbContributors){
+		document.querySelector('#globalData>p.words').innerText = nbWords + ' Mots';
+		document.querySelector('#globalData>p.connections').innerText = nbConnections + ' Connexions';
+		document.querySelector('#globalData>p.contributors').innerText = nbContributors + ' Contributeurs';
+	},
+
 	notification: function(type, msg){
             //Si le message n'est pas déjà dans la liste d'attente
             if(UI.currentNotifications.indexOf(msg) === -1){
