@@ -11,15 +11,15 @@ var app = {
 
 	init: function(){
 
-		app.createCustomEvents();
-
-		UI.init();
-
 		model.initFirebase();
 
 		model.initUser();
 
 		model.getDico();
+
+		UI.init();
+
+		app.createCustomEvents();
 
 		app.watchData();
 		
