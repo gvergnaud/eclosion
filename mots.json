@@ -1,0 +1,144 @@
+{
+  "mots" : {
+    "links" : [ {
+      "source" : 1,
+      "target" : 0,
+      "value" : 1
+    }, {
+      "source" : 2,
+      "target" : 0,
+      "value" : 1
+    }, {
+      "source" : 3,
+      "target" : 1,
+      "value" : 1
+    }, {
+      "source" : 4,
+      "target" : 2,
+      "value" : 1
+    }, {
+      "source" : 5,
+      "target" : 3,
+      "value" : 1
+    }, {
+      "source" : 6,
+      "target" : 4,
+      "value" : 1
+    }, {
+      "source" : 7,
+      "target" : 5,
+      "value" : 1
+    }, {
+      "source" : 8,
+      "target" : 7,
+      "value" : 1
+    }, {
+      "source" : 9,
+      "target" : 4,
+      "value" : 1
+    }, {
+      "source" : 10,
+      "target" : 1,
+      "value" : 1
+    }, {
+      "source" : 4,
+      "target" : 0,
+      "value" : 1
+    }, {
+      "source" : 11,
+      "target" : 6,
+      "value" : 1
+    }, {
+      "source" : 12,
+      "target" : 3,
+      "value" : 1
+    }, {
+      "source" : 12,
+      "target" : 10,
+      "value" : 1
+    }, {
+      "source" : 8,
+      "target" : 5,
+      "value" : 1
+    } ],
+    "nodes" : [ {
+      "age" : 24,
+      "index" : 0,
+      "name" : "bonheur",
+      "nbLinks" : 3,
+      "sexe" : "male"
+    }, {
+      "age" : 35,
+      "index" : 1,
+      "name" : "cinema",
+      "nbLinks" : 3,
+      "sexe" : "female"
+    }, {
+      "age" : "unknown",
+      "index" : 2,
+      "name" : "vie",
+      "nbLinks" : 2,
+      "sexe" : "unknown"
+    }, {
+      "age" : "unknown",
+      "index" : 3,
+      "name" : "plaisir",
+      "nbLinks" : 3,
+      "sexe" : "unknown"
+    }, {
+      "age" : "unknown",
+      "index" : 4,
+      "name" : "nature",
+      "nbLinks" : 4,
+      "sexe" : "unknown"
+    }, {
+      "age" : "unknown",
+      "index" : 5,
+      "name" : "envie",
+      "nbLinks" : 3,
+      "sexe" : "unknown"
+    }, {
+      "age" : "unknown",
+      "index" : 6,
+      "name" : "forêt",
+      "nbLinks" : 2,
+      "sexe" : "unknown"
+    }, {
+      "age" : "unknown",
+      "index" : 7,
+      "name" : "faim",
+      "nbLinks" : 2,
+      "sexe" : "unknown"
+    }, {
+      "age" : "unknown",
+      "index" : 8,
+      "name" : "cuisine",
+      "nbLinks" : 2,
+      "sexe" : "unknown"
+    }, {
+      "age" : "unknown",
+      "index" : 9,
+      "name" : "faune",
+      "nbLinks" : 1,
+      "sexe" : "unknown"
+    }, {
+      "age" : "unknown",
+      "index" : 10,
+      "name" : "passion",
+      "nbLinks" : 2,
+      "sexe" : "unknown"
+    }, {
+      "age" : "unknown",
+      "index" : 11,
+      "name" : "odeurs",
+      "nbLinks" : 1,
+      "sexe" : "unknown"
+    }, {
+      "age" : "unknown",
+      "index" : 12,
+      "name" : "amour",
+      "nbLinks" : 2,
+      "sexe" : "unknown"
+    } ]
+  }
+}

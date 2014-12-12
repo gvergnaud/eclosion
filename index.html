@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Les mots</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        
+        <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+
+        <link rel="stylesheet" href="css/reset.css">
+        <link rel="stylesheet" href="css/styles.css">
+    </head>
+    <body>
+        <!--[if lt IE 7]>
+            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+        <aside id="notifications"></aside>
+        
+        <div class="contribution">
+            <p id="proposedWord"></p>
+            <input id="addContribution" type="text" placeholder="ajouter un mot" />
+        </div>
+        <div class="filters">
+            <label>sexe :</label>
+            
+            <input type="radio" class="filter sexe" name="sexe" value="male" onChange="app.addFilter('sexe', 'male')">homme<br>
+            <input type="radio" class="filter sexe" name="sexe" value="female" onChange="app.addFilter('sexe', 'female')">femme<br>
+            <input type="radio" class="filter sexe" name="sexe" value="unknown" onChange="app.addFilter('sexe', 'unknown')">inconnu<br>
+
+            <label>age :</label>
+            <input type="radio" class="filter age" name="age" onChange="app.addFilter('age', {min: 0, max: 25})">- 25ans <br>
+            <input type="radio" class="filter age" name="age" onChange="app.addFilter('age', {min: 25, max: 45})">25 - 45ans <br>
+            <input type="radio" class="filter age" name="age" onChange="app.addFilter('age', {min: 45, max: 150})">+ 40ans<br>
+            <button class="reset">reset</button>
+        </div>
+        <div class="search">
+		   	<input list="searchAutoComplete" id="search" placeholder="recherche">
+            <datalist id="searchAutoComplete"></datalist>
+		</div>
+        <svg id="wordGraph"></svg>
+		
+
+        <div id="globalData">
+            <p class="words"></p>
+            <p class="connections"></p>
+            <p class="contributors"></p>
+        </div>
+
+        <script src="http://d3js.org/d3.v3.min.js"></script>
+        <script src="https://cdn.firebase.com/js/client/2.0.4/firebase.js"></script>
+        <!--<script src='https://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js'></script>-->
+        
+        <script src="js/model.js"></script>
+        <script src="js/ui.js"></script>
+        <script src="js/app.js"></script>
+    </body>
+</html>
