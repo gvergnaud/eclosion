@@ -147,8 +147,10 @@ var app = {
 	},
 
 	searchNode: function(e){
+		
 		var value = this.value;
 
+		//auto completion avec les mots qui matches avec la recherche
 		if(value){
 			var matches = model.words.nodes.filter(function (node) {
 				return	node.name.substring(0, value.length) === value;
@@ -159,12 +161,15 @@ var app = {
 
 		datalist.innerHTML = '';
 
-		matches.forEach(function(match){
-			var option = document.createElement('option');
-			option.innerHTML = match.name;
-			datalist.appendChild(option);
-		});
+		if(matches){
+			matches.forEach(function(match){
+				var option = document.createElement('option');
+				option.innerHTML = match.name;
+				datalist.appendChild(option);
+			});
+		}
 
+		//envoi de la recherche
 		if(e.keyCode === 13){
 			var selectedVal = document.getElementById("search").value;
 			UI.d3.searchNode(selectedVal);
