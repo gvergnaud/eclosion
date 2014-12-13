@@ -1,6 +1,8 @@
 body{
 	color: #fff;
 	background-color: #888888;
+	padding: 0;
+	margin: 0;
 }
 
 .node {
@@ -79,7 +81,7 @@ p.notification.show{
 }
 
 /* Menu de navigation latéral gauche : Recherche de mot, ajout de mot, filtes */
-.contribution, .filters, #lateral-navigation, #globalData {
+.contribution, .filters, #lateral-navigation{
 	z-index: 10;
 	position: relative;
 }
