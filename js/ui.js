@@ -1,4 +1,6 @@
 var UI = {
+    
+    currentNotifications: [], //tableau qui contient toutes les notifications en cours
 	
 	init: function(){
 		this.wordGraph = document.querySelector('#wordGraph');
@@ -14,7 +16,72 @@ var UI = {
 	printWord: function(word){
 		document.querySelector('#proposedWord').innerText = word;
 	},
+
+	printGlobalData: function(nbWords, nbConnections, nbContributors){
+		document.querySelector('#globalData>p.words').innerText = nbWords + ' Mots';
+		document.querySelector('#globalData>p.connections').innerText = nbConnections + ' Connexions';
+		document.querySelector('#globalData>p.contributors').innerText = nbContributors + ' Contributeurs';
+	},
+
+	notification: function(type, msg){
+            //Si le message n'est pas d√©j√† dans la liste d'attente
+            if(UI.currentNotifications.indexOf(msg) === -1){
+
+                //si il n'y a rien dans la liste d'attente, on affiche la notif
+                if(UI.currentNotifications.length === 0){
+                    //on met le messsage en liste d'attente
+                    UI.currentNotifications.push(msg);
+
+
+                    var notifContainer = document.querySelector('aside#notifications');
+                    var newNotif = document.createElement('p');
+
+                    newNotif.innerHTML = msg;
+
+                    newNotif.classList.add('notification');
+                    if(type){
+                        newNotif.classList.add(type);
+                    }
+
+                    notifContainer.innerHTML = '';
+                    notifContainer.style.display = 'block';
+                    notifContainer.appendChild(newNotif);
+
+                    setTimeout(function(){	
+                        newNotif.classList.add('show');
+                    }, 100);
+
+                    setTimeout(function(){
+                        //on cache la notif 
+                        newNotif.classList.remove('show');
+
+                        setTimeout(function(){
+
+                            notifContainer.style.display = 'none';
+                        	newNotif.parentNode.removeChild(newNotif);
+                            //on retire le message de la liste d'attente
+                            UI.currentNotifications.splice(UI.currentNotifications.indexOf(msg), 1);
+                        }, 650);
+
+
+                    }, 4000);
+
+                    newNotif.addEventListener('click', function(){
+                        notifContainer.style.display = 'none';
+                        newNotif.parentNode.removeChild(newNotif);
+                        //on retire le message de la liste d'attente
+                        UI.currentNotifications.splice(UI.currentNotifications.indexOf(msg), 1);
+                    });
+
+                }else{
+                    setTimeout(function(){
+                        UI.notification(type, msg);
+                    }, 1000);
+                }
+            }
+        },
 	
+	// D3.js 
 	d3: {
 		previousWords : false,
 		nodeSizeCoefficient : 3,
@@ -36,7 +103,7 @@ var UI = {
 			    .linkDistance(30)
 			    .size([width, height]);
 			
-			// CrÈation du SVG
+			// Cr√©ation du SVG
 			this.svg = d3.select("#wordGraph").attr("width", width) 
 			    .attr("pointer-events", "all")
 			    .style("background-color", "white")
@@ -57,7 +124,7 @@ var UI = {
 				.links(words.links)
 				.start();
 			
-			// CrÈation des liens entre les noeuds
+			// Cr√©ation des liens entre les noeuds
 			var link = this.g.append("g")
 				.attr("class", "links")
 				.selectAll("link")
@@ -67,7 +134,7 @@ var UI = {
 				.style("stroke", "#dfdede")
 				.style("stroke-width", function(d) { return Math.sqrt(d.value); });
 				
-			// CrÈation des noeuds
+			// Cr√©ation des noeuds
 			var node = this.g.append("g").attr("class", "nodes")
 	           	.selectAll("node")
 				.data(words.nodes)
@@ -229,13 +296,13 @@ var UI = {
 				 + "scale(1.3)"
 				);
 				
-				// On redÈfini le zoom avec ses nouvelles valeurs d'origines
+				// On red√©fini le zoom avec ses nouvelles valeurs d'origines
 				this.svg.call(d3.behavior.zoom().scale(1.3).translate([x, y]).scaleExtent([0.25, 3]).on("zoom", function(){
 			    		UI.d3.redrawGraph();
 			    		// Dessiner le zoom sur barre verticale, d3.event.scale
 			    }));
 			}else{
-				console.log("Pas de mots trouvÈs");
+				UI.notification('error', "Pas de mots trouv√©s");
 			}
 		},
 		
