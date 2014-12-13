@@ -72,7 +72,13 @@ var UI = {
 	           	.selectAll("node")
 				.data(words.nodes)
 				.enter()
-				.append("g").style("opacity", 0.8);
+				.append("g").style("opacity", 0.8).call(d3.behavior.drag().on("dragstart", function(){
+					d3.event.sourceEvent.stopPropagation();		            
+				}).on("drag", function(d, i){
+					
+				}).on("dragend", function(d){
+					
+				}));
 	         
 			node.append("circle")
 	         	.attr("class", "node")
@@ -163,8 +169,8 @@ var UI = {
 		        nodeEnter.append("circle")
 		            .attr("class", "node")
 		            .style('fill', "#3177df")
-					.attr("r", function(d) {return Math.sqrt(d.nbLinks) * self.nodeSizeCoefficient; })
-		            .call(self.force.drag);
+					.attr("r", function(d) {return Math.sqrt(d.nbLinks) * self.nodeSizeCoefficient; });
+		            //.call(self.force.drag)
 		
 		        nodeEnter.append("text")
 		            .attr("text-anchor", "middle")
@@ -263,6 +269,8 @@ var UI = {
 	        
 	        // Noeud choisi en pleine opacité
         	node.transition().duration(1000).style("opacity", 1);
+        	
+        	self.force.resume();
         	
         	// Class open window de datas
 		},
