@@ -14,7 +14,7 @@ var UI = {
 	},
 	
 	printWord: function(word){
-		document.querySelector('#proposedWord').innerText = word;
+		document.querySelector('#proposedWordText').innerText = word;
 	},
 
 	printGlobalData: function(nbWords, nbConnections, nbContributors){

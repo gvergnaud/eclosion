@@ -127,7 +127,7 @@ p.notification.show{
 	height: 214px;
 	background-color: #fff;
 	color: #000;
-	opacity: 0.95;
+	opacity: 0.9;
 }
 .flaticons {
 	height: 70px;
@@ -141,12 +141,15 @@ p.notification.show{
 	cursor: pointer;
 }
 .optionsForm {
+	height: 100%;
 	display: flex;
+	flex-direction: column;
 	align-items: center;
 	justify-content: center;
 }
 #searchWordForm {
 	height: 214px;
+	margin-left: 82px;
 }
 .optionsInputText {
 	display: inline-block;
@@ -158,33 +161,43 @@ p.notification.show{
 }
 #searchInput {
 	height: 60px;
+	width: 434px;
 	font-size: 48px;
 }
 #proposedWord { /* Mot proposé */
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	margin: 0;
+	margin: 10px 0;
 	font-family: 'Open Sans', sans-serif;
 	font-size: 48px;
 	color: #434343;
 }
+#proposedWordText {
+	color: #3277df;
+}
 #writehWordForm {
-
+	margin-left: 82px;
 }
 #addContribution { /* Input text pour ajouter un mot */
+	margin: 10px 0;
+	padding: 8px 30px;
+	width: 490px;
 	height: 50px;
-	font-size: 36px;
+	font-size: 28px;
 }
 input::-webkit-input-placeholder {
-	color: #434343;
+	font-style: italic;
 }
 input:-moz-placeholder { /* Firefox 18- */
 	color: #434343;
+	font-style: italic;
 }
 input::-moz-placeholder {  /* Firefox 19+ */
 	color: #434343;
+	font-style: italic;
 }
 input:-ms-input-placeholder {  
 	color: #434343;
+	font-style: italic;
 }
