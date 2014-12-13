@@ -191,75 +191,31 @@ var model = {
 		return mostAssociatedWords;
 	},
 
-	//ApplyFilters
-	applyFilters: function(words, filters, callback){
+	getUserAgeRange: function(age){
+		var ageRange;
 
-		//Compatibilité IE pour la methode filter de Array
-		model.toolbox.ieFilterCompatibility();
+		if(age === 'unknown'){
 
-		var filteredWords = {};
+			ageRange = 'unknown';
 
-		if(filters.sexe && filters.age){
+		}else if(age < 25){
 
-			filteredWords.nodes = words.nodes.filter(function (node) {
-				return	node.sexe && node.sexe === filters.sexe &&
-						node.age && filters.age.min <= node.age && node.age < filters.age.max;
-			});
+			ageRange = 'under25';
 
-		}else if(filters.sexe){
+		}else if(25 <= age < 35){
+			
+			ageRange = '25to35';
 
-			filteredWords.nodes = words.nodes.filter(function (node) {
-				return	node.sexe && node.sexe === filters.sexe;
-			});
+		}else if(35 <= age < 45){
+			
+			ageRange = '35to45';
 
-		}else if(filters.age){
+		}else if(45 <= age){
 
-			filteredWords.nodes = words.nodes.filter(function (node) {
-				return	node.age && filters.age.min <= node.age && node.age < filters.age.max;
-			});
+			ageRange = 'above45';
 		}
 
-		filteredWords.links = words.links.filter(function (link) {
-
-			return	(function(link){
-				var ok = false;
-				var BreakException = {};
-				try{
-					filteredWords.nodes.forEach(function(node, index){
-						if(link.source === node.index){
-							link.source = index;
-							ok = true;
-							throw BreakException;
-						}
-					});
-				} catch(e) {
-					if (e !== BreakException) throw e;
-				}
-				return ok;
-			})(link) 
-
-			&&
-
-			(function(link){
-				var ok = false;
-				var BreakException = {};
-				try{
-					filteredWords.nodes.forEach(function(node, index){
-						if(link.target === node.index){
-							link.target = index;
-							ok = true;
-							throw BreakException;
-						}
-					});
-				} catch(e) {
-					if (e !== BreakException) throw e;
-				}
-				return ok;
-			})(link);
-		});
-
-		callback.call(this, filteredWords);
-
+		return ageRange;
 	},
 
 	// CREATE
@@ -268,8 +224,18 @@ var model = {
 			name: newWord,
 			index: model.words.nodes.length,
 			nbLinks: 0,
-			sexe: model.user.sexe,
-			age: model.user.age
+			sexe: {
+				'male': 0,
+				'female': 0,
+				'unknown': 0
+			},
+			age: {
+				'unknown': 0,
+				'under25': 0,
+				'25to35': 0,
+				'35to45': 0,
+				'above45': 0
+			}
 		};
 
 		model.words.nodes.push(newNode);
@@ -291,7 +257,28 @@ var model = {
 		model.words.nodes[sourceNode.index].nbLinks += 1;
 		model.words.nodes[targetNode.index].nbLinks += 1;
 
+		//ajoute les states sur l'age et le sex au node
+		model.words.nodes[sourceNode.index].age[model.getUserAgeRange(model.user.age)] += 1;
+		model.words.nodes[targetNode.index].age[model.getUserAgeRange(model.user.age)] += 1;
+
+		model.words.nodes[sourceNode.index].sexe[model.user.sexe] += 1;
+		model.words.nodes[targetNode.index].sexe[model.user.sexe] += 1;
+
 		model.words.links.push(newLink);
+
+		this.firebase.set(model.words);
+	},
+
+	updateLink: function(link){
+		link.element.value += 1;
+
+		model.words.nodes[link.element.source].age[model.getUserAgeRange(model.user.age)] += 1;
+		model.words.nodes[link.element.target].age[model.getUserAgeRange(model.user.age)] += 1;
+
+		model.words.nodes[link.element.source].sexe[model.user.sexe] += 1;
+		model.words.nodes[link.element.target].sexe[model.user.sexe] += 1;
+
+		words.links[link.index] = link.element;
 
 		this.firebase.set(model.words);
 	},
@@ -324,9 +311,7 @@ var model = {
 					console.log('les deux mots sont déjà liés entre eux');
 
 					//on ajoute 1 à la value de la liaison link
-					link.element.value += 1;
-					
-					this.firebase.child('links').child(link.index).set(link.element);
+					model.updateLink(link);
 
 					successCallback.call(this);
 
@@ -414,5 +399,76 @@ var model = {
 		}else{
 			return areLinked(proposedNode.index, node.index);
 		}
-	}
+	},
+
+	//ApplyFilters
+	applyFilters: function(words, filters, callback){
+
+		//Compatibilité IE pour la methode filter de Array
+		model.toolbox.ieFilterCompatibility();
+
+		var filteredWords = {};
+
+		if(filters.sexe && filters.age){
+
+			filteredWords.nodes = words.nodes.filter(function (node) {
+				return	node.sexe && node.sexe[filters.sexe] > 0  &&
+						node.age && node.age[filters.age] > 0;
+			});
+
+		}else if(filters.sexe){
+
+			filteredWords.nodes = words.nodes.filter(function (node) {
+				return	node.sexe && node.sexe[filters.sexe] > 0;
+			});
+
+		}else if(filters.age){
+
+			filteredWords.nodes = words.nodes.filter(function (node) {
+				return	node.age && node.age[filters.age] > 0;
+			});
+		}
+
+		filteredWords.links = words.links.filter(function (link) {
+
+			return	(function(link){
+				var ok = false;
+				var BreakException = {};
+				try{
+					filteredWords.nodes.forEach(function(node, index){
+						if(link.source === node.index){
+							link.source = index;
+							ok = true;
+							throw BreakException;
+						}
+					});
+				} catch(e) {
+					if (e !== BreakException) throw e;
+				}
+				return ok;
+			})(link) 
+
+			&&
+
+			(function(link){
+				var ok = false;
+				var BreakException = {};
+				try{
+					filteredWords.nodes.forEach(function(node, index){
+						if(link.target === node.index){
+							link.target = index;
+							ok = true;
+							throw BreakException;
+						}
+					});
+				} catch(e) {
+					if (e !== BreakException) throw e;
+				}
+				return ok;
+			})(link);
+		});
+
+		callback.call(this, filteredWords);
+
+	},
 };

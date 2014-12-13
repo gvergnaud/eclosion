@@ -33,9 +33,10 @@
             <input type="radio" class="filter sexe" name="sexe" value="unknown" onChange="app.addFilter('sexe', 'unknown')">inconnu<br>
 
             <label>age :</label>
-            <input type="radio" class="filter age" name="age" onChange="app.addFilter('age', {min: 0, max: 25})">- 25ans <br>
-            <input type="radio" class="filter age" name="age" onChange="app.addFilter('age', {min: 25, max: 45})">25 - 45ans <br>
-            <input type="radio" class="filter age" name="age" onChange="app.addFilter('age', {min: 45, max: 150})">+ 40ans<br>
+            <input type="radio" class="filter age" name="age" onChange="app.addFilter('age', 'under25')">- 25ans <br>
+            <input type="radio" class="filter age" name="age" onChange="app.addFilter('age', '25to35')">25 - 35ans <br>
+            <input type="radio" class="filter age" name="age" onChange="app.addFilter('age', '35to45')">35 - 45ans <br>
+            <input type="radio" class="filter age" name="age" onChange="app.addFilter('age', 'above45')">+ 45ans<br>
             <button class="reset">reset</button>
         </div>
         <div class="search">

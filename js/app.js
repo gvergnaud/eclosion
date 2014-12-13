@@ -161,7 +161,7 @@ var app = {
 		if(e.keyCode == 13){
 			if(this.value){
 
-				model.addContribution(this.value, app.proposedWord, 
+				model.addContribution(this.value.toLowerCase(), app.proposedWord, 
 					function(){ //success
 						document.dispatchEvent(app.event.userContribution);
 					},
