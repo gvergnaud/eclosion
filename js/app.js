@@ -56,7 +56,7 @@ var app = {
 
 		document.querySelector('#addContribution').addEventListener('keypress', app.addContribution, false);
 		document.querySelector('#searchInput').addEventListener('keyup', app.searchNode, false);
-		document.querySelector('div.filters button.reset').addEventListener('click', app.resetFilters, false);
+		document.querySelector('div.filters button.resetFilters').addEventListener('click', app.resetFilters, false);
 	},
 
 	createCustomEvents: function(){

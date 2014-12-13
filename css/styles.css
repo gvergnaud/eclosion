@@ -200,6 +200,14 @@ p.notification.show{
 	font-family: 'Open Sans', sans-serif;
 	font-size: 40px;
 }
+.filters .resetFilters {
+	margin: 20px 0;
+	padding: 0;
+	border: 0;
+	background: none;
+	font-family: 'Open Sans', sans-serif;
+	font-size: 40px;
+}
 .filterbuttons {
 	margin: 5px;
 	padding: 0;
