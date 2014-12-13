@@ -230,7 +230,8 @@ var app = {
 			var selectedVal = document.getElementById("searchInput").value;
 			UI.d3.searchNode(selectedVal);
 			this.value = '';
-
+			
+			var searchWordModal = document.getElementById("searchWord");
 			searchWordModal.classList.add("hidden-option");
             searchWordModal.classList.remove("modalApparition");
 		}
