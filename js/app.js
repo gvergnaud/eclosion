@@ -141,8 +141,10 @@ var app = {
 		nodeData.mostAssociatedWords = model.getMostAssociatedWords(node);
 
 		//apparition par sexe
+		nodeData.sexeOccurence = model.getSexeOccurrence(node);
 
 		//apparition par age
+		nodeData.ageOccurence = model.getAgeOccurrence(node);
 
 		if(callback){
 			callback.call(this, nodeData);

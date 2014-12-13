@@ -191,6 +191,32 @@ var model = {
 		return mostAssociatedWords;
 	},
 
+	getSexeOccurrence: function(node){
+		var total = node.sexe.female + node.sexe.male + node.sexe.unknown;
+
+		var sexeOccurrence = {
+			female: node.sexe.female * 100 / total,
+			male: node.sexe.male * 100 / total,
+			unknown: node.sexe.unknown * 100 / total,
+		};
+
+		return sexeOccurrence;
+	},
+
+	getAgeOccurrence: function(node){
+		var total = node.age.unknown + node.age.under25 + node.age['25to35'] + node.age['35to45'] + node.age.above45;
+
+		var ageOccurrence = {
+			unknown: node.age.unknown * 100 / total,
+			under25: node.age.under25 * 100 / total,
+			'25to35': node.age['25to35'] * 100 / total,
+			'35to45': node.age['35to45'] * 100 / total,
+			above45: node.age.above45 * 100 / total,
+		};
+
+		return ageOccurrence;
+	},
+
 	getUserAgeRange: function(age){
 		var ageRange;
 
