@@ -137,11 +137,20 @@ p.notification.show{
 	height: 60px;
 	padding: 15px 50px;
 	border: none;
-	border-left: 1px solid #000;
+	border-left: 1px solid #434343;
 	font-family: 'Open Sans', sans-serif;
-	font-size: 46px;
+	font-size: 48px;
 	color: #434343;
 }
 input::-webkit-input-placeholder {
+	color: #434343;
+}
+input:-moz-placeholder { /* Firefox 18- */
+	color: #434343;
+}
+input::-moz-placeholder {  /* Firefox 19+ */
+	color: #434343;
+}
+input:-ms-input-placeholder {  
 	color: #434343;
 }
