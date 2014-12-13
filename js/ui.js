@@ -25,8 +25,6 @@ var UI = {
 
 	printNodeData: function(nodeData){
 		var nodeDataElement = document.querySelector('#nodeData');
-
-		console.log(nodeData);
 		nodeDataElement.querySelector('h1.nodeName').innerText = nodeData.name;
 		//affiche le nombre d'utilisation du mot
 		nodeDataElement.querySelector('div.occurrence>p.data').innerText = nodeData.occurrence;
