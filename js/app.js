@@ -50,6 +50,12 @@ var app = {
 		// lorsque les données sont mises à jour
 		document.addEventListener('dataupdate', function(){
 			UI.printGlobalData(model.words.nodes.length,  model.words.links.length, model.words.contributors);
+			
+			UI.d3.svg.selectAll(".nodes>g>circle").on("click", 	function(node){
+				app.getNodeData(node, function(nodeData){
+					console.log(nodeData);
+				});
+			});
 		}, false);
 
 		//lorsque l'utilisateur ajoute un mot
@@ -58,7 +64,7 @@ var app = {
 		}, false);
 
 		document.querySelector('#addContribution').addEventListener('keypress', app.addContribution, false);
-		document.querySelector('#search').addEventListener('keyup', app.searchNode, false);
+		document.querySelector('#searchInput').addEventListener('keyup', app.searchNode, false);
 		document.querySelector('div.filters button.reset').addEventListener('click', app.resetFilters, false);
 	},
 
@@ -224,9 +230,12 @@ var app = {
 
 		//envoi de la recherche
 		if(e.keyCode === 13){
-			var selectedVal = document.getElementById("search").value;
+			var selectedVal = document.getElementById("searchInput").value;
 			UI.d3.searchNode(selectedVal);
 			this.value = '';
+
+			searchWordModal.classList.add("hidden-option");
+            searchWordModal.classList.remove("modalApparition");
 		}
 	},
 };

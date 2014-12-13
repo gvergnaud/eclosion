@@ -12,15 +12,15 @@
         
         <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
 
-        <link rel="stylesheet" href="css/reset.css">
         <link rel="stylesheet" href="css/styles.css">
+        <link rel="stylesheet" href="font/flaticon.css" media="all">
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
     </head>
     <body>
         <!--[if lt IE 7]>
             <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
         <aside id="notifications"></aside>
-        
         <div class="contribution">
             <p id="proposedWord"></p>
             <input id="addContribution" type="text" placeholder="ajouter un mot" />
@@ -39,12 +39,43 @@
             <input type="radio" class="filter age" name="age" onChange="app.addFilter('age', 'above45')">+ 45ans<br>
             <button class="reset">reset</button>
         </div>
-        <div class="search">
-		   	<input list="searchAutoComplete" id="search" placeholder="recherche">
-            <datalist id="searchAutoComplete"></datalist>
-		</div>
+
+        <!-- Menu de navigation gauche -->
+        <nav role="navigation" id="lateral-navigation">
+            <div class="left-nav" id="searchBox">
+                <i class="flaticons flaticon-magnifier12"></i> 
+            </div>
+            <div class="hidden-option" id="searchWord">
+                <!-- Menu caché pour la recherche -->
+                <button class="closeMenu" onclick="closeModal();">X</button>
+                <div id="searchWordForm" class="search">
+                    <input type="text" id="searchInput" list="searchAutoComplete" placeholder="Rechercher un mot" />
+                    <datalist id="searchAutoComplete"></datalist>
+                </div>
+            </div>
+            <div class="left-nav" id="addWordBox">
+                <i class="flaticons flaticon-pen29"></i> 
+            </div>
+            <div class="hidden-option" id="writeWord">
+                <!-- Menu caché pour l'ajout de mot -->
+                <button class="closeMenu" onclick="closeModal();">X</button>
+                <form id="writehWordForm">
+                    <input type="text" id="writeInput" placeholder="Ecrire un mot" />
+                </form>
+            </div>
+            <div class="left-nav" id="filterBox">
+                <i class="flaticons flaticon-filled9"></i>
+            </div>
+            <div class="hidden-option" id="filterWord">
+                <!-- Menu caché pour filtrer la vue -->
+                <button class="closeMenu" onclick="closeModal();">X</button>
+                <p>Les Filtres</p>
+                <p>Par Âge</p>
+                <p>Par Sexe</p>
+            </div>
+        </nav>
+
         <svg id="wordGraph"></svg>
-		
 
         <div id="globalData">
             <p class="words"></p>
@@ -52,12 +83,68 @@
             <p class="contributors"></p>
         </div>
 
-        <script src="http://d3js.org/d3.v3.min.js"></script>
-        <script src="https://cdn.firebase.com/js/client/2.0.4/firebase.js"></script>
-        <!--<script src='https://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js'></script>-->
+        <script src="js/libs/d3.v3.min.js"></script>
+        <script src="js/libs/firebase.js"></script>
         
         <script src="js/model.js"></script>
         <script src="js/ui.js"></script>
         <script src="js/app.js"></script>
+
+        <script>
+            var leftNav = document.getElementById('lateral-navigation');
+            var searchBox = document.getElementById('searchBox');
+            searchBox.addEventListener("click",searchBoxfun,false);
+            var addWordBox = document.getElementById('addWordBox');
+            addWordBox.addEventListener("click",addWordBoxfun,false);
+            var filterBox = document.getElementById('filterBox');
+            filterBox.addEventListener("click",filterWordBoxfun,false);
+
+            var searchWordModal = document.getElementById("searchWord");
+            var writehWordModal = document.getElementById("writeWord");
+            var filterWordModal = document.getElementById("filterWord");
+            function searchBoxfun() {
+                searchWordModal.classList.remove("hidden-option");
+
+                writehWordModal.classList.remove("modalApparition");
+                filterWordModal.classList.remove("modalApparition");
+                writehWordModal.classList.add("hidden-option");
+                filterWordModal.classList.add("hidden-option");
+
+                searchWordModal.classList.add("modalApparition");
+                leftNav.classList.add("widthauto");
+            }
+            function addWordBoxfun() {
+                writehWordModal.classList.remove("hidden-option");
+
+                filterWordModal.classList.remove("modalApparition");
+                searchWordModal.classList.remove("modalApparition");
+                searchWordModal.classList.add("hidden-option");
+                filterWordModal.classList.add("hidden-option");
+
+                writehWordModal.classList.add("modalApparition");
+                leftNav.classList.add("widthauto");
+            }
+            function filterWordBoxfun() {
+                filterWordModal.classList.remove("hidden-option");
+
+                searchWordModal.classList.remove("modalApparition");
+                writehWordModal.classList.remove("modalApparition");
+                searchWordModal.classList.add("hidden-option");
+                writehWordModal.classList.add("hidden-option");
+
+                filterWordModal.classList.add("modalApparition");
+                leftNav.classList.add("widthauto");
+            }
+            function closeModal() {
+                searchWordModal.classList.add("hidden-option");
+                writehWordModal.classList.add("hidden-option");
+                filterWordModal.classList.add("hidden-option");
+                searchWordModal.classList.remove("modalApparition");
+                writehWordModal.classList.remove("modalApparition");
+                filterWordModal.classList.remove("modalApparition");
+                leftNav.classList.remove("widthauto");
+            }
+
+        </script>
     </body>
 </html>

@@ -1,6 +1,7 @@
 @import url(http://fonts.googleapis.com/css?family=Fjalla+One);
 body{
 	color: #fff;
+	background-color: #888888;
 }
 
 .link {
@@ -21,7 +22,6 @@ input{
 	position: absolute;
 	top:0;
 	left:0;
-	z-index: -50;
 }
 
 /*GLOBALDATA*/
@@ -81,4 +81,76 @@ p.notification.show{
 	-o-transform: translateY(0%);
 	-moz-transform: translateY(0%);
 	-webkit-transform: translateY(0%);
+}
+
+/* Menu de navigation latéral gauche : Recherche de mot, ajout de mot, filtes */
+.contribution, .filters, #lateral-navigation, #globalData {
+	z-index: 10;
+	position: relative;
+}
+#lateral-navigation {
+	width: 70px;
+}
+.widthauto { /* Pour le #lateral-navigation seulement au click */
+	width: auto !important;
+}
+.left-nav {
+	width: 70px;
+	height: 70px;
+	margin-bottom: 2px;
+	background: #E0E0E0;
+}
+.left-nav:hover {
+	background: #fff;
+	cursor: pointer;
+}
+.hidden-option {
+	display: none;
+}
+.modalApparition {
+	display: block;
+	box-sizing: border-box;
+	position: absolute;
+	top: 0;
+	left: 70px;
+	right: 0;
+	height: 214px;
+	background-color: #fff;
+	color: #000;
+	opacity: 0.95;
+}
+.flaticons {
+	height: 70px;
+	line-height: 70px;
+}
+.closeMenu {
+	float: right;
+}
+#searchWordForm {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: 214px;
+}
+#searchInput {
+	display: inline-block;
+	height: 60px;
+	padding: 15px 50px;
+	border: none;
+	border-left: 1px solid #434343;
+	font-family: 'Open Sans', sans-serif;
+	font-size: 48px;
+	color: #434343;
+}
+input::-webkit-input-placeholder {
+	color: #434343;
+}
+input:-moz-placeholder { /* Firefox 18- */
+	color: #434343;
+}
+input::-moz-placeholder {  /* Firefox 19+ */
+	color: #434343;
+}
+input:-ms-input-placeholder {  
+	color: #434343;
 }
