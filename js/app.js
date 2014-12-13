@@ -131,6 +131,8 @@ var app = {
 	getNodeData: function(node, callback){
 		var nodeData = {};
 
+		nodeData.name = node.name;
+		
 		//nombre de connexions
 		nodeData.nbLinks = node.nbLinks;
 		
