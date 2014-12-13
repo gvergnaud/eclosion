@@ -33,6 +33,13 @@ var app = {
 			UI.d3.svg.call(d3.behavior.zoom().scaleExtent([0.25, 3]).on("zoom", function(){
 				UI.d3.redrawGraph();
 			}));
+
+			UI.d3.svg.selectAll(".nodes>g>circle").on("click", 	function(node){
+				app.getNodeData(node, function(nodeData){
+					console.log(nodeData);
+				});
+			});
+
 			//remove l'event listener
 			e.target.removeEventListener(e.type, arguments.callee);
 		}, false);
@@ -119,6 +126,27 @@ var app = {
 
 			document.dispatchEvent(app.event.dataUpdate);
 		});
+	},
+
+	getNodeData: function(node, callback){
+		var nodeData = {};
+
+		//nombre de connexions
+		nodeData.nbLinks = node.nbLinks;
+		
+		//nombre d'apparition du mot
+		nodeData.occurrence = model.getNodeOccurrence(node);
+
+		//les mots les plus associés
+		nodeData.mostAssociatedWords = model.getMostAssociatedWords(node);
+
+		//apparition par sexe
+
+		//apparition par age
+
+		if(callback){
+			callback.call(this, nodeData);
+		}
 	},
 
 	proposeRandomWord: function(){
