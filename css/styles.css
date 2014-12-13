@@ -130,6 +130,9 @@ p.notification.show{
 	height: 70px;
 	line-height: 70px;
 }
+.left-nav:hover .flaticons:before {
+	color: #3277df;
+}
 .flaticon-cross97 {
 	float: right;
 	padding: 15px 20px;
@@ -217,11 +220,10 @@ p.notification.show{
 	font-size: 16px;
 	color: #888888;
 }
-.filterbuttons:hover, .filterbuttons:active, .filterbuttons:focus {
+.filters button:hover, .filters button:active, .filters button:focus {
 	cursor: pointer;
 	color: #3277df;
 }
-
 input::-webkit-input-placeholder {
 	font-style: italic;
 }
