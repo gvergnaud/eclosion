@@ -52,9 +52,12 @@ var app = {
 			UI.printGlobalData(model.words.nodes.length,  model.words.links.length, model.words.contributors);
 			
 			UI.d3.svg.selectAll(".nodes>g>circle").on("click", 	function(node){
-				app.getNodeData(node, function(nodeData){
-					console.log(nodeData);
-				});
+				if(d3.event.defaultPrevented == false){ 
+					UI.d3.selectNode(d3.select(this.parentNode));
+					app.getNodeData(node, function(nodeData){
+						//console.log(nodeData);
+					});
+				}
 			});
 		}, false);
 

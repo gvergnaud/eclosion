@@ -292,14 +292,24 @@ var UI = {
 	        // Si la recherche a donné quelque chose
 	        if(selected[0].length > 0){
 	        
-				// On calcule le x et y du translate
-		        var x = (window.innerWidth / 2) - selected.attr("cx");
-		        var y = (window.innerHeight / 2) - selected.attr("cy");
+				//On calcule le x et y du translate
+				var rect = document.querySelector("svg>g>g").getBoundingClientRect();
+				
+		        var x = ((window.innerWidth / 2) - (parseInt(selected.attr("cx")) + parseInt(rect.left))) 
+		       		+ parseInt(rect.left);
+		        var y = ((window.innerHeight / 2) - (parseInt(selected.attr("cy")) + parseInt(rect.top))) 
+		        	+ parseInt(rect.top);
 		        
 		        this.svg.select("g").select("g").transition().duration(1500).attr("transform",
 				  "translate(" + x + " ," + y + ")"
-				 + "scale(1.3)"
 				);
+				
+				
+				
+				setTimeout(function(){
+					self.svg.select("g").select("g").transition().duration(1000).attr("transform",
+				  "scale(1.3)").attr("transform-origin","(" + x + "," + y + ")");// Find the good transform-origin
+				}, 1500);
 				
 				// On red√©fini le zoom avec ses nouvelles valeurs d'origines
 				this.svg.call(d3.behavior.zoom().scale(1.3).translate([x, y]).scaleExtent([0.25, 3]).on("zoom", function(){
@@ -307,7 +317,7 @@ var UI = {
 			    		// Dessiner le zoom sur barre verticale, d3.event.scale
 			    }));
 			}else{
-				UI.notification('error', "Pas de mots trouv√©s");
+				UI.notification('error', "Pas de mots trouvés");
 			}
 		},
 		
