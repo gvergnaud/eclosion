@@ -22,7 +22,7 @@
             <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
         <aside id="notifications"></aside>
-        
+
         <!-- Menu de navigation gauche -->
         <nav role="navigation" id="lateral-navigation">
             <div class="left-nav" id="searchBox">
@@ -53,24 +53,26 @@
             <div class="hidden-option" id="filterWord">
                 <!-- Menu caché pour filtrer la vue -->
                 <i class="closeMenu flaticon-cross97" onclick="closeModal();"></i>
-                <div class="divfilter">
-                    <p>AUCUN</p>
-                </div>
-                <div class="divfilter">
-                    <p>AGE</p>
-                    <div class="agefilter">
-                        <button class="filterbuttons" onclick="app.addFilter('age','under25')">-25 ans</button>
-                        <button class="filterbuttons" onclick="app.addFilter('age','25to35')">25-35 ans</button>
-                        <button class="filterbuttons" onclick="app.addFilter('age','35to45')">35-45 ans</button>
-                        <button class="filterbuttons" onclick="app.addFilter('age','above45)">+45 ans</button>
+                <div class="filter-container">
+                    <div class="filters">
+                        <p>AUCUN</p>
                     </div>
-                </div>
-                <div class="divfilter">
-                    <p>SEXE</p>
-                    <div class="sexfilter">
-                        <button class="filterbuttons" onclick="app.addFilter('sexe','male')">Homme</button>
-                        <button class="filterbuttons" onclick="app.addFilter('sexe','female')">Femme</button>
-                        <button class="filterbuttons" onclick="app.addFilter('sexe','unknown')">Inconnu</button>
+                    <div class="filters">
+                        <p>AGE</p>
+                        <div class="agefilter">
+                            <button class="filterbuttons" onclick="app.addFilter('age','under25')">-25 ans</button>
+                            <button class="filterbuttons" onclick="app.addFilter('age','25to35')">25-35 ans</button>
+                            <button class="filterbuttons" onclick="app.addFilter('age','35to45')">35-45 ans</button>
+                            <button class="filterbuttons" onclick="app.addFilter('age','above45)">+45 ans</button>
+                        </div>
+                    </div>
+                    <div class="filters">
+                        <p>SEXE</p>
+                        <div class="sexfilter">
+                            <button class="filterbuttons" onclick="app.addFilter('sexe','male')">Homme</button>
+                            <button class="filterbuttons" onclick="app.addFilter('sexe','female')">Femme</button>
+                            <button class="filterbuttons" onclick="app.addFilter('sexe','unknown')">Inconnu</button>
+                        </div>
                     </div>
                 </div>
             </div>

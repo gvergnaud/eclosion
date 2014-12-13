@@ -168,7 +168,7 @@ p.notification.show{
 	color: #434343;
 }
 #proposedWordText { /* Span contenant uniquement le mot proposé */
-	color: #3277df;
+	color: #3277df; /* bleu primaire */
 }
 #writehWordForm { /* Pour gommer les 82px de droite que prend le bouton close */
 	margin-left: 82px;
@@ -180,6 +180,40 @@ p.notification.show{
 	height: 50px;
 	font-size: 28px;
 }
+.filter-container {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	height: 100%;
+	margin-left: 82px;
+}
+.filters {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	width: 350px;
+	margin: 0 10px; 
+}
+.filters p {
+	margin: 20px 0;
+	font-family: 'Open Sans', sans-serif;
+	font-size: 40px;
+}
+.filterbuttons {
+	margin: 5px;
+	padding: 0;
+	border: 0;
+	background: none;
+	font-family: 'Open Sans', sans-serif;
+	font-size: 16px;
+	color: #888888;
+}
+.filterbuttons:hover, .filterbuttons:active, .filterbuttons:focus {
+	cursor: pointer;
+	color: #3277df;
+}
+
 input::-webkit-input-placeholder {
 	font-style: italic;
 }
