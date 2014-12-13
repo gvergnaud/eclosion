@@ -28,6 +28,14 @@ body{
 	left: 20px;
 }
 
+/*NODEDATA*/
+#nodeData{
+	width: 250px;
+	position: absolute;
+	top: 20px;
+	right: 20px;
+}
+
 /* NOTIFICATIONS */
 
 aside#notifications{

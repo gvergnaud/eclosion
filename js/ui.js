@@ -23,63 +23,82 @@ var UI = {
 		document.querySelector('#globalData>p.contributors').innerText = nbContributors + ' Contributeurs';
 	},
 
+	printNodeData: function(nodeData){
+		var nodeDataElement = document.querySelector('#nodeData');
+
+		nodeDataElement.querySelector('div.occurrence>p.data').innerText = nodeData.occurrence;
+		nodeDataElement.querySelector('div.nbLinks>p.data').innerText = nodeData.nbLinks;
+
+		nodeDataElement.querySelector('div.sexeOccurrence>div.male .data').innerText = Math.round(nodeData.sexeOccurrence.male);
+		nodeDataElement.querySelector('div.sexeOccurrence>div.female .data').innerText = Math.round(nodeData.sexeOccurrence.female);
+		nodeDataElement.querySelector('div.sexeOccurrence>div.unknown .data').innerText = Math.round(nodeData.sexeOccurrence.unknown);
+
+		nodeDataElement.querySelector('div.ageOccurrence>div.under25 .data').innerText = Math.round(nodeData.ageOccurrence['under25']);
+		nodeDataElement.querySelector('div.ageOccurrence>div.from25to35 .data').innerText = Math.round(nodeData.ageOccurrence['25to35']);
+		nodeDataElement.querySelector('div.ageOccurrence>div.from35to45 .data').innerText = Math.round(nodeData.ageOccurrence['35to45']);
+		nodeDataElement.querySelector('div.ageOccurrence>div.above45 .data').innerText = Math.round(nodeData.ageOccurrence['above45']);
+		nodeDataElement.querySelector('div.ageOccurrence>div.unknown .data').innerText = Math.round(nodeData.ageOccurrence.unknown);
+
+		nodeDataElement.querySelector('div.mostAssociatedWords>p.data').innerText = nodeData.mostAssociatedWords;
+	},
+
 	notification: function(type, msg){
-            //Si le message n'est pas déjà dans la liste d'attente
-            if(UI.currentNotifications.indexOf(msg) === -1){
+        //Si le message n'est pas déjà dans la liste d'attente
+        if(UI.currentNotifications.indexOf(msg) === -1){
 
-                //si il n'y a rien dans la liste d'attente, on affiche la notif
-                if(UI.currentNotifications.length === 0){
-                    //on met le messsage en liste d'attente
-                    UI.currentNotifications.push(msg);
+            //si il n'y a rien dans la liste d'attente, on affiche la notif
+            if(UI.currentNotifications.length === 0){
+                //on met le messsage en liste d'attente
+                UI.currentNotifications.push(msg);
 
 
-                    var notifContainer = document.querySelector('aside#notifications');
-                    var newNotif = document.createElement('p');
+                var notifContainer = document.querySelector('aside#notifications');
+                var newNotif = document.createElement('p');
 
-                    newNotif.innerHTML = msg;
+                newNotif.innerHTML = msg;
 
-                    newNotif.classList.add('notification');
-                    if(type){
-                        newNotif.classList.add(type);
-                    }
+                newNotif.classList.add('notification');
+                if(type){
+                    newNotif.classList.add(type);
+                }
 
-                    notifContainer.innerHTML = '';
-                    notifContainer.style.display = 'block';
-                    notifContainer.appendChild(newNotif);
+                notifContainer.innerHTML = '';
+                notifContainer.style.display = 'block';
+                notifContainer.appendChild(newNotif);
 
-                    setTimeout(function(){	
-                        newNotif.classList.add('show');
-                    }, 100);
+                setTimeout(function(){	
+                    newNotif.classList.add('show');
+                }, 100);
+
+                setTimeout(function(){
+                    //on cache la notif 
+                    newNotif.classList.remove('show');
 
                     setTimeout(function(){
-                        //on cache la notif 
-                        newNotif.classList.remove('show');
 
-                        setTimeout(function(){
-
-                            notifContainer.style.display = 'none';
-                        	newNotif.parentNode.removeChild(newNotif);
-                            //on retire le message de la liste d'attente
-                            UI.currentNotifications.splice(UI.currentNotifications.indexOf(msg), 1);
-                        }, 650);
-
-
-                    }, 4000);
-
-                    newNotif.addEventListener('click', function(){
                         notifContainer.style.display = 'none';
-                        newNotif.parentNode.removeChild(newNotif);
+                    	newNotif.parentNode.removeChild(newNotif);
                         //on retire le message de la liste d'attente
                         UI.currentNotifications.splice(UI.currentNotifications.indexOf(msg), 1);
-                    });
+                    }, 650);
 
-                }else{
-                    setTimeout(function(){
-                        UI.notification(type, msg);
-                    }, 1000);
-                }
+
+                }, 3000);
+
+                newNotif.addEventListener('click', function(){
+                    notifContainer.style.display = 'none';
+                    newNotif.parentNode.removeChild(newNotif);
+                    //on retire le message de la liste d'attente
+                    UI.currentNotifications.splice(UI.currentNotifications.indexOf(msg), 1);
+                });
+
+            }else{
+                setTimeout(function(){
+                    UI.notification(type, msg);
+                }, 1000);
             }
-        },
+        }
+    },
 	
 	// D3.js 
 	d3: {
