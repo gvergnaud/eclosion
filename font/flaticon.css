@@ -21,9 +21,15 @@
 .flaticon-filter15:before {
 	content: "\e001";
 }
-.flaticon-magnifying47:before {
+.flaticon-magnifier12:before {
 	content: "\e002";
 }
-.flaticon-pen29:before {
+.flaticon-magnifying47:before {
 	content: "\e003";
+}
+.flaticon-pen29:before {
+	content: "\e004";
+}
+.flaticon-search74:before {
+	content: "\e005";
 }
