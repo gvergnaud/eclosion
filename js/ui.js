@@ -24,7 +24,7 @@ var UI = {
 	},
 
 	notification: function(type, msg){
-            //Si le message n'est pas déjà dans la liste d'attente
+            //Si le message n'est pas d√©j√† dans la liste d'attente
             if(UI.currentNotifications.indexOf(msg) === -1){
 
                 //si il n'y a rien dans la liste d'attente, on affiche la notif
@@ -139,12 +139,11 @@ var UI = {
 	           	.selectAll("node")
 				.data(words.nodes)
 				.enter()
-				.append("g").style("opacity", 0.8).call(d3.behavior.drag().on("dragstart", function(){
-					d3.event.sourceEvent.stopPropagation();		            
-				}).on("drag", function(d, i){
+				.append("g").style("opacity", 0.8).call(d3.behavior.drag().on("drag", function(d, i){
+					self.force.drag;
 					
 				}).on("dragend", function(d){
-					
+					self.force.resume();
 				}));
 	         
 			node.append("circle")
@@ -231,13 +230,18 @@ var UI = {
 		        var node = this.svg.select(".nodes").selectAll("g")
 		            .data(self.previousWords.nodes);
 		
-		        var nodeEnter = node.enter().append("g").style("opacity", 0.8);
+		        var nodeEnter = node.enter().append("g").style("opacity", 0.8)
+		        .call(d3.behavior.drag().on("drag", function(d, i){
+					self.force.drag;
+				}).on("dragend", function(d){
+					self.force.resume();
+				}));
 		        
 		        nodeEnter.append("circle")
 		            .attr("class", "node")
 		            .style('fill', "#3177df")
-					.attr("r", function(d) {return Math.sqrt(d.nbLinks) * self.nodeSizeCoefficient; });
-		            //.call(self.force.drag)
+					.attr("r", function(d) {return Math.sqrt(d.nbLinks) * self.nodeSizeCoefficient; })
+		            .call(self.force.drag);
 		
 		        nodeEnter.append("text")
 		            .attr("text-anchor", "middle")
@@ -285,6 +289,7 @@ var UI = {
 	            return d.name == selectedVal;
 	        });
 	        
+	        // Si la recherche a donné quelque chose
 	        if(selected[0].length > 0){
 	        
 				// On calcule le x et y du translate
@@ -296,23 +301,21 @@ var UI = {
 				 + "scale(1.3)"
 				);
 				
-				// On redéfini le zoom avec ses nouvelles valeurs d'origines
+				// On red√©fini le zoom avec ses nouvelles valeurs d'origines
 				this.svg.call(d3.behavior.zoom().scale(1.3).translate([x, y]).scaleExtent([0.25, 3]).on("zoom", function(){
 			    		UI.d3.redrawGraph();
 			    		// Dessiner le zoom sur barre verticale, d3.event.scale
 			    }));
 			}else{
-				UI.notification('error', "Pas de mots trouvés");
+				UI.notification('error', "Pas de mots trouv√©s");
 			}
 		},
 		
 		selectNode : function(node){
-			
 			var self = this;
 			var nodes = d3.selectAll(".nodes>g");
 			var links = d3.selectAll(".links>line");
         		
-        	//Create an array logging what is connected to what
 			var linkedByIndex = {};
 			for (i = 0; i < self.previousWords.length; i++) {
 			    linkedByIndex[i + "," + i] = 1;
@@ -324,17 +327,17 @@ var UI = {
 			
 	        d = node.node().__data__;
 	        
-	        // R�duction de l'opacit� en fonction de la proximit� des noeuds
+	        // Réduction de l'opacité en fonction de la proximité des noeuds
 	        nodes.transition().duration(1000).style("opacity", function (o) {
 	            return linkedByIndex[d.index + "," + o.index] | linkedByIndex[o.index + "," + d.index] ? 0.8 : 0.2;
 	        });
 	      
-	        // R�duction de l'opacit� des links en fonction des noeuds voisins
+	        // Réduction de l'opacité des links en fonction des noeuds voisins
 	        links.transition().duration(1000).style("opacity", function (o) {
 	            return d.index==o.source.index | d.index==o.target.index ? 1 : 0.2;
 	        });
 	        
-	        // Noeud choisi en pleine opacit�
+	        // Noeud choisi en pleine opacité
         	node.transition().duration(1000).style("opacity", 1);
         	
         	self.force.resume();

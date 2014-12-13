@@ -35,12 +35,14 @@ var app = {
 			}));
 
 			UI.d3.svg.selectAll(".nodes>g>circle").on("click", 	function(node){
-				UI.d3.selectNode(node);
-				app.getNodeData(node, function(nodeData){
-					console.log(nodeData);
-				});
+				if(d3.event.defaultPrevented == false){ 
+					UI.d3.selectNode(d3.select(this.parentNode));
+					app.getNodeData(node, function(nodeData){
+						//console.log(nodeData);
+					});
+				}
 			});
-			
+
 			//remove l'event listener
 			e.target.removeEventListener(e.type, arguments.callee);
 		}, false);
