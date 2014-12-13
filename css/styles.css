@@ -13,16 +13,10 @@ body{
 	stroke-opacity: .6;
 }
 
-input{
-	z-index: 10;
-	position: relative;
-}
-
 #wordGraph{
 	position: absolute;
 	top:0;
 	left:0;
-	z-index: -50;
 }
 
 /*GLOBALDATA*/
@@ -84,15 +78,16 @@ p.notification.show{
 	-webkit-transform: translateY(0%);
 }
 
+.contribution, .filters, .search, #lateral-navigation, #globalData {
+	z-index: 5;
+}
 /* Menu de navigation latéral gauche : Recherche de mot, ajout de mot, filtes */
-.displayblock {
-	display: block;
-}
-.displaynone {
-	display: none;
-}
 #lateral-navigation {
 	position: relative;
+	width: 70px;
+}
+.widthauto { /* Pour le #lateral-navigation seulement au click */
+	width: auto !important;
 }
 .left-nav {
 	width: 70px;
