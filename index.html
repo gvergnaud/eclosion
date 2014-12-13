@@ -46,30 +46,38 @@
 
         <!-- Menu de navigation gauche -->
         <nav role="navigation" id="lateral-navigation">
-            <div class="left-nav">
+            <div class="left-nav" id="searchBox">
                 <i class="flaticons flaticon-magnifying47"></i> 
-                <div class="hidden-option" id="searchWord">
-                    <!-- Menu caché pour la recherche -->
-                    <button class="closeMenu">X</button>
-                    <form id="searchWord">
-                        <input type="text" id="searchInput" placeholder="Rechercher un mot" />
-                    </form>
-                </div>
             </div>
-            <div class="left-nav">
+            <div class="hidden-option" id="searchWord">
+                <!-- Menu caché pour la recherche -->
+                <button class="closeMenu" onclick="closeModal();">X</button>
+                <form id="searchWordForm">
+                    <input type="text" id="searchInput" placeholder="Rechercher un mot" />
+                </form>
+            </div>
+            <div class="left-nav" id="addWordBox">
                 <i class="flaticons flaticon-pen29"></i> 
-                <div class="hidden-option" id="searchWord">
-                    <!-- Menu caché pour contribuer en ajoutant un mot -->
-                </div>
             </div>
-            <div class="left-nav">
-                <i class="flaticons flaticon-filled9"></i> 
-                <div class="hidden-option" id="searchWord">
-                    <!-- Menu caché pour filtrer la vue -->
-                </div>
+            <div class="hidden-option" id="writeWord">
+                <!-- Menu caché pour l'ajout de mot -->
+                <button class="closeMenu" onclick="closeModal();">X</button>
+                <form id="writehWordForm">
+                    <input type="text" id="writeInput" placeholder="Ecrire un mot" />
+                </form>
+            </div>
+            <div class="left-nav" id="filterBox">
+                <i class="flaticons flaticon-filled9"></i>
+            </div>
+            <div class="hidden-option" id="filterWord">
+                <!-- Menu caché pour filtrer la vue -->
+                <button class="closeMenu" onclick="closeModal();">X</button>
+                <p>Les Filtres</p>
+                <p>Par Âge</p>
+                <p>Par Sexe</p>
             </div>
         </nav>
-
+    
         <svg id="wordGraph"></svg>
 		
 

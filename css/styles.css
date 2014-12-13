@@ -84,16 +84,16 @@ p.notification.show{
 }
 
 /* Menu de navigation latéral gauche : Recherche de mot, ajout de mot, filtes */
-#lateral-navigation {
-	width: 70px;
+.displayblock {
+	display: block;
 }
-#lateral-navigation:hover .left-nav:nth-child(1),
-#lateral-navigation:hover .left-nav:nth-child(2){
-	margin-bottom: 0;
-	border-bottom: 2px solid #fff;
+.displaynone {
+	display: none;
+}
+#lateral-navigation {
+	position: relative;
 }
 .left-nav {
-	position: relative;
 	width: 70px;
 	height: 70px;
 	margin-bottom: 2px;
@@ -101,21 +101,27 @@ p.notification.show{
 }
 .left-nav:hover {
 	background: #fff;
+	cursor: pointer;
 }
-.left-nav .hidden-option {
+.hidden-option {
 	display: none;
 }
-.left-nav:hover .hidden-option {
+.modalApparition {
 	display: block;
+	box-sizing: border-box;
 	position: absolute;
 	top: 0;
-	left: 70px; /* Largeur du conteneur parent */
-	width: 1200px;
+	left: 70px;
+	right: 0;
 	height: 214px;
+	padding: 10px 10px 10px 80px;
 	background-color: #fff;
 	opacity: 0.95;
 }
 .flaticons {
 	height: 70px;
 	line-height: 70px;
+}
+.closeMenu {
+	float: right;
 }
