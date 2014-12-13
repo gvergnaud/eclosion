@@ -171,12 +171,22 @@ var model = {
 			return b.value - a.value;
 		});
 
+		var totalOccurrence = 0;
+
+		links.forEach(function(link){
+			totalOccurrence += link.value;
+		});
+
 		try{
 			links.forEach(function(link){
+				var word = {};
+
 				if(link.source !== node.index){
-					var word = model.words.nodes[link.source].name;
+					word.name = model.words.nodes[link.source].name;
+					word.occurrence = Math.round(link.value * 100 / totalOccurrence);
 				}else{
-					var word = model.words.nodes[link.target].name;
+					word.name = model.words.nodes[link.target].name;
+					word.occurrence = Math.round(link.value * 100 / totalOccurrence);
 				}
 				mostAssociatedWords.push(word);
 
@@ -195,9 +205,9 @@ var model = {
 		var total = node.sexe.female + node.sexe.male + node.sexe.unknown;
 
 		var sexeOccurrence = {
-			female: node.sexe.female * 100 / total,
-			male: node.sexe.male * 100 / total,
-			unknown: node.sexe.unknown * 100 / total,
+			female: Math.round(node.sexe.female * 100 / total),
+			male: Math.round(node.sexe.male * 100 / total),
+			unknown: Math.round(node.sexe.unknown * 100 / total),
 		};
 
 		return sexeOccurrence;
@@ -207,11 +217,11 @@ var model = {
 		var total = node.age.unknown + node.age.under25 + node.age['25to35'] + node.age['35to45'] + node.age.above45;
 
 		var ageOccurrence = {
-			unknown: node.age.unknown * 100 / total,
-			under25: node.age.under25 * 100 / total,
-			'25to35': node.age['25to35'] * 100 / total,
-			'35to45': node.age['35to45'] * 100 / total,
-			above45: node.age.above45 * 100 / total,
+			unknown: Math.round(node.age.unknown * 100 / total),
+			under25: Math.round(node.age.under25 * 100 / total),
+			'25to35': Math.round(node.age['25to35'] * 100 / total),
+			'35to45': Math.round(node.age['35to45'] * 100 / total),
+			above45: Math.round(node.age.above45 * 100 / total),
 		};
 
 		return ageOccurrence;

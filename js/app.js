@@ -34,12 +34,6 @@ var app = {
 				UI.d3.redrawGraph();
 			}));
 
-			UI.d3.svg.selectAll(".nodes>g>circle").on("click", 	function(node){
-				app.getNodeData(node, function(nodeData){
-					console.log(nodeData);
-				});
-			});
-
 			//remove l'event listener
 			e.target.removeEventListener(e.type, arguments.callee);
 		}, false);
@@ -50,7 +44,7 @@ var app = {
 			
 			UI.d3.svg.selectAll(".nodes>g>circle").on("click", 	function(node){
 				app.getNodeData(node, function(nodeData){
-					console.log(nodeData);
+					UI.printNodeData(nodeData);
 				});
 			});
 		}, false);
@@ -137,6 +131,8 @@ var app = {
 	getNodeData: function(node, callback){
 		var nodeData = {};
 
+		nodeData.name = node.name;
+		
 		//nombre de connexions
 		nodeData.nbLinks = node.nbLinks;
 		
@@ -147,10 +143,10 @@ var app = {
 		nodeData.mostAssociatedWords = model.getMostAssociatedWords(node);
 
 		//apparition par sexe
-		nodeData.sexeOccurence = model.getSexeOccurrence(node);
+		nodeData.sexeOccurrence = model.getSexeOccurrence(node);
 
 		//apparition par age
-		nodeData.ageOccurence = model.getAgeOccurrence(node);
+		nodeData.ageOccurrence = model.getAgeOccurrence(node);
 
 		if(callback){
 			callback.call(this, nodeData);
