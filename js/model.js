@@ -16,6 +16,29 @@ var model = {
 			xmlhttp.open("GET", fichier, true);
 			xmlhttp.setRequestHeader("Content-Type", "charset=utf-8");
 			xmlhttp.send(null);
+		},
+
+		ieFilterCompatibility: function(){
+			if (!Array.prototype.filter) {
+				Array.prototype.filter = function(fun /*, thisp*/) {
+					var len = this.length >>> 0;
+					if (typeof fun != "function"){
+						throw new TypeError();
+					}
+
+					var res = [];
+					var thisp = arguments[1];
+					for (var i = 0; i < len; i++) {
+						if (i in this) {
+							var val = this[i]; // in case fun mutates this
+							if (fun.call(thisp, val, i, this)){
+								res.push(val);
+							}
+						}
+					}
+					return res;
+				};
+			}
 		}
 	},
 
@@ -115,31 +138,64 @@ var model = {
 		return node;
 	},
 
+	getAllLinksFromNode: function(node){
+		//Compatibilité IE pour la methode filter de Array
+		model.toolbox.ieFilterCompatibility();
+
+		var links = model.words.links.filter(function (link) {
+			return link.source === node.index || link.target === node.index;
+		});
+
+		return links;
+	},
+
+	getNodeOccurrence: function(node){
+
+		var occurrence = 0,
+			links = model.getAllLinksFromNode(node);
+
+		links.forEach(function(link){
+			occurrence += link.value;
+		});
+
+		return occurrence;
+	},
+
+	getMostAssociatedWords: function(node){
+		var mostAssociatedWords = [],
+			links = model.getAllLinksFromNode(node),
+			BreakException = {};
+
+
+		links.sort(function(a, b) { //on trie le tableau par value décroissante
+			return b.value - a.value;
+		});
+
+		try{
+			links.forEach(function(link){
+				if(link.source !== node.index){
+					var word = model.words.nodes[link.source].name;
+				}else{
+					var word = model.words.nodes[link.target].name;
+				}
+				mostAssociatedWords.push(word);
+
+				if(mostAssociatedWords.length === 5){
+					throw BreakException;
+				}
+			});
+		} catch(e) {
+			if (e !== BreakException) throw e;
+		}
+
+		return mostAssociatedWords;
+	},
 
 	//ApplyFilters
 	applyFilters: function(words, filters, callback){
 
 		//Compatibilité IE pour la methode filter de Array
-		if (!Array.prototype.filter) {
-			Array.prototype.filter = function(fun /*, thisp*/) {
-				var len = this.length >>> 0;
-				if (typeof fun != "function"){
-					throw new TypeError();
-				}
-
-				var res = [];
-				var thisp = arguments[1];
-				for (var i = 0; i < len; i++) {
-					if (i in this) {
-						var val = this[i]; // in case fun mutates this
-						if (fun.call(thisp, val, i, this)){
-							res.push(val);
-						}
-					}
-				}
-				return res;
-			};
-		}
+		model.toolbox.ieFilterCompatibility();
 
 		var filteredWords = {};
 
