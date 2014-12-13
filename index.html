@@ -45,9 +45,10 @@
             <div class="hidden-option" id="searchWord">
                 <!-- Menu caché pour la recherche -->
                 <i class="closeMenu flaticon-cross97" onclick="closeModal();"></i>
-                <form id="searchWordForm">
-                    <input type="text" id="searchInput" placeholder="Rechercher un mot" />
-                </form>
+                <div id="searchWordForm" class="optionsForm">
+                    <input type="text" id="searchInput" class="optionsInputText" list="searchAutoComplete" placeholder="Rechercher un mot" />
+                    <datalist id="searchAutoComplete"></datalist>
+                </div>
             </div>
             <div class="left-nav" id="addWordBox">
                 <i class="flaticons flaticon-pen29"></i> 
@@ -55,12 +56,9 @@
             <div class="hidden-option" id="writeWord">
                 <!-- Menu caché pour l'ajout de mot -->
                 <i class="closeMenu flaticon-cross97" onclick="closeModal();"></i>
-                <form id="writehWordForm">
-                    <input type="text" id="writeInput" placeholder="Ecrire un mot" />
-                </form>
-                <div class="contribution">
-                    <p id="proposedWord"></p>
-                    <input id="addContribution" type="text" placeholder="ajouter un mot" />
+                <p id="proposedWord">Si je vous dit : </p>
+                <div id="writehWordForm" class="optionsForm">
+                    <input type="text" id="addContribution" class="optionsInputText" placeholder="Ajouter un mot" />
                 </div>
             </div>
             <div class="left-nav" id="filterBox">
@@ -102,9 +100,9 @@
             searchBox.addEventListener("click",searchBoxfun,false);
             addWordBox.addEventListener("click",addWordBoxfun,false);
             filterBox.addEventListener("click",filterWordBoxfun,false);
-            searchBox.addEventListener("mouseover",searchBoxfun,false);
-            addWordBox.addEventListener("mouseover",addWordBoxfun,false);
-            filterBox.addEventListener("mouseover",filterWordBoxfun,false);
+            // searchBox.addEventListener("mouseover",searchBoxfun,false);
+            // addWordBox.addEventListener("mouseover",addWordBoxfun,false);
+            // filterBox.addEventListener("mouseover",filterWordBoxfun,false);
             function searchBoxfun() {
                 searchWordModal.classList.remove("hidden-option");
                 writehWordModal.classList.remove("modalApparition");

@@ -124,21 +124,41 @@ p.notification.show{
 .flaticon-cross97:hover {
 	cursor: pointer;
 }
-#searchWordForm {
+.optionsForm {
 	display: flex;
 	align-items: center;
 	justify-content: center;
+}
+#searchWordForm {
 	height: 214px;
 }
-#searchInput {
+.optionsInputText {
 	display: inline-block;
-	height: 60px;
 	padding: 15px 50px;
 	border: none;
 	border-left: 1px solid #434343;
 	font-family: 'Open Sans', sans-serif;
+	color: #434343;
+}
+#searchInput {
+	height: 60px;
+	font-size: 48px;
+}
+#proposedWord { /* Mot proposé */
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	margin: 0;
+	font-family: 'Open Sans', sans-serif;
 	font-size: 48px;
 	color: #434343;
+}
+#writehWordForm {
+
+}
+#addContribution { /* Input text pour ajouter un mot */
+	height: 50px;
+	font-size: 36px;
 }
 input::-webkit-input-placeholder {
 	color: #434343;
