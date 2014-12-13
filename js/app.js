@@ -31,6 +31,11 @@ var app = {
 				UI.d3.redrawGraph();
 			}));
 			
+			// Event Click Nodes circle
+	        d3.selectAll(".nodes>g>circle").on("click", function(){
+	        	UI.d3.selectNode(d3.select(this.parentNode));
+	        });
+			
 			//remove l'event listener
 			e.target.removeEventListener(e.type, arguments.callee);
 		}, false);
