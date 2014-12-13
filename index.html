@@ -77,7 +77,7 @@
                 <p>Par Sexe</p>
             </div>
         </nav>
-    
+
         <svg id="wordGraph"></svg>
 		
 
@@ -94,5 +94,56 @@
         <script src="js/model.js"></script>
         <script src="js/ui.js"></script>
         <script src="js/app.js"></script>
+
+        <script>
+            var searchBox = document.getElementById('searchBox');
+            searchBox.addEventListener("click",searchBoxfun,false);
+            var addWordBox = document.getElementById('addWordBox');
+            addWordBox.addEventListener("click",addWordBoxfun,false);
+            var filterBox = document.getElementById('filterBox');
+            filterBox.addEventListener("click",filterWordBoxfun,false);
+
+            var searchWordModal = document.getElementById("searchWord");
+            var writehWordModal = document.getElementById("writeWord");
+            var filterWordModal = document.getElementById("filterWord");
+            function searchBoxfun() {
+                searchWordModal.classList.remove("hidden-option");
+
+                writehWordModal.classList.remove("modalApparition");
+                filterWordModal.classList.remove("modalApparition");
+                writehWordModal.classList.add("hidden-option");
+                filterWordModal.classList.add("hidden-option");
+
+                searchWordModal.classList.add("modalApparition");
+            }
+            function addWordBoxfun() {
+                writehWordModal.classList.remove("hidden-option");
+
+                filterWordModal.classList.remove("modalApparition");
+                searchWordModal.classList.remove("modalApparition");
+                searchWordModal.classList.add("hidden-option");
+                filterWordModal.classList.add("hidden-option");
+
+                writehWordModal.classList.add("modalApparition");
+            }
+            function filterWordBoxfun() {
+                filterWordModal.classList.remove("hidden-option");
+
+                searchWordModal.classList.remove("modalApparition");
+                writehWordModal.classList.remove("modalApparition");
+                searchWordModal.classList.add("hidden-option");
+                writehWordModal.classList.add("hidden-option");
+
+                filterWordModal.classList.add("modalApparition");
+            }
+            function closeModal() {
+                searchWordModal.classList.add("hidden-option");
+                writehWordModal.classList.add("hidden-option");
+                filterWordModal.classList.add("hidden-option");
+                searchWordModal.classList.remove("modalApparition");
+                writehWordModal.classList.remove("modalApparition");
+                filterWordModal.classList.remove("modalApparition");
+            }
+        </script>
     </body>
 </html>
