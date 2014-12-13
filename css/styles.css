@@ -127,7 +127,7 @@ p.notification.show{
 	justify-content: center;
 	height: 214px;
 }
-#search {
+#searchInput {
 	display: inline-block;
 	height: 60px;
 	padding: 15px 50px;
