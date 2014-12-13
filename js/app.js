@@ -33,6 +33,13 @@ var app = {
 			UI.d3.svg.call(d3.behavior.zoom().scaleExtent([0.25, 3]).on("zoom", function(){
 				UI.d3.redrawGraph();
 			}));
+
+			UI.d3.svg.selectAll(".nodes>g>circle").on("click", 	function(node){
+				app.getNodeData(node, function(nodeData){
+					console.log(nodeData);
+				});
+			});
+
 			//remove l'event listener
 			e.target.removeEventListener(e.type, arguments.callee);
 		}, false);
@@ -121,6 +128,29 @@ var app = {
 		});
 	},
 
+	getNodeData: function(node, callback){
+		var nodeData = {};
+
+		//nombre de connexions
+		nodeData.nbLinks = node.nbLinks;
+		
+		//nombre d'apparition du mot
+		nodeData.occurrence = model.getNodeOccurrence(node);
+
+		//les mots les plus associés
+		nodeData.mostAssociatedWords = model.getMostAssociatedWords(node);
+
+		//apparition par sexe
+		nodeData.sexeOccurence = model.getSexeOccurrence(node);
+
+		//apparition par age
+		nodeData.ageOccurence = model.getAgeOccurrence(node);
+
+		if(callback){
+			callback.call(this, nodeData);
+		}
+	},
+
 	proposeRandomWord: function(){
 		//rÃ©cupÃ¨re un mot au hasard pour faire contribuer l'utilisateur
 		app.proposedWord = model.getRandomWord();
@@ -133,7 +163,7 @@ var app = {
 		if(e.keyCode == 13){
 			if(this.value){
 
-				model.addContribution(this.value, app.proposedWord, 
+				model.addContribution(this.value.toLowerCase(), app.proposedWord, 
 					function(){ //success
 						document.dispatchEvent(app.event.userContribution);
 					},
