@@ -278,7 +278,7 @@ var model = {
 		model.words.nodes[link.element.source].sexe[model.user.sexe] += 1;
 		model.words.nodes[link.element.target].sexe[model.user.sexe] += 1;
 
-		words.links[link.index] = link.element;
+		model.words.links[link.index] = link.element;
 
 		this.firebase.set(model.words);
 	},

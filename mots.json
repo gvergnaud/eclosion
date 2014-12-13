@@ -1,75 +1,115 @@
 {
   "mots" : {
-    "contributors": 2,
-    "links" : [
-      {
-        "source" : 1,
-        "target" : 0,
-        "value" : 1
+    "contributors" : 4,
+    "links" : [ {
+      "source" : 1,
+      "target" : 0,
+      "value" : 1
+    }, {
+      "source" : 2,
+      "target" : 0,
+      "value" : 2
+    }, {
+      "source" : 2,
+      "target" : 1,
+      "value" : 1
+    }, {
+      "source" : 3,
+      "target" : 0,
+      "value" : 1
+    }, {
+      "source" : 4,
+      "target" : 2,
+      "value" : 1
+    }, {
+      "source" : 4,
+      "target" : 3,
+      "value" : 1
+    }, {
+      "source" : 4,
+      "target" : 1,
+      "value" : 1
+    } ],
+    "nodes" : [ {
+      "age" : {
+        "25to35" : 0,
+        "35to45" : 0,
+        "above45" : 0,
+        "under25" : 1,
+        "unknown" : 2
       },
-      {
-        "source" : 2,
-        "target" : 0,
-        "value" : 1
-      },
-      {
-        "source" : 2,
-        "target" : 1,
-        "value" : 1
+      "index" : 0,
+      "name" : "bonheur",
+      "nbLinks" : 3,
+      "sexe" : {
+        "female" : 0,
+        "male" : 1,
+        "unknown" : 2
       }
-    ],
-    "nodes" : [
-      {
-        "index" : 0,
-        "name" : "bonheur",
-        "nbLinks" : 3,
-        "age": {
-          "unknown": 0,
-          "under25": 1,
-          "25to35": 0,
-          "35to45": 0,
-          "above45": 0
-        },
-        "sexe" : {
-          "male": 1,
-          "female": 0,
-          "unknown": 0
-        }
+    }, {
+      "age" : {
+        "25to35" : 0,
+        "35to45" : 1,
+        "above45" : 0,
+        "under25" : 0,
+        "unknown" : 1
       },
-      {
-        "index" : 1,
-        "name" : "cinema",
-        "nbLinks" : 3,
-        "age": {
-          "unknown": 0,
-          "under25": 0,
-          "25to35": 0,
-          "35to45": 1,
-          "above45": 0
-        },
-        "sexe" : {
-          "male": 0,
-          "female": 0,
-          "unknown": 1
-        }
-      }, 
-      {
-        "index" : 2,
-        "name" : "vie",
-        "nbLinks" : 2,
-        "age": {
-          "unknown": 0,
-          "under25": 0,
-          "25to35": 1,
-          "35to45": 0,
-          "above45": 0
-        },
-        "sexe" : {
-          "male": 0,
-          "female": 1,
-          "unknown": 0
-        }
+      "index" : 1,
+      "name" : "cinéma",
+      "nbLinks" : 3,
+      "sexe" : {
+        "female" : 0,
+        "male" : 0,
+        "unknown" : 2
       }
-    ]
+    }, {
+      "age" : {
+        "25to35" : 1,
+        "35to45" : 0,
+        "above45" : 0,
+        "under25" : 0,
+        "unknown" : 2
+      },
+      "index" : 2,
+      "name" : "vie",
+      "nbLinks" : 3,
+      "sexe" : {
+        "female" : 1,
+        "male" : 0,
+        "unknown" : 2
+      }
+    }, {
+      "age" : {
+        "25to35" : 0,
+        "35to45" : 0,
+        "above45" : 0,
+        "under25" : 0,
+        "unknown" : 2
+      },
+      "index" : 3,
+      "name" : "plaisir",
+      "nbLinks" : 2,
+      "sexe" : {
+        "female" : 0,
+        "male" : 0,
+        "unknown" : 2
+      }
+    }, {
+      "age" : {
+        "25to35" : 0,
+        "35to45" : 0,
+        "above45" : 0,
+        "under25" : 0,
+        "unknown" : 3
+      },
+      "index" : 4,
+      "name" : "envie",
+      "nbLinks" : 3,
+      "sexe" : {
+        "female" : 0,
+        "male" : 0,
+        "unknown" : 3
+      }
+    } ]
   }
 }
