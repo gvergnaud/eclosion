@@ -23,7 +23,6 @@ body{
 #globalData{
 	position: absolute;
 	bottom: 20px;
-	left: 20px;
 }
 
 /* NOTIFICATIONS */
@@ -79,7 +78,7 @@ p.notification.show{
 }
 
 /* Menu de navigation latéral gauche : Recherche de mot, ajout de mot, filtes */
-.contribution, .filters, #lateral-navigation, #globalData {
+.contribution, .filters, .search, #lateral-navigation {
 	z-index: 10;
 	position: relative;
 }
@@ -118,8 +117,12 @@ p.notification.show{
 	height: 70px;
 	line-height: 70px;
 }
-.closeMenu {
+.flaticon-cross97 {
 	float: right;
+	padding: 15px 20px;
+}
+.flaticon-cross97:hover {
+	cursor: pointer;
 }
 #searchWordForm {
 	display: flex;
