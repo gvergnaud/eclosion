@@ -266,8 +266,6 @@ var model = {
 
 		model.words.nodes.push(newNode);
 
-		//this.firebase.child('nodes').set(model.words.nodes); //pose des problèmes sur l'ajout d'un node sans recharger le graph
-
 		return newNode;
 	},
 
