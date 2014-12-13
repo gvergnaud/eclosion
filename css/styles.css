@@ -94,12 +94,10 @@ p.notification.show{
 }
 
 /* Menu de navigation latéral gauche : Recherche de mot, ajout de mot, filtes */
-.filters, #lateral-navigation {
-	z-index: 10;
-	position: relative;
-}
 #lateral-navigation {
 	width: 70px;
+	z-index: 10;
+	position: relative;
 }
 .widthauto { /* Pour le #lateral-navigation seulement au click */
 	width: auto !important;
