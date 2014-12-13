@@ -132,7 +132,7 @@ var app = {
 		var nodeData = {};
 
 		nodeData.name = node.name;
-		
+
 		//nombre de connexions
 		nodeData.nbLinks = node.nbLinks;
 		
@@ -224,7 +224,15 @@ var app = {
 		//envoi de la recherche
 		if(e.keyCode === 13){
 			var selectedVal = document.getElementById("searchInput").value;
+
 			UI.d3.searchNode(selectedVal);
+
+			var selectedNode = model.getNodeFromWord(selectedVal);
+
+			app.getNodeData(selectedNode, function(nodeData){
+				UI.printNodeData(nodeData);
+			});
+
 			this.value = '';
 
 			searchWordModal.classList.add("hidden-option");

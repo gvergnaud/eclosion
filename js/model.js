@@ -183,10 +183,12 @@ var model = {
 
 				if(link.source !== node.index){
 					word.name = model.words.nodes[link.source].name;
-					word.occurrence = Math.round(link.value * 100 / totalOccurrence);
+					word.occurrence = link.value;
+					word.occurrencePercentage = Math.round(link.value * 100 / totalOccurrence);
 				}else{
 					word.name = model.words.nodes[link.target].name;
-					word.occurrence = Math.round(link.value * 100 / totalOccurrence);
+					word.occurrence = link.value;
+					word.occurrencePercentage = Math.round(link.value * 100 / totalOccurrence);
 				}
 				mostAssociatedWords.push(word);
 

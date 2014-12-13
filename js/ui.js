@@ -25,6 +25,7 @@ var UI = {
 
 	printNodeData: function(nodeData){
 		var nodeDataElement = document.querySelector('#nodeData');
+
 		nodeDataElement.querySelector('h1.nodeName').innerText = nodeData.name;
 		//affiche le nombre d'utilisation du mot
 		nodeDataElement.querySelector('div.occurrence>p.data').innerText = nodeData.occurrence;
@@ -52,7 +53,7 @@ var UI = {
 		nodeData.mostAssociatedWords.forEach(function(word){
 			var p = document.createElement('p');
 
-			p.innerHTML = word.name + ' : ' + word.occurrence + '%';
+			p.innerHTML = word.name + ' : ' + word.occurrence + ' fois';
 			//p.classList.add('');
 
 			associatedDataElm.appendChild(p);
