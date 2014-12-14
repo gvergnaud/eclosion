@@ -1,7 +1,10 @@
 @import url(http://fonts.googleapis.com/css?family=Fjalla+One);
+
 body{
 	color: #fff;
 	background-color: #888888;
+	padding:0;
+	margin:0;
 }
 
 .link {
@@ -10,7 +13,7 @@ body{
 }
 
 .nodes>g>text{
-	font-family: "Fjalla One";
+	font-family: "Open sans";
 }
 
 input{
@@ -154,3 +157,39 @@ input::-moz-placeholder {  /* Firefox 19+ */
 input:-ms-input-placeholder {  
 	color: #434343;
 }
+
+/* Barre de Zoom */
+#zoom{
+	height:60%;
+	width:140px;
+	position: absolute;
+	right:10px;
+	top:20%;
+	text-align: center;
+	z-index:20;
+	background-image: url(./../res/zoom.png);
+	background-size: cover;
+}
+
+#zoomBar{
+	height:100%;
+	width:3px;
+	background-color: #b8b8b8;
+	margin: auto;
+}
+
+.zoomConf{
+	color:#b8b8b8;
+}
+
+#cursor{
+	width:15px;
+	cursor: pointer;
+	height:15px;
+	position: relative;
+	top:100%;
+	left:-6px;
+	border-radius: 50%;
+	background-color:#3177df;
+}
+

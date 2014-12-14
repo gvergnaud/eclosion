@@ -30,8 +30,9 @@ var app = {
 
 			app.proposeRandomWord();
 
-			UI.d3.svg.call(d3.behavior.zoom().scaleExtent([0.25, 3]).on("zoom", function(){
+			UI.d3.svg.call(d3.behavior.zoom().scaleExtent([0.5, 3]).on("zoom", function(){
 				UI.d3.redrawGraph();
+				UI.d3.defineZoom();
 			}));
 
 			UI.d3.svg.selectAll(".nodes>g>circle").on("click", 	function(node){

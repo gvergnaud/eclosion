@@ -84,8 +84,8 @@ var UI = {
 	// D3.js 
 	d3: {
 		previousWords : false,
-		nodeSizeCoefficient : 3,
-		padding : 1,
+		nodeSizeCoefficient : 4,
+		collision : 1,
 		
 		createGraph: function(words){
 			var self = this;
@@ -139,32 +139,32 @@ var UI = {
 	           	.selectAll("node")
 				.data(words.nodes)
 				.enter()
-				.append("g").style("opacity", 0.8).call(d3.behavior.drag().on("drag", function(d, i){
+				.append("g").call(d3.behavior.drag().on("drag", function(d, i){
 					self.force.drag;
-					
 				}).on("dragend", function(d){
 					self.force.resume();
 				}));
 	         
+	        // Ajout d'un cercle pour chaque noeud
 			node.append("circle")
 	         	.attr("class", "node")
 	         	.attr("pointer-events", "drag")
-	         	.style('fill', "#3177df")
+	         	.style('fill', "#b8b8b8")
 	         	.style("cursor", "pointer")
 	         	.attr("r", function(d){
 	         		var nbLinks = Math.sqrt(d.nbLinks);
-	         		return nbLinks * self.nodeSizeCoefficient; 
+	         		return nbLinks * (nbLinks * self.nodeSizeCoefficient); 
 	         	})
 	         	.call(self.force.drag);
 	         	
 
-			// Ajout d'un texte pour les noeuds
+			// Ajout d'un texte pour chaque noeud
 			node.append("text")
 			     .attr("text-anchor", "middle")
 			     .style("font-size", function(d) {return Math.sqrt(d.nbLinks) * 10 + "px"; })
 			     .style("fill", "#4b4b4b")
 			     .attr("transform",function(d) {
-			            return "translate(0," + -(Math.sqrt(d.nbLinks) * (self.nodeSizeCoefficient + 2)) + ")";
+			            return "translate(0," + -(Math.sqrt(d.nbLinks) * (Math.sqrt(d.nbLinks) * self.nodeSizeCoefficient + 2)) + ")";
 			        })
 			     .text(function(d) {
 			       return d.name.charAt(0).toUpperCase() + d.name.substring(1).toLowerCase();
@@ -185,6 +185,8 @@ var UI = {
 			});
 			
 			this.previousWords = words;
+			
+			self.defineZoom();
 			
 			document.dispatchEvent(app.event.graphReady);
 		},
@@ -220,40 +222,45 @@ var UI = {
 				var link = this.svg.select(".links").selectAll(".link")
 		            .data(self.previousWords.links);
 		
-		        link.enter().insert("line")
-		            .attr("class", "link")
-					.style("stroke", "#dfdede")
+		        var newLink = link.enter().insert("line");
+		        
+		        newLink.attr("class", "link")
+					.style("stroke", "#3177df")
 					.style("stroke-width", function(d) { return Math.sqrt(d.value); });
 		
+				newLink.transition().duration(5000).style("stroke", "#b8b8b8");
+				
 		        link.exit().remove();
 		
 		        var node = this.svg.select(".nodes").selectAll("g")
 		            .data(self.previousWords.nodes);
 		
-		        var nodeEnter = node.enter().append("g").style("opacity", 0.8)
-		        .call(d3.behavior.drag().on("drag", function(d, i){
-					self.force.drag;
-				}).on("dragend", function(d){
-					self.force.resume();
-				}));
+		        var nodeEnter = node.enter().append("g").call(d3.behavior.drag().on("drag", function(d, i){
+						self.force.drag;
+					}).on("dragend", function(d){
+						self.force.resume();
+					}));
 		        
 		        nodeEnter.append("circle")
 		            .attr("class", "node")
 		            .style('fill', "#3177df")
-					.attr("r", function(d) {return Math.sqrt(d.nbLinks) * self.nodeSizeCoefficient; })
+					.attr("r", function(d) {return Math.sqrt(d.nbLinks) * (Math.sqrt(d.nbLinks) * self.nodeSizeCoefficient); })
 		            .call(self.force.drag);
 		
 		        nodeEnter.append("text")
 		            .attr("text-anchor", "middle")
 				    .style("font-size", function(d) {return Math.sqrt(d.nbLinks) * 10 + "px";})
-				    .style("fill", "#4b4b4b")
+				    .style("fill", "#3177df")
 				    .attr("transform",function(d) {
-			            return "translate(0," + -(Math.sqrt(d.nbLinks) * (self.nodeSizeCoefficient + 2)) + ")";
+			            return "translate(0," + -(Math.sqrt(d.nbLinks) * (Math.sqrt(d.nbLinks) * self.nodeSizeCoefficient + 2)) + ")";
 			        })
 				    .text(function(d) {
 					    return d.name.charAt(0).toUpperCase() + d.name.substring(1).toLowerCase();
 				    });
 		
+				nodeEnter.select("circle").transition().duration(5000).style("fill", "#b8b8b8");
+		        nodeEnter.select("text").transition().duration(5000).style("fill", "#4b4b4b");
+		        
 		        node.exit().remove();
 		
 		        this.force.on("tick", function() {
@@ -269,11 +276,20 @@ var UI = {
 		        });
 			
 			    this.force.start();
+			    
 			}
 		},
 		
 		defineZoom : function(){
-			// Dessiner le zoom sur barre verticale, d3.event.scale
+			var value;
+			if(d3.event != null && d3.event.scale != undefined){
+				console.log(d3.event.scale);
+				value = d3.event.scale;
+			}else{
+				value = 1;
+			}
+				
+			document.getElementById("cursor").style.top = (100 - ((value - 0.5) * 100 / 2.5)) + "%";
 		},
 		
 		searchNode : function(selectedVal){
@@ -292,9 +308,10 @@ var UI = {
 	        // Si la recherche a donné quelque chose
 	        if(selected[0].length > 0){
 	        
-				//On calcule le x et y du translate
+	        	// Obtenir position du g
 				var rect = document.querySelector("svg>g>g").getBoundingClientRect();
 				
+				// On calcule le x et y du translate
 		        var x = ((window.innerWidth / 2) - (parseInt(selected.attr("cx")) + parseInt(rect.left))) 
 		       		+ parseInt(rect.left);
 		        var y = ((window.innerHeight / 2) - (parseInt(selected.attr("cy")) + parseInt(rect.top))) 
@@ -304,21 +321,16 @@ var UI = {
 				  "translate(" + x + " ," + y + ")"
 				);
 				
-				
-				
-				setTimeout(function(){
-					self.svg.select("g").select("g").transition().duration(1000).attr("transform",
-				  "scale(1.3)").attr("transform-origin","(" + x + "," + y + ")");// Find the good transform-origin
-				}, 1500);
-				
-				// On red√©fini le zoom avec ses nouvelles valeurs d'origines
-				this.svg.call(d3.behavior.zoom().scale(1.3).translate([x, y]).scaleExtent([0.25, 3]).on("zoom", function(){
-			    		UI.d3.redrawGraph();
-			    		// Dessiner le zoom sur barre verticale, d3.event.scale
+				// On redéfini le zoom avec ses nouvelles valeurs d'origines
+				this.svg.call(d3.behavior.zoom().translate([x, y]).scaleExtent([0.5, 3]).on("zoom", function(){
+			    	UI.d3.redrawGraph();
+			    	UI.d3.defineZoom();
 			    }));
 			}else{
 				UI.notification('error', "Pas de mots trouvés");
 			}
+			
+			self.defineZoom();
 		},
 		
 		selectNode : function(node){
@@ -337,22 +349,44 @@ var UI = {
 			
 	        d = node.node().__data__;
 	        
-	        // Réduction de l'opacité en fonction de la proximité des noeuds
-	        nodes.transition().duration(1000).style("opacity", function (o) {
-	            return linkedByIndex[d.index + "," + o.index] | linkedByIndex[o.index + "," + d.index] ? 0.8 : 0.2;
-	        });
-	      
-	        // Réduction de l'opacité des links en fonction des noeuds voisins
-	        links.transition().duration(1000).style("opacity", function (o) {
-	            return d.index==o.source.index | d.index==o.target.index ? 1 : 0.2;
+	        // Changement de couleur des cercles des noeuds
+	        nodes.select("circle").transition().duration(1000).style("fill", function (o) {
+	            return linkedByIndex[d.index + "," + o.index] | linkedByIndex[o.index + "," + d.index] ? "#72a1e9" : "#b8d0f4";
 	        });
 	        
-	        // Noeud choisi en pleine opacité
-        	node.transition().duration(1000).style("opacity", 1);
+	        // On remet les propriétés des noeuds à leur état d'origine
+	        nodes.select("text").transition().duration(1000).style("fill", "#4b4b4b").style("font-weight", "normal");
+	      
+	        // Changement de couleur des liens
+	        links.transition().duration(1000).style("stroke", function (o) {
+	            return d.index == o.source.index | d.index == o.target.index ? "#72a1e9" : "#b8d0f4";
+	        });
+	        
+	        // On modifie l'apparence du noeud choisi
+        	node.select("circle").transition().duration(1000).style("fill", "#3177df");
+        	node.select("text").transition().duration(1000).style("fill", "#3177df").style("font-weight", "bold");
+			
+	        var rect = document.querySelector("svg>g>g").getBoundingClientRect();
+	        
+	        var x = ((window.innerWidth / 2) - (parseInt(node.attr("cx")) + parseInt(rect.left))) 
+		       		+ parseInt(rect.left);
+	        var y = ((window.innerHeight / 2) - (parseInt(node.attr("cy")) + parseInt(rect.top))) 
+	        	+ parseInt(rect.top);
+			
+			// On fait un translate pour avoir le noeud choisi au centre
+			this.svg.select("g").select("g").transition().duration(1500).attr("transform",
+				 "translate(" + x + " ," + y + ")"
+			);
+			
+			self.defineZoom();
+			
+			// On redéfini le zoom avec ses nouvelles valeurs
+			this.svg.call(d3.behavior.zoom().translate([x, y]).scaleExtent([0.5, 3]).on("zoom", function(){
+		    	UI.d3.redrawGraph();
+		    	UI.d3.defineZoom();
+		    }));
         	
         	self.force.resume();
-        	
-        	// Class open window de datas
 		},
 		
 		collide : function(alpha) {
@@ -360,26 +394,27 @@ var UI = {
 			var	radius = 8; 
 			var quadtree = d3.geom.quadtree(self.previousWords.nodes);
 			return function(d) {
-			    var rb = 2 * radius + self.padding,
+			    var rb = 2 * radius + self.collision,
 			        nx1 = d.x - rb,
 			        nx2 = d.x + rb,
 			        ny1 = d.y - rb,
 			        ny2 = d.y + rb;
-				    quadtree.visit(function(quad, x1, y1, x2, y2) {
-						if (quad.point && (quad.point !== d)) {
-							var x = d.x - quad.point.x,
-								y = d.y - quad.point.y,
-								l = Math.sqrt(x * x + y * y);
-							if (l < rb) {
-								l = (l - rb) / l * alpha;
-								d.x -= x *= l;
-								d.y -= y *= l;
-								quad.point.x += x;
-								quad.point.y += y;
-							}
+			        
+			    quadtree.visit(function(quad, x1, y1, x2, y2) {
+					if (quad.point && (quad.point !== d)) {
+						var x = d.x - quad.point.x,
+							y = d.y - quad.point.y,
+							l = Math.sqrt(x * x + y * y);
+						if (l < rb) {
+							l = (l - rb) / l * alpha;
+							d.x -= x *= l;
+							d.y -= y *= l;
+							quad.point.x += x;
+							quad.point.y += y;
 						}
-						return x1 > nx2 || x2 < nx1 || y1 > ny2 || y2 < ny1;
-				    });
+					}
+					return x1 > nx2 || x2 < nx1 || y1 > ny2 || y2 < ny1;
+			    });
 			};
 		}
 	}
