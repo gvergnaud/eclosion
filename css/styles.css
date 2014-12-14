@@ -145,7 +145,7 @@ p.notification.show{
 	box-sizing: border-box;
 	position: absolute;
 	top: 0;
-	left: 70px;
+	left: -1875px;
 	right: 0;
 	height: 214px;
 	background-color: #fff;
