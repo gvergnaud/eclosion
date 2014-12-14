@@ -347,27 +347,24 @@ var UI = {
 	    	var closeAnim = [
 	        	{
 	        		elements: this.element, 
-	        		properties: {left: '-875px'},
+	        		properties: {left: '-1875px'},
 	        		options: {duration: 250, easing: 'easeInOutBack'}
-	        	}
+	        	}	        	
 	        ];
 			Velocity.RunSequence(closeAnim);
+
+			setTimeout(function(){
+				UI.optionsMenu.searchWordModal.classList.remove("modalApparition");
+				UI.optionsMenu.writehWordModal.classList.remove("modalApparition");
+				UI.optionsMenu.filterWordModal.classList.remove("modalApparition");
+				UI.optionsMenu.menuElement.classList.remove("widthauto");
+			}, 250);
 
 		},
 
 		searchBoxView: function() {
-			// Si on doit masquer l'élément
-	        if(model.toolbox.hasClassName(this.searchWordModal, "modalApparition")) {
-		        var openAnim = [
-		        	{
-		        		elements: this.searchWordModal,
-		        		properties: {left: "-1875px"},
-		        		options: {duration: 250, easing: 'easeInOutBack'}
-		        	}
-		        ];
-	        }	  
-	        // Si on doit l'afficher
-	        else {
+	        // Si on doit l'afficher, animation vers la droite
+	        if(!model.toolbox.hasClassName(this.searchWordModal, "modalApparition")) {
 		        var openAnim = [
 		        	{
 		        		elements: this.searchWordModal,
@@ -375,27 +372,20 @@ var UI = {
 		        		options: {duration: 250, easing: 'easeInOutBack'}
 		        	}
 		        ];
+				Velocity.RunSequence(openAnim);
+	        	this.menuElement.classList.add("widthauto");
+	        	this.searchWordModal.classList.add("modalApparition");
 	        }
-
-	        this.writehWordModal.classList.remove("modalApparition");
-	        this.filterWordModal.classList.remove("modalApparition");
-	        this.searchWordModal.classList.toggle("modalApparition");
-	        this.menuElement.classList.add("widthauto");
-
+	        else {
+	        	// this.searchWordModal.classList.remove("modalApparition");
+				this.closeModalView(); // On reset à gauche toutes les modal
+	        	this.searchWordModal.classList.remove("modalApparition");
+	        }
 		},
+
 		addWordBoxView: function() {
-			// Si on doit masquer l'élément
-	        if(model.toolbox.hasClassName(this.writehWordModal, "modalApparition")) {
-		        var openAnim = [
-		        	{
-		        		elements: this.writehWordModal,
-		        		properties: {left: "-1875px"},
-		        		options: {duration: 250, easing: 'easeInOutBack'}
-		        	}
-		        ];
-	        }	  
-	        // Si on doit l'afficher
-	        else {
+	        // Si on doit l'afficher, animation vers la droite
+	        if(!model.toolbox.hasClassName(this.writehWordModal, "modalApparition")) {
 		        var openAnim = [
 		        	{
 		        		elements: this.writehWordModal,
@@ -403,28 +393,18 @@ var UI = {
 		        		options: {duration: 250, easing: 'easeInOutBack'}
 		        	}
 		        ];
+				Velocity.RunSequence(openAnim);
+	        	this.menuElement.classList.add("widthauto");
+	        	this.writehWordModal.classList.add("modalApparition");
 	        }
-
-			Velocity.RunSequence(openAnim);
-
-	        this.filterWordModal.classList.remove("modalApparition");
-	        this.searchWordModal.classList.remove("modalApparition");
-	        this.writehWordModal.classList.toggle("modalApparition");
-	        this.menuElement.classList.add("widthauto");
+	        else {
+				this.closeModalView(); // On reset à gauche toutes les modal
+				this.writehWordModal.classList.remove("modalApparition");
+	        }
 		},
+
 		filterWordBoxView: function() {
-			// Si on doit masquer l'élément
-	        if(model.toolbox.hasClassName(this.filterWordModal, "modalApparition")) {
-		        var openAnim = [
-		        	{
-		        		elements: this.filterWordModal,
-		        		properties: {left: "-1875px"},
-		        		options: {duration: 250, easing: 'easeInOutBack'}
-		        	}
-		        ];
-	        }	  
-	        // Si on doit l'afficher
-	        else {
+	        if(!model.toolbox.hasClassName(this.filterWordModal, "modalApparition")) {
 		        var openAnim = [
 		        	{
 		        		elements: this.filterWordModal,
@@ -432,16 +412,24 @@ var UI = {
 		        		options: {duration: 250, easing: 'easeInOutBack'}
 		        	}
 		        ];
+				Velocity.RunSequence(openAnim);
+	        	this.menuElement.classList.add("widthauto");
+				UI.optionsMenu.filterWordModal.classList.add("modalApparition");
 	        }
+	        else {
+		        var closeAnim = [
+		        	{
+		        		elements: this.filterWordModal,
+		        		properties: {left: "-1875px"},
+		        		options: {duration: 250, easing: 'easeInOutBack'}
+		        	}
+		        ];
+				Velocity.RunSequence(closeAnim);
 
-			Velocity.RunSequence(openAnim);
-
-	        this.writehWordModal.classList.remove("modalApparition");
-	        this.searchWordModal.classList.remove("modalApparition");
-	        this.filterWordModal.classList.toggle("modalApparition");
-	        this.menuElement.classList.add("widthauto");
-
-
+				setTimeout(function(){
+					UI.optionsMenu.filterWordModal.classList.remove("modalApparition");
+				}, 250);
+	        }
 		}
 	},
 
