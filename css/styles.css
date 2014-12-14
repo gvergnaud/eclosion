@@ -270,8 +270,12 @@ p.notification.show{
 	line-height: 70px;
 	color: #AFAFAF;
 }
+#lateral-navigation .flaticons:before {
+   font-size: 28px;
+}
 .left-nav:hover .flaticons:before {
 	color: #3277df;
+
 }
 .flaticon-cross97 {
 	float: right;
