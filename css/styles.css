@@ -46,6 +46,7 @@ body{
 	background: #3177df;
 	width: 100%;
 	max-height: 300px;
+	overflow: hidden;
 }
 
 #nodeData header h1.theme{
@@ -72,7 +73,6 @@ body{
 	font-size: 2rem;
 	padding: 5px;
 	margin-top: 5px;
-	margin-bottom: 20px;
 	background: transparent;
 	border: none;
 }
@@ -112,6 +112,7 @@ body{
 }
 
 #nodeData div.stats .data{
+	font-size: 1.1rem;
 	font-family: 'Fjalla One';
 	color:#3177df;
 }
