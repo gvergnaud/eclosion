@@ -168,6 +168,10 @@ var app = {
 				model.addContribution(this.value.toLowerCase(), app.proposedWord, 
 					function(){ //success
 						document.dispatchEvent(app.event.userContribution);
+			            var writehWordModal = document.getElementById("writeWord");
+			            var leftNav = document.getElementById("lateral-navigation");
+			            writehWordModal.classList.remove("modalApparition");
+                		leftNav.classList.remove("widthauto");
 					},
 					function(error){
 						UI.notification('error', error);
@@ -228,7 +232,8 @@ var app = {
 			this.value = '';
 			
 			var searchWordModal = document.getElementById("searchWord");
-			searchWordModal.classList.add("hidden-option");
+			var leftNav = document.getElementById("lateral-navigation");
+            leftNav.classList.remove("widthauto");
             searchWordModal.classList.remove("modalApparition");
 		}
 	},

@@ -35,7 +35,7 @@
 }
  
 .icon-users-1:before { content: '\e800'; } /* '' */
-.icon-filter:before { content: '\e801'; } /* '' */
+.icon-filter:before { content: '\e801'; font-weight: bold;} /* '' */
 .icon-angle-down:before { content: '\e802'; } /* '' */
 .icon-angle-up:before { content: '\e803'; } /* '' */
 .icon-volume-off:before { content: '\e804'; } /* '' */
