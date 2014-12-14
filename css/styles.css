@@ -102,6 +102,8 @@ p.notification.show{
 	width: auto !important;
 }
 .left-nav {
+	display: flex;
+	justify-content: center;
 	width: 70px;
 	height: 70px;
 	margin-bottom: 2px;
@@ -150,9 +152,12 @@ p.notification.show{
 	color: #000;
 	opacity: 0.9;
 }
-.flaticons {
+
+/* Icônes du menu */
+#lateral-navigation .flaticons {
 	height: 70px;
 	line-height: 70px;
+	color: #AFAFAF;
 }
 .left-nav:hover .flaticons:before {
 	color: #3277df;

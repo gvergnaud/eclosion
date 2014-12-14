@@ -15,6 +15,7 @@
         <link rel="stylesheet" href="css/reset.css">
         <link rel="stylesheet" href="css/styles.css">
         <link rel="stylesheet" href="font/flaticon.css" media="all">
+        <link rel="stylesheet" href="font/fontello.css" media="all">
         <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
     </head>
     <body>
@@ -26,7 +27,7 @@
         <!-- Menu de navigation gauche -->
         <nav role="navigation" id="lateral-navigation">
             <div class="left-nav" id="searchBox">
-                <i class="flaticons flaticon-magnifier12"></i> 
+                <i class="flaticons icon-search"></i> 
             </div>
             <div class="optionName" id="optionName1">Rechercher</div>
             <div class="hidden-option" id="searchWord">
@@ -38,7 +39,7 @@
                 </div>
             </div>
             <div class="left-nav" id="addWordBox">
-                <i class="flaticons flaticon-pen29"></i> 
+                <i class="flaticons icon-edit"></i> 
             </div>
             <div class="optionName" id="optionName2">Contribuer</div>
             <div class="hidden-option" id="writeWord">
@@ -50,7 +51,7 @@
                 </div>
             </div>
             <div class="left-nav" id="filterBox">
-                <i class="flaticons flaticon-filled9"></i>
+                <i class="flaticons icon-filter"></i> 
             </div>
             <div class="optionName" id="optionName3">Filtrer</div>
             <div class="hidden-option" id="filterWord">
@@ -174,19 +175,19 @@
                 writehWordModal.classList.remove("modalApparition");
                 filterWordModal.classList.remove("modalApparition");
                 searchWordModal.classList.toggle("modalApparition");
-                leftNav.classList.toggle("widthauto");
+                leftNav.classList.add("widthauto");
             }
             function addWordBoxfun() {
                 filterWordModal.classList.remove("modalApparition");
                 searchWordModal.classList.remove("modalApparition");
                 writehWordModal.classList.toggle("modalApparition");
-                leftNav.classList.toggle("widthauto");
+                leftNav.classList.add("widthauto");
             }
             function filterWordBoxfun() {
                 searchWordModal.classList.remove("modalApparition");
                 writehWordModal.classList.remove("modalApparition");
                 filterWordModal.classList.toggle("modalApparition");
-                leftNav.classList.toggle("widthauto");
+                leftNav.classList.add("widthauto");
             }
             function closeModal() {
                 searchWordModal.classList.remove("modalApparition");
