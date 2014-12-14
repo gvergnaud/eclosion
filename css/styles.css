@@ -111,7 +111,31 @@ p.notification.show{
 	background: #fff;
 	cursor: pointer;
 }
-.hidden-option {
+.left-nav:hover + .optionName {
+	display: block;
+	position: absolute;
+	box-sizing: border-box;
+	left: 67px;
+	z-index: 12;
+	padding: 0 10px;
+	height: 70px;
+	line-height: 70px;
+	border-left: 3px solid #3277df;
+
+	font-family: 'Open Sans', sans-serif;
+	font-size: 28px;
+	color: #3277df;
+}
+.left-nav:hover + #optionName1{
+	top: 0;
+}
+.left-nav:hover + #optionName2{
+	top: 72px;
+}
+.left-nav:hover + #optionName3{
+	top: 144px;
+}
+.hidden-option, .optionName {
 	display: none;
 }
 .modalApparition {

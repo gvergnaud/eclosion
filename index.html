@@ -28,6 +28,7 @@
             <div class="left-nav" id="searchBox">
                 <i class="flaticons flaticon-magnifier12"></i> 
             </div>
+            <div class="optionName" id="optionName1">Rechercher</div>
             <div class="hidden-option" id="searchWord">
                 <!-- Menu caché pour la recherche -->
                 <i class="closeMenu flaticon-cross97" onclick="closeModal();"></i>
@@ -39,6 +40,7 @@
             <div class="left-nav" id="addWordBox">
                 <i class="flaticons flaticon-pen29"></i> 
             </div>
+            <div class="optionName" id="optionName2">Contribuer</div>
             <div class="hidden-option" id="writeWord">
                 <!-- Menu caché pour l'ajout de mot -->
                 <i class="closeMenu flaticon-cross97" onclick="closeModal();"></i>
@@ -50,6 +52,7 @@
             <div class="left-nav" id="filterBox">
                 <i class="flaticons flaticon-filled9"></i>
             </div>
+            <div class="optionName" id="optionName3">Filtrer</div>
             <div class="hidden-option" id="filterWord">
                 <!-- Menu caché pour filtrer la vue -->
                 <i class="closeMenu flaticon-cross97" onclick="closeModal();"></i>
@@ -168,36 +171,24 @@
             // addWordBox.addEventListener("mouseover",addWordBoxfun,false);
             // filterBox.addEventListener("mouseover",filterWordBoxfun,false);
             function searchBoxfun() {
-                searchWordModal.classList.remove("hidden-option");
                 writehWordModal.classList.remove("modalApparition");
                 filterWordModal.classList.remove("modalApparition");
-                writehWordModal.classList.add("hidden-option");
-                filterWordModal.classList.add("hidden-option");
-                searchWordModal.classList.add("modalApparition");
+                searchWordModal.classList.toggle("modalApparition");
                 leftNav.classList.add("widthauto");
             }
             function addWordBoxfun() {
-                writehWordModal.classList.remove("hidden-option");
                 filterWordModal.classList.remove("modalApparition");
                 searchWordModal.classList.remove("modalApparition");
-                searchWordModal.classList.add("hidden-option");
-                filterWordModal.classList.add("hidden-option");
-                writehWordModal.classList.add("modalApparition");
+                writehWordModal.classList.toggle("modalApparition");
                 leftNav.classList.add("widthauto");
             }
             function filterWordBoxfun() {
-                filterWordModal.classList.remove("hidden-option");
                 searchWordModal.classList.remove("modalApparition");
                 writehWordModal.classList.remove("modalApparition");
-                searchWordModal.classList.add("hidden-option");
-                writehWordModal.classList.add("hidden-option");
-                filterWordModal.classList.add("modalApparition");
+                filterWordModal.classList.toggle("modalApparition");
                 leftNav.classList.add("widthauto");
             }
             function closeModal() {
-                searchWordModal.classList.add("hidden-option");
-                writehWordModal.classList.add("hidden-option");
-                filterWordModal.classList.add("hidden-option");
                 searchWordModal.classList.remove("modalApparition");
                 writehWordModal.classList.remove("modalApparition");
                 filterWordModal.classList.remove("modalApparition");
