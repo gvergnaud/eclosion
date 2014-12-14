@@ -12,6 +12,9 @@ var UI = {
 			UI.setSVGSize();
 			UI.nodeData.style();
 		}, false);
+
+		/* Right dynamique pour ne pas voir arriver la modal */
+		this.optionsMenu.styleModal();
 	},
 
 	setSVGSize: function(){
@@ -383,7 +386,6 @@ var UI = {
 			}
 		}
 	},
-
 	optionsMenu: {
 
 		element: document.querySelectorAll('.hidden-option'),
@@ -395,8 +397,17 @@ var UI = {
 	    /* Les deux input à autofocus */
 	    searchInput: document.getElementById("searchInput"),
 	    addContribution: document.getElementById("addContribution"),
+	    largeurEcran: window.innerWidth+"px",
+
+	    styleModal: function() {
+	    	console.log(this.element);
+		    this.element[0].style.right = this.largeurEcran;
+		    this.element[1].style.right = this.largeurEcran;
+		    this.element[2].style.right = this.largeurEcran;
+	    },
 
 		closeModalView: function() {
+	    	console.log(this.element);
 
 	    	var closeAnim = [
 	        	{
@@ -424,13 +435,12 @@ var UI = {
 		        		elements: this.element,
 		        		properties: {left: "-1875px"},
 		        		options: {duration: 0, easing: 'easeInOutBack'}
-		        	},	        	
+		        	},
 		        	{
 		        		elements: this.searchWordModal,
-		        		properties: {left: "70px"},
+		        		properties: {left: "70px", opacity: "0.9", right: 0},
 		        		options: {duration: 250, easing: 'easeInOutBack'}
 		        	}
-
 		        ];
 				Velocity.RunSequence(openAnim);
 	        	this.writehWordModal.classList.remove("modalApparition");				
@@ -443,7 +453,7 @@ var UI = {
 		        var closeAnim = [
 		        	{
 		        		elements: this.element,
-		        		properties: {left: "-1875px"},
+		        		properties: {left: "-1875px", opacity: "0.7", right: this.largeurEcran},
 		        		options: {duration: 250, easing: 'easeInOutBack'}
 		        	}
 		        ];
@@ -472,7 +482,7 @@ var UI = {
 		        	},
 		        	{
 		        		elements: this.writehWordModal,
-		        		properties: {left: "70px"},
+		        		properties: {left: "70px", opacity: "0.9", right: 0},
 		        		options: {duration: 250, easing: 'easeInOutBack'}
 		        	}
 		        ];
@@ -487,7 +497,7 @@ var UI = {
 		        var closeAnim = [
 		        	{
 		        		elements: this.element,
-		        		properties: {left: "-1875px"},
+		        		properties: {left: "-1875px", opacity: "0.7", right: this.largeurEcran},
 		        		options: {duration: 250, easing: 'easeInOutBack'}
 		        	}
 		        ];
@@ -514,7 +524,7 @@ var UI = {
 		        	},
 		        	{
 		        		elements: this.filterWordModal,
-		        		properties: {left: "70px"},
+		        		properties: {left: "70px", opacity: "0.9", right: 0},
 		        		options: {duration: 250, easing: 'easeInOutBack'}
 		        	}
 		        ];
@@ -528,7 +538,7 @@ var UI = {
 		        var closeAnim = [
 		        	{
 		        		elements: this.element,
-		        		properties: {left: "-1875px"},
+		        		properties: {left: "-1875px", opacity: "0.7", right: this.largeurEcran},
 		        		options: {duration: 250, easing: 'easeInOutBack'}
 		        	}
 		        ];
@@ -543,6 +553,5 @@ var UI = {
 	        }
 
 		}
-	},
-
+	}
 };
