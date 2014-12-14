@@ -388,10 +388,13 @@ var UI = {
 
 		element: document.querySelectorAll('.hidden-option'),
 		menuElement: document.getElementById('lateral-navigation'),
+		/* Les 3 fenêtres d'options */
 		searchWordModal: document.getElementById("searchWord"),
 	    writehWordModal: document.getElementById("writeWord"),
 	    filterWordModal: document.getElementById("filterWord"),
-		// opened: false,
+	    /* Les deux input à autofocus */
+	    searchInput: document.getElementById("searchInput"),
+	    addContribution: document.getElementById("addContribution"),
 
 		closeModalView: function() {
 
@@ -433,16 +436,11 @@ var UI = {
 	        	this.writehWordModal.classList.remove("modalApparition");				
 				this.filterWordModal.classList.remove("modalApparition");
 	        	this.menuElement.classList.add("widthauto");
-	        	this.searchWordModal.classList.add("modalApparition");
 
+	        	this.searchWordModal.classList.add("modalApparition");
 	        }
 	        else {
 		        var closeAnim = [
-		        	{
-		        		elements: this.element,
-		        		properties: {left: "-1875px"},
-		        		options: {duration: 0, easing: 'easeInOutBack'}
-		        	},
 		        	{
 		        		elements: this.element,
 		        		properties: {left: "-1875px"},
@@ -479,9 +477,9 @@ var UI = {
 				Velocity.RunSequence(openAnim);
 	        	this.searchWordModal.classList.remove("modalApparition");
 				this.filterWordModal.classList.remove("modalApparition");
-	        	this.menuElement.classList.add("widthauto");		
-	        	this.writehWordModal.classList.add("modalApparition");		
+	        	this.menuElement.classList.add("widthauto");
 
+	        	this.writehWordModal.classList.add("modalApparition");		
 	        }
 	        else {
 		        var closeAnim = [
@@ -506,6 +504,11 @@ var UI = {
 		filterWordBoxView: function() {
 	        if(!model.toolbox.hasClassName(this.filterWordModal, "modalApparition")) {
 		        var openAnim = [
+		        	{
+		        		elements: this.element,
+		        		properties: {left: "-1875px"},
+		        		options: {duration: 0, easing: 'easeInOutBack'}
+		        	},
 		        	{
 		        		elements: this.filterWordModal,
 		        		properties: {left: "70px"},
