@@ -179,11 +179,11 @@ var model = {
 			return b.value - a.value;
 		});
 
-		var totalOccurrence = 0;
+		/*var totalOccurrence = 0;
 
 		links.forEach(function(link){
 			totalOccurrence += link.value;
-		});
+		});*/
 
 		try{
 			links.forEach(function(link){
@@ -192,11 +192,11 @@ var model = {
 				if(link.source !== node.index){
 					word.name = model.words.nodes[link.source].name;
 					word.occurrence = link.value;
-					word.occurrencePercentage = Math.round(link.value * 100 / totalOccurrence);
+					//word.occurrencePercentage = Math.round(link.value * 100 / totalOccurrence);
 				}else{
 					word.name = model.words.nodes[link.target].name;
 					word.occurrence = link.value;
-					word.occurrencePercentage = Math.round(link.value * 100 / totalOccurrence);
+					//word.occurrencePercentage = Math.round(link.value * 100 / totalOccurrence);
 				}
 				mostAssociatedWords.push(word);
 
