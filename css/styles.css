@@ -29,6 +29,7 @@ input, button {
 #globalData{
 	text-transform: uppercase;
 	position: absolute;
+	left: 20px;
 	bottom: 20px;
 }
 
@@ -323,7 +324,7 @@ p.notification.show{
 #writehWordForm { /* Pour gommer les 82px de droite que prend le bouton close */
 	margin-left: 82px;
 }
-#addContribution { /* Input text pour ajouter un mot */
+.addContribution { /* Input text pour ajouter un mot */
 	margin: 10px 0;
 	padding: 8px 30px;
 	width: 490px;
