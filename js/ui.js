@@ -327,5 +327,73 @@ var UI = {
 				UI.notification('error', "Pas de mots trouvés");
 			}
 		}
-	}
+	},
+
+	optionsMenu: {
+
+		element: document.querySelectorAll('.hidden-option'),
+		menuElement: document.getElementById('lateral-navigation'),
+		searchWordModal: document.getElementById("searchWord"),
+	    writehWordModal: document.getElementById("writeWord"),
+	    filterWordModal: document.getElementById("filterWord"),
+		// opened: false,
+
+		// openSection: function(){
+		// 	if(!this.opened){
+		// 		var openAnim = [
+		//         	{
+		//         		elements: this.element,
+		//         		properties: {left: 0},
+		//         		options: {duration: 250, easing: 'easeInOutBack'}
+		//         	}
+		//         ];
+		// 		this.element.style.display = 'block';
+
+		// 		Velocity.RunSequence(openAnim);
+
+		// 		this.opened = true;
+		// 	}
+		// },
+
+		closeModalView: function() {
+	        this.searchWordModal.classList.remove("modalApparition");
+	        this.writehWordModal.classList.remove("modalApparition");
+	        this.filterWordModal.classList.remove("modalApparition");
+	        this.menuElement.classList.remove("widthauto");
+
+	    	var closeAnim = [
+	        	{
+	        		elements: this.element, 
+	        		properties: {left: '-275px'},
+	        		options: {duration: 250, easing: 'easeInOutBack'}
+	        	}
+	        ];
+
+			Velocity.RunSequence(closeAnim);
+			setTimeout(function(){
+				this.element.style.display = 'none';
+			}, 250);
+
+		},
+
+		searchBoxView: function() {
+	        this.writehWordModal.classList.remove("modalApparition");
+	        this.filterWordModal.classList.remove("modalApparition");
+	        this.searchWordModal.classList.toggle("modalApparition");
+	        this.menuElement.classList.add("widthauto");
+		},
+		addWordBoxView: function() {
+	        this.filterWordModal.classList.remove("modalApparition");
+	        this.searchWordModal.classList.remove("modalApparition");
+	        this.writehWordModal.classList.toggle("modalApparition");
+	        this.menuElement.classList.add("widthauto");
+		},
+		filterWordBoxView: function() {
+	        this.writehWordModal.classList.remove("modalApparition");
+	        this.searchWordModal.classList.remove("modalApparition");
+	        this.filterWordModal.classList.toggle("modalApparition");
+	        this.menuElement.classList.add("widthauto");
+		}
+	},
+
 };

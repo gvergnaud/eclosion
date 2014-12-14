@@ -57,6 +57,11 @@ var app = {
 		document.querySelector('#addContribution').addEventListener('keypress', app.addContribution, false);
 		document.querySelector('#searchInput').addEventListener('keyup', app.searchNode, false);
 		document.querySelector('div.filters button.resetFilters').addEventListener('click', app.resetFilters, false);
+	
+		/* Gestion des fenêtres du menu */
+        document.getElementById('searchBox').addEventListener("click",app.searchBoxfun,false);
+        document.getElementById('addWordBox').addEventListener("click",app.addWordBoxfun,false);
+        document.getElementById('filterBox').addEventListener("click",app.filterWordBoxfun,false);
 	},
 
 	createCustomEvents: function(){
@@ -237,6 +242,22 @@ var app = {
             searchWordModal.classList.remove("modalApparition");
 		}
 	},
+
+	// Fermeture du menu avec la croix
+    closeModal: function() {
+    	UI.optionsMenu.closeModalView();
+    },
+    // Ouverture des 3 fenêtres d'options
+	searchBoxfun: function() {
+		UI.optionsMenu.searchBoxView();
+	},
+	addWordBoxfun: function() {
+		UI.optionsMenu.addWordBoxView();
+	},
+	filterWordBoxfun: function() {
+		UI.optionsMenu.filterWordBoxView();
+	}
+
 };
 
 app.init();
