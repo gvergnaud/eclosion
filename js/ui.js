@@ -20,7 +20,7 @@ var UI = {
 	},
 	
 	printWord: function(word){
-		document.querySelector('#proposedWord').innerText = word;
+		document.querySelector('#proposedWordText').innerText = word;
 	},
 
 	printGlobalData: function(nbWords, nbConnections, nbContributors){
@@ -382,5 +382,160 @@ var UI = {
 				UI.notification('error', "Pas de mots trouvés");
 			}
 		}
-	}
+	},
+
+	optionsMenu: {
+
+		element: document.querySelectorAll('.hidden-option'),
+		menuElement: document.getElementById('lateral-navigation'),
+		searchWordModal: document.getElementById("searchWord"),
+	    writehWordModal: document.getElementById("writeWord"),
+	    filterWordModal: document.getElementById("filterWord"),
+		// opened: false,
+
+		closeModalView: function() {
+
+	    	var closeAnim = [
+	        	{
+	        		elements: this.element, 
+	        		properties: {left: '-1875px'},
+	        		options: {duration: 250, easing: 'easeInOutBack'}
+	        	}	        	
+	        ];
+			Velocity.RunSequence(closeAnim);
+
+			setTimeout(function(){
+				UI.optionsMenu.searchWordModal.classList.remove("modalApparition");
+				UI.optionsMenu.writehWordModal.classList.remove("modalApparition");
+				UI.optionsMenu.filterWordModal.classList.remove("modalApparition");
+				UI.optionsMenu.menuElement.classList.remove("widthauto");
+			}, 250);
+
+		},
+
+		searchBoxView: function() {
+	        // Si on doit l'afficher, animation vers la droite
+	        if(!model.toolbox.hasClassName(this.searchWordModal, "modalApparition")) {
+		        var openAnim = [
+		        	{
+		        		elements: this.element,
+		        		properties: {left: "-1875px"},
+		        		options: {duration: 0, easing: 'easeInOutBack'}
+		        	},	        	
+		        	{
+		        		elements: this.searchWordModal,
+		        		properties: {left: "70px"},
+		        		options: {duration: 250, easing: 'easeInOutBack'}
+		        	}
+
+		        ];
+				Velocity.RunSequence(openAnim);
+	        	this.writehWordModal.classList.remove("modalApparition");				
+				this.filterWordModal.classList.remove("modalApparition");
+	        	this.menuElement.classList.add("widthauto");
+	        	this.searchWordModal.classList.add("modalApparition");
+
+	        }
+	        else {
+		        var closeAnim = [
+		        	{
+		        		elements: this.element,
+		        		properties: {left: "-1875px"},
+		        		options: {duration: 0, easing: 'easeInOutBack'}
+		        	},
+		        	{
+		        		elements: this.element,
+		        		properties: {left: "-1875px"},
+		        		options: {duration: 250, easing: 'easeInOutBack'}
+		        	}
+		        ];
+				Velocity.RunSequence(closeAnim);
+				this.writehWordModal.classList.remove("modalApparition");
+		        this.filterWordModal.classList.remove("modalApparition");
+
+				setTimeout(function(){
+					UI.optionsMenu.searchWordModal.classList.remove("modalApparition");
+		        	UI.optionsMenu.menuElement.classList.remove("widthauto");
+				}, 250);
+
+	        }
+		},
+
+		addWordBoxView: function() {
+	        // Si on doit l'afficher, animation vers la droite
+	        if(!model.toolbox.hasClassName(this.writehWordModal, "modalApparition")) {
+		        var openAnim = [
+		        	{
+		        		elements: this.element,
+		        		properties: {left: "-1875px"},
+		        		options: {duration: 0, easing: 'easeInOutBack'}
+		        	},
+		        	{
+		        		elements: this.writehWordModal,
+		        		properties: {left: "70px"},
+		        		options: {duration: 250, easing: 'easeInOutBack'}
+		        	}
+		        ];
+				Velocity.RunSequence(openAnim);
+	        	this.searchWordModal.classList.remove("modalApparition");
+				this.filterWordModal.classList.remove("modalApparition");
+	        	this.menuElement.classList.add("widthauto");		
+	        	this.writehWordModal.classList.add("modalApparition");		
+
+	        }
+	        else {
+		        var closeAnim = [
+		        	{
+		        		elements: this.element,
+		        		properties: {left: "-1875px"},
+		        		options: {duration: 250, easing: 'easeInOutBack'}
+		        	}
+		        ];
+				Velocity.RunSequence(closeAnim);
+				this.searchWordModal.classList.remove("modalApparition");
+		        this.filterWordModal.classList.remove("modalApparition");
+
+				setTimeout(function(){
+					UI.optionsMenu.writehWordModal.classList.remove("modalApparition");
+		        	UI.optionsMenu.menuElement.classList.remove("widthauto");
+				}, 250);
+
+	        }
+		},
+
+		filterWordBoxView: function() {
+	        if(!model.toolbox.hasClassName(this.filterWordModal, "modalApparition")) {
+		        var openAnim = [
+		        	{
+		        		elements: this.filterWordModal,
+		        		properties: {left: "70px"},
+		        		options: {duration: 250, easing: 'easeInOutBack'}
+		        	}
+		        ];
+				Velocity.RunSequence(openAnim);
+				this.searchWordModal.classList.remove("modalApparition");
+		        this.writehWordModal.classList.remove("modalApparition");
+	        	this.menuElement.classList.add("widthauto");
+				this.filterWordModal.classList.add("modalApparition");
+	        }
+	        else {
+		        var closeAnim = [
+		        	{
+		        		elements: this.element,
+		        		properties: {left: "-1875px"},
+		        		options: {duration: 250, easing: 'easeInOutBack'}
+		        	}
+		        ];
+				Velocity.RunSequence(closeAnim);
+				this.searchWordModal.classList.remove("modalApparition");
+		        this.writehWordModal.classList.remove("modalApparition");
+
+				setTimeout(function(){
+					UI.optionsMenu.filterWordModal.classList.remove("modalApparition");
+		        	UI.optionsMenu.menuElement.classList.remove("widthauto");
+				}, 250);
+	        }
+		}
+	},
+
 };
