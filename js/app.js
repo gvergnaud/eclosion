@@ -44,7 +44,8 @@ var app = {
 			
 			UI.d3.svg.selectAll(".nodes>g>circle").on("click", 	function(node){
 				app.getNodeData(node, function(nodeData){
-					UI.printNodeData(nodeData);
+					UI.nodeData.printData(nodeData);
+					UI.nodeData.openSection();
 				});
 			});
 		}, false);

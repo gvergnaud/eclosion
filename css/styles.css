@@ -3,6 +3,7 @@ body{
 	background-color: #888888;
 	padding: 0;
 	margin: 0;
+	overflow: hidden;
 }
 
 .node {
@@ -30,16 +31,34 @@ body{
 
 /*NODEDATA*/
 #nodeData{
-	width: 250px;
+	font-family: 'Fjalla One';
 	position: absolute;
-	top: 20px;
-	right: 20px;
+	width: 275px;
+	height: 100%;
+	top: 0;
+	right: -275px;
+	display: none;
+	background: #eeeeee;
 }
 
-#nodeData h1{
-	margin-top: 20px;
-	font-family: 'Open Sans', sans-serif;
-	font-size: 1.3em;
+#nodeData header{
+	text-transform: uppercase;
+	background: #3177df;
+	width: 100%;
+	height:150px;
+}
+
+#nodeData header h1.theme{
+	padding-top: 20px;
+	height: 75px;
+	border-bottom: 1px solid #194e9f;
+	color: #194e9f;
+	font-size: 2rem;
+	text-align: center;
+}
+
+#nodeData header .nodeName{
+	color: #fff;
 }
 
 /* NOTIFICATIONS */

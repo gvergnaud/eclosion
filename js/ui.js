@@ -23,41 +23,85 @@ var UI = {
 		document.querySelector('#globalData>p.contributors').innerText = nbContributors + ' Contributeurs';
 	},
 
-	printNodeData: function(nodeData){
-		var nodeDataElement = document.querySelector('#nodeData');
+	//Panneau de droite
+	nodeData: {
 
-		nodeDataElement.querySelector('h1.nodeName').innerText = nodeData.name;
-		//affiche le nombre d'utilisation du mot
-		nodeDataElement.querySelector('div.occurrence>p.data').innerText = nodeData.occurrence;
-		
-		//affiche le nombre de connexions
-		nodeDataElement.querySelector('div.nbLinks>p.data').innerText = nodeData.nbLinks;
+		element: document.querySelector('#nodeData'),
 
-		//affiche le nombre dutilisation par sexe
-		nodeDataElement.querySelector('div.sexeOccurrence>div.male .data').innerText = nodeData.sexeOccurrence.male;
-		nodeDataElement.querySelector('div.sexeOccurrence>div.female .data').innerText = nodeData.sexeOccurrence.female;
-		nodeDataElement.querySelector('div.sexeOccurrence>div.unknown .data').innerText = nodeData.sexeOccurrence.unknown;
+		opened: false,
 
-		//affiche le nombre dutilisation par age
-		nodeDataElement.querySelector('div.ageOccurrence>div.under25 .data').innerText = nodeData.ageOccurrence['under25'];
-		nodeDataElement.querySelector('div.ageOccurrence>div.from25to35 .data').innerText = nodeData.ageOccurrence['25to35'];
-		nodeDataElement.querySelector('div.ageOccurrence>div.from35to45 .data').innerText = nodeData.ageOccurrence['35to45'];
-		nodeDataElement.querySelector('div.ageOccurrence>div.above45 .data').innerText = nodeData.ageOccurrence['above45'];
-		nodeDataElement.querySelector('div.ageOccurrence>div.unknown .data').innerText = nodeData.ageOccurrence.unknown;
+		openSection: function(){
+			if(!this.opened){
+				var openAnim = [
+		        	{
+		        		elements: this.element, 
+		        		properties: {right: 0},
+		        		options: {duration: 250, easing: 'easeInOutBack'}
+		        	}
+		        ];
+				this.element.style.display = 'block';
 
-		//affiche les mots les plus associés à celui la
-		var associatedDataElm = nodeDataElement.querySelector('div.mostAssociatedWords>div.data');
+				Velocity.RunSequence(openAnim);
 
-		associatedDataElm.innerHTML = '';
+				this.opened = true;
+			}
+		},
 
-		nodeData.mostAssociatedWords.forEach(function(word){
-			var p = document.createElement('p');
+		closeSection: function(){
+			if(this.opened){
+				var closeAnim = [
+		        	{
+		        		elements: this.element, 
+		        		properties: {right: '-275px'},
+		        		options: {duration: 250, easing: 'easeInOutBack'}
+		        	}
+		        ];
 
-			p.innerHTML = word.name + ' : ' + word.occurrence + ' fois';
-			//p.classList.add('');
+				Velocity.RunSequence(closeAnim);
+				setTimeout(function(){
+					UI.nodeData.element.style.display = 'none';
+				}, 250);
 
-			associatedDataElm.appendChild(p);
-		});
+				this.opened = false;
+			}
+		},
+
+		printData: function(nodeData){
+			
+
+			this.element.querySelector('.nodeName').innerText = nodeData.name;
+			//affiche le nombre d'utilisation du mot
+			this.element.querySelector('div.occurrence>p.data').innerText = nodeData.occurrence;
+			
+			//affiche le nombre de connexions
+			this.element.querySelector('div.nbLinks>p.data').innerText = nodeData.nbLinks;
+
+			//affiche le nombre dutilisation par sexe
+			this.element.querySelector('div.sexeOccurrence>div.male .data').innerText = nodeData.sexeOccurrence.male;
+			this.element.querySelector('div.sexeOccurrence>div.female .data').innerText = nodeData.sexeOccurrence.female;
+			this.element.querySelector('div.sexeOccurrence>div.unknown .data').innerText = nodeData.sexeOccurrence.unknown;
+
+			//affiche le nombre dutilisation par age
+			this.element.querySelector('div.ageOccurrence>div.under25 .data').innerText = nodeData.ageOccurrence['under25'];
+			this.element.querySelector('div.ageOccurrence>div.from25to35 .data').innerText = nodeData.ageOccurrence['25to35'];
+			this.element.querySelector('div.ageOccurrence>div.from35to45 .data').innerText = nodeData.ageOccurrence['35to45'];
+			this.element.querySelector('div.ageOccurrence>div.above45 .data').innerText = nodeData.ageOccurrence['above45'];
+			this.element.querySelector('div.ageOccurrence>div.unknown .data').innerText = nodeData.ageOccurrence.unknown;
+
+			//affiche les mots les plus associés à celui la
+			var associatedDataElm = this.element.querySelector('div.mostAssociatedWords>div.data');
+
+			associatedDataElm.innerHTML = '';
+
+			nodeData.mostAssociatedWords.forEach(function(word){
+				var p = document.createElement('p');
+
+				p.innerHTML = word.name + ' : ' + word.occurrence + ' fois';
+				//p.classList.add('');
+
+				associatedDataElm.appendChild(p);
+			});
+		}
 	},
 
 	notification: function(type, msg){
