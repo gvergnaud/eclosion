@@ -5,6 +5,9 @@ body{
 	margin: 0;
 	overflow: hidden;
 }
+input, button {
+	outline: none;
+}
 
 .node {
 	stroke: #fff;

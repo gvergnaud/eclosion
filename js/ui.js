@@ -457,6 +457,8 @@ var UI = {
 				}, 250);
 
 	        }
+	        this.searchInput.focus();
+
 		},
 
 		addWordBoxView: function() {
@@ -499,6 +501,7 @@ var UI = {
 				}, 250);
 
 	        }
+	        this.addContribution.focus();
 		},
 
 		filterWordBoxView: function() {
@@ -538,6 +541,7 @@ var UI = {
 		        	UI.optionsMenu.menuElement.classList.remove("widthauto");
 				}, 250);
 	        }
+
 		}
 	},
 
