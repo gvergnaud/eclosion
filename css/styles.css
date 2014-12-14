@@ -24,9 +24,35 @@ body{
 
 /*GLOBALDATA*/
 #globalData{
+	text-transform: uppercase;
 	position: absolute;
 	bottom: 20px;
 	left: 20px;
+}
+
+#globalData p{
+	font-family: 'Fjalla One';
+	font-size: .9rem;
+	padding: 5px 5px 5px 0;
+	margin:5px;
+	border: 1px solid #3177df;
+	color: #3177df;
+}
+
+#globalData .global i{
+	font-size: 1.1rem;
+	padding: 5px;
+	border-right: 1px solid #3177df;
+	color: #3177df;
+}
+
+#globalData .global span{
+	margin-left: 5px;
+}
+
+#globalData .global span.dataType{
+	margin-top: 4px;
+	float: right;
 }
 
 /*NODEDATA*/
@@ -69,7 +95,7 @@ body{
 }
 
 #nodeData header .contribution input{
-	font-family: 'Fjalla One';
+	font-family: 'Open Sans';
 	font-size: 2rem;
 	padding: 5px;
 	margin-top: 5px;
@@ -84,6 +110,10 @@ body{
 #nodeData div.stats{
 	padding: 20px;
 	overflow: auto;
+}
+
+#nodeData div.stats div.statSection{
+	margin-bottom: 15px;
 }
 
 #nodeData div.stats h1.statTitle{
@@ -101,6 +131,8 @@ body{
 #nodeData div.stats .stat{
 	margin-left: 45px;
 	margin-bottom: 5px;
+	display: inline-block;
+	min-width: 175px;
 	color: #989898;
 	font-family: 'Open Sans';
 }
@@ -115,6 +147,10 @@ body{
 	font-size: 1.1rem;
 	font-family: 'Fjalla One';
 	color:#3177df;
+}
+
+#nodeData div.stats span.right{
+	float: right;
 }
 
 /* NOTIFICATIONS */

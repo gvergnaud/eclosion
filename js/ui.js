@@ -24,9 +24,9 @@ var UI = {
 	},
 
 	printGlobalData: function(nbWords, nbConnections, nbContributors){
-		document.querySelector('#globalData>p.words').innerText = nbWords + ' Mots';
-		document.querySelector('#globalData>p.connections').innerText = nbConnections + ' Connexions';
-		document.querySelector('#globalData>p.contributors').innerText = nbContributors + ' Contributeurs';
+		document.querySelector('#globalData span.words').innerText = nbWords;
+		document.querySelector('#globalData span.connections').innerText = nbConnections;
+		document.querySelector('#globalData span.contributors').innerText = nbContributors;
 	},
 
 	//Panneau de droite
@@ -102,15 +102,15 @@ var UI = {
 			nodeData.mostAssociatedWords.forEach(function(word){
 				var p = document.createElement('p');
 
-				p.innerHTML = word.name + ' : <span class="data">' + word.occurrence + '</span> fois';
-				//p.classList.add('');
+				p.innerHTML = word.name + ' <span class="right"><span class="data">' + word.occurrence + '</span> fois</span>';
+				p.classList.add('stat');
 
 				associatedDataElm.appendChild(p);
 			});
 		},
 
 		style: function(){
-			this.element.querySelector('div.stats').style.maxHeight = window.innerHeight - 300 + 'px';
+			this.element.querySelector('div.stats').style.maxHeight = window.innerHeight - 260 + 'px';
 		}
 	},
 

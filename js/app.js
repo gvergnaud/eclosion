@@ -261,7 +261,8 @@ var app = {
 			var selectedNode = model.getNodeFromWord(selectedVal);
 
 			app.getNodeData(selectedNode, function(nodeData){
-				UI.printNodeData(nodeData);
+				UI.nodeData.openSection();
+				UI.nodeData.printData(nodeData);
 			});
 
 			this.value = '';
