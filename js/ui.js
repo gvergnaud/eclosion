@@ -106,18 +106,18 @@ var UI = {
 			// Création du SVG
 			this.svg = d3.select("#wordGraph").attr("width", width) 
 			    .attr("pointer-events", "all")
-			    .style("background-color", "white")
+			    //.style("background-color", "white")
 			    .attr("height", height);
 		    	
 		    this.g = this.svg.append('svg:g')
-			   	.style("background-color", "white")
+			   	.style("background-color", "transparent")
 			    .append('svg:g')
-			    .style("background-color", "white");
+			    .style("background-color", "transparent");
 			
-			this.g.append('svg:rect')
-			    .attr('width', width)
-			    .attr('height', height)
-			    .attr('fill', 'white');
+			//this.g.append('svg:rect')
+			  //  .attr('width', width)
+			    //.attr('height', height)
+			    //.attr('fill', 'white');
 			    
 			this.force
 				.nodes(words.nodes)
