@@ -50,6 +50,9 @@ var UI = {
 		        ];
 				this.element.style.display = 'block';
 
+			    var addContribution = document.querySelectorAll('.addContribution');
+			    addContribution[1].focus();
+
 				Velocity.RunSequence(openAnim);
 
 				this.opened = true;
@@ -396,11 +399,10 @@ var UI = {
 	    filterWordModal: document.getElementById("filterWord"),
 	    /* Les deux input à autofocus */
 	    searchInput: document.getElementById("searchInput"),
-	    addContribution: document.getElementById("addContribution"),
+	    addContribution: document.querySelectorAll('.addContribution'),
 	    largeurEcran: window.innerWidth+"px",
 
 	    styleModal: function() {
-	    	console.log(this.element);
 		    this.element[0].style.right = this.largeurEcran;
 		    this.element[1].style.right = this.largeurEcran;
 		    this.element[2].style.right = this.largeurEcran;
@@ -511,7 +513,7 @@ var UI = {
 				}, 250);
 
 	        }
-	        this.addContribution.focus();
+	        this.addContribution[0].focus();
 		},
 
 		filterWordBoxView: function() {
