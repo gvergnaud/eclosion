@@ -28,7 +28,7 @@
         <aside id="notifications"></aside>
         <div class="contribution">
             <p id="proposedWord"></p>
-            <input id="addContribution" type="text" placeholder="ajouter un mot" />
+            <input class="addContribution" type="text" placeholder="ajouter un mot" />
         </div>
         <div class="filters">
             <label>sexe :</label>
@@ -94,18 +94,18 @@
                 <h1 class="theme">Theme : <span class="nodeName"></span></h1>
                 <div class="contribution">
                     <p>Contribuer</p>
-                    <input type="text" placeholder="ton mot" />
+                    <input class="addContribution" data-activeWord="activeWord" type="text" placeholder="ton mot" />
                 </div>
             </header>
             <div class="stats">
                 <div class="occurrence">
                     <h1 class="statTitle"><i class="icon-graph"></i> Nombre d'apparition du mot</h1>
-                    <p class="stat data"></p>
+                    <p class="stat data fat"></p>
                 </div>
 
                 <div class="nbLinks">
                     <h1 class="statTitle"><i class="icon-connexion"></i> Nombre de connexions</h1>
-                    <p class="stat data"></p>
+                    <p class="stat data fat"></p>
                 </div>
 
                 <div class="sexeOccurrence">

@@ -49,7 +49,7 @@ body{
 }
 
 #nodeData header h1.theme{
-	padding: 20px;
+	margin: 30px 30px 0 30px;
 	height: 75px;
 	border-bottom: 1px solid #194e9f;
 	color: #194e9f;
@@ -62,15 +62,18 @@ body{
 }
 
 #nodeData header .contribution{
-	padding: 20px;
+	margin: 20px 30px;
 	color: #194e9f;
 }
 
 #nodeData header .contribution input{
+	font-family: 'Fjalla One';
+	font-size: 2rem;
 	padding: 5px;
+	margin-top: 5px;
+	margin-bottom: 20px;
 	background: transparent;
 	border: none;
-	margin-top: 20px;
 }
 
 #nodeData header .contribution input:focus{
@@ -96,11 +99,19 @@ body{
 
 #nodeData div.stats .stat{
 	margin-left: 45px;
-	color: #b8b8b8;
+	margin-bottom: 5px;
+	color: #989898;
 	font-family: 'Open Sans';
 }
 
+#nodeData div.stats .stat.fat{
+	font-size: 3rem;
+	font-family: 'Fjalla One';
+	text-shadow: 2px 1px 0px rgba(100, 100, 100, 1);
+}
+
 #nodeData div.stats .data{
+	font-family: 'Fjalla One';
 	color:#3177df;
 }
 

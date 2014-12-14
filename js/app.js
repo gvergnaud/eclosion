@@ -2,6 +2,8 @@ var app = {
 
 	proposedWord : false,
 
+	activeWord : false,
+
 	filters : {
 		age: false,
 		sexe: false
@@ -24,38 +26,21 @@ var app = {
 		app.watchData();
 		
 		//lorsque le graph principale a été crée
-		document.addEventListener('graphready', function (e) {
-
-			app.graphCreated = true;
-
-			app.proposeRandomWord();
-
-			UI.d3.svg.call(d3.behavior.zoom().scaleExtent([0.25, 3]).on("zoom", function(){
-				UI.d3.redrawGraph();
-			}));
-
-			//remove l'event listener
-			e.target.removeEventListener(e.type, arguments.callee);
-		}, false);
+		document.addEventListener('graphready', app.onGraphReady, false);
 
 		// lorsque les données sont mises à jour
-		document.addEventListener('dataupdate', function(){
-			UI.printGlobalData(model.words.nodes.length,  model.words.links.length, model.words.contributors);
-			
-			UI.d3.svg.selectAll(".nodes>g>circle").on("click", 	function(node){
-				app.getNodeData(node, function(nodeData){
-					UI.nodeData.printData(nodeData);
-					UI.nodeData.openSection();
-				});
-			});
-		}, false);
+		document.addEventListener('dataupdate', app.onDataUpdate, false);
 
 		//lorsque l'utilisateur ajoute un mot
 		document.addEventListener('usercontribution', function (e) {
 			app.proposeRandomWord();
 		}, false);
 
-		document.querySelector('#addContribution').addEventListener('keypress', app.addContribution, false);
+		//applique l'evenement addContribution a tous les elements ayant la class
+		[].forEach.call(document.querySelectorAll('.addContribution'), function (element) {
+			element.addEventListener('keyup', app.addContribution, false);
+		});
+
 		document.querySelector('#searchInput').addEventListener('keyup', app.searchNode, false);
 		document.querySelector('div.filters button.reset').addEventListener('click', app.resetFilters, false);
 	},
@@ -70,6 +55,43 @@ var app = {
 
 		app.event.userContribution = document.createEvent('Event');
 		app.event.userContribution.initEvent('usercontribution', true, true);
+	},
+
+	onGraphReady: function (e) {
+
+		app.graphCreated = true;
+
+		app.proposeRandomWord();
+
+		UI.d3.svg.call(d3.behavior.zoom().scaleExtent([0.25, 3]).on("zoom", function(){
+			UI.d3.redrawGraph();
+		}));
+
+		//remove l'event listener
+		e.target.removeEventListener(e.type, arguments.callee);
+	},
+
+	onDataUpdate: function(){
+
+		//on affiche les données globales
+		UI.printGlobalData(model.words.nodes.length,  model.words.links.length, model.words.contributors);
+		
+		//si le panneau est ouvert, et qu'il y a un mot actif, on update les données
+		if(app.activeWord){
+			app.getNodeData(model.getNodeFromWord(app.activeWord), function(nodeData){
+				UI.nodeData.printData(nodeData);
+			});
+		}
+
+		//au click sur un node, on ouvre le panneau droit et on recupérer toutes les données de ce node
+		UI.d3.svg.selectAll(".nodes>g>circle").on("click", 	function(node){
+			app.getNodeData(node, function(nodeData){
+				UI.nodeData.printData(nodeData);
+				UI.nodeData.openSection();
+				app.activeWord = nodeData.name;
+
+			});
+		});
 	},
 
 	watchData: function(){
@@ -101,6 +123,7 @@ var app = {
 			document.dispatchEvent(app.event.dataUpdate);
 		});
 	},
+
 
 	reloadData: function(){
 		model.getDataOnce(function(words){
@@ -161,12 +184,20 @@ var app = {
 		UI.printWord(app.proposedWord);
 	},
 	
-	//Filters
+	//User interaction
 	addContribution: function(e){
 		if(e.keyCode == 13){
 			if(this.value){
 
-				model.addContribution(this.value.toLowerCase(), app.proposedWord, 
+				var proposedWord;
+
+				if(e.target.getAttribute('data-activeWord') === 'activeWord'){
+					proposedWord = app.activeWord;
+				}else{
+					proposedWord = app.proposedWord;
+				}
+
+				model.addContribution(this.value.toLowerCase(), proposedWord, 
 					function(){ //success
 						document.dispatchEvent(app.event.userContribution);
 					},
@@ -182,7 +213,6 @@ var app = {
 		}
 	},
 
-	//User interaction
 	addFilter: function(filter, value){
 
 		app.filters[filter] = value;

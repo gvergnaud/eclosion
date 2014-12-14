@@ -110,7 +110,6 @@ var UI = {
 		},
 
 		style: function(){
-			console.log(this.element.querySelector('header').height);
 			this.element.querySelector('div.stats').style.maxHeight = window.innerHeight - 300 + 'px';
 		}
 	},
