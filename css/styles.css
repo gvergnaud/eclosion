@@ -33,10 +33,10 @@ body{
 #nodeData{
 	font-family: 'Fjalla One';
 	position: absolute;
-	width: 275px;
+	width: 350px;
 	height: 100%;
 	top: 0;
-	right: -275px;
+	right: -350px;
 	display: none;
 	background: #eeeeee;
 }
@@ -45,11 +45,11 @@ body{
 	text-transform: uppercase;
 	background: #3177df;
 	width: 100%;
-	height:150px;
+	max-height: 300px;
 }
 
 #nodeData header h1.theme{
-	padding-top: 20px;
+	padding: 20px;
 	height: 75px;
 	border-bottom: 1px solid #194e9f;
 	color: #194e9f;
@@ -59,6 +59,49 @@ body{
 
 #nodeData header .nodeName{
 	color: #fff;
+}
+
+#nodeData header .contribution{
+	padding: 20px;
+	color: #194e9f;
+}
+
+#nodeData header .contribution input{
+	padding: 5px;
+	background: transparent;
+	border: none;
+	margin-top: 20px;
+}
+
+#nodeData header .contribution input:focus{
+	outline: none;
+}
+
+#nodeData div.stats{
+	padding: 20px;
+	overflow: auto;
+}
+
+#nodeData div.stats h1.statTitle{
+	text-transform: uppercase;
+	margin: 10px 0 10px 0;
+	color:#4b4b4b;
+	font-size: 1.1rem;
+}
+
+#nodeData div.stats h1.statTitle i{
+	color: #b8b8b8;
+	font-size: 1.6rem;
+}
+
+#nodeData div.stats .stat{
+	margin-left: 45px;
+	color: #b8b8b8;
+	font-family: 'Open Sans';
+}
+
+#nodeData div.stats .data{
+	color:#3177df;
 }
 
 /* NOTIFICATIONS */

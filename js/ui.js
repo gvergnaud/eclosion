@@ -4,8 +4,14 @@ var UI = {
 	
 	init: function(){
 		this.wordGraph = document.querySelector('#wordGraph');
+
 		this.setSVGSize();
-		window.addEventListener('resize', this.setSVGSize, false);
+		this.nodeData.style();
+
+		window.addEventListener('resize', function(){
+			UI.setSVGSize();
+			UI.nodeData.style();
+		}, false);
 	},
 
 	setSVGSize: function(){
@@ -52,7 +58,7 @@ var UI = {
 				var closeAnim = [
 		        	{
 		        		elements: this.element, 
-		        		properties: {right: '-275px'},
+		        		properties: {right: '-350px'},
 		        		options: {duration: 250, easing: 'easeInOutBack'}
 		        	}
 		        ];
@@ -89,18 +95,23 @@ var UI = {
 			this.element.querySelector('div.ageOccurrence>div.unknown .data').innerText = nodeData.ageOccurrence.unknown;
 
 			//affiche les mots les plus associés à celui la
-			var associatedDataElm = this.element.querySelector('div.mostAssociatedWords>div.data');
+			var associatedDataElm = this.element.querySelector('div.mostAssociatedWords>div.associatedWordsContainer');
 
 			associatedDataElm.innerHTML = '';
 
 			nodeData.mostAssociatedWords.forEach(function(word){
 				var p = document.createElement('p');
 
-				p.innerHTML = word.name + ' : ' + word.occurrence + ' fois';
+				p.innerHTML = word.name + ' : <span class="data">' + word.occurrence + '</span> fois';
 				//p.classList.add('');
 
 				associatedDataElm.appendChild(p);
 			});
+		},
+
+		style: function(){
+			console.log(this.element.querySelector('header').height);
+			this.element.querySelector('div.stats').style.maxHeight = window.innerHeight - 300 + 'px';
 		}
 	},
 

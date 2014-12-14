@@ -14,7 +14,10 @@
 
         <link rel="stylesheet" href="css/reset.css">
         <link rel="stylesheet" href="css/styles.css">
+
+        <link rel="stylesheet" href="css/fontello.css">
         <link rel="stylesheet" href="font/flaticon.css" media="all">
+
         <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
         <link href='http://fonts.googleapis.com/css?family=Fjalla+One' rel='stylesheet' type='text/css'>
     </head>
@@ -85,66 +88,69 @@
             <p class="contributors"></p>
         </div>
 
-        <section id="nodeData" onClick="UI.nodeData.closeSection()">
+        <section id="nodeData">
             <header>
+                <div class="close" onClick="UI.nodeData.closeSection()">Fermer</div>
                 <h1 class="theme">Theme : <span class="nodeName"></span></h1>
                 <div class="contribution">
+                    <p>Contribuer</p>
                     <input type="text" placeholder="ton mot" />
                 </div>
             </header>
-
-            <div class="occurrence">
-                <h1>Nombre d'apparition du mot</h1>
-                <p class="data"></p>
-            </div>
-
-            <div class="nbLinks">
-                <h1>Nombre de connexions</h1>
-                <p class="data"></p>
-            </div>
-
-            <div class="sexeOccurrence">
-                <h1>Utilisation en fonction du sexe</h1>
-                
-                <div class="male">
-                    <p>Homme <span class="data"></span>%</p>
+            <div class="stats">
+                <div class="occurrence">
+                    <h1 class="statTitle"><i class="icon-graph"></i> Nombre d'apparition du mot</h1>
+                    <p class="stat data"></p>
                 </div>
 
-                <div class="female">
-                    <p>Femme <span class="data"></span>%</p>
-                </div>
-                
-                <div class="unknown">
-                    <p>Non renseigné <span class="data"></span>%</p>
-                </div>
-            </div>
-
-            <div class="ageOccurrence">
-                <h1>Utilisation en fonction de l'age</h1>
-                <div class="under25">
-                    <p>- 25 ans <span class="data"></span>%</p>
+                <div class="nbLinks">
+                    <h1 class="statTitle"><i class="icon-connexion"></i> Nombre de connexions</h1>
+                    <p class="stat data"></p>
                 </div>
 
-                <div class="from25to35">
-                    <p>25-35 ans <span class="data"></span>%</p>
+                <div class="sexeOccurrence">
+                    <h1 class="statTitle"><i class="icon-gender"></i> Utilisation en fonction du sexe</h1>
+                    
+                    <div class="stat male">
+                        <p>Homme <span class="data"></span>%</p>
+                    </div>
+
+                    <div class="stat female">
+                        <p>Femme <span class="data"></span>%</p>
+                    </div>
+                    
+                    <div class="stat unknown">
+                        <p>Non renseigné <span class="data"></span>%</p>
+                    </div>
                 </div>
 
-                <div class="from35to45">
-                    <p>35-45 ans <span class="data"></span>%</p>
+                <div class="ageOccurrence">
+                    <h1 class="statTitle"><i class="icon-age"></i> Utilisation en fonction de l'âge</h1>
+                    <div class="stat under25">
+                        <p>- 25 ans <span class="data"></span>%</p>
+                    </div>
+
+                    <div class="stat from25to35">
+                        <p>25-35 ans <span class="data"></span>%</p>
+                    </div>
+
+                    <div class="stat from35to45">
+                        <p>35-45 ans <span class="data"></span>%</p>
+                    </div>
+
+                    <div class="stat above45">
+                        <p>+ 45 ans <span class="data"></span>%</p>
+                    </div>
+                    
+                    <div class="stat unknown">
+                        <p>Non renseigné <span class="data"></span>%</p>
+                    </div>
                 </div>
 
-                <div class="above45">
-                    <p>+ 45 ans <span class="data"></span>%</p>
+                <div class="mostAssociatedWords">
+                    <h1 class="statTitle"><i class="icon-rank"></i> Mots les plus associés</h1>
+                    <div class="stat associatedWordsContainer"></div>
                 </div>
-                
-                <div class="unknown">
-                    <p>Non renseigné <span class="data"></span>%</p>
-                </div>
-            </div>
-
-            <div class="mostAssociatedWords">
-                <h1>Mots les plus associés</h1>
-                <div class="data"></div>
             </div>
         </section>
 
