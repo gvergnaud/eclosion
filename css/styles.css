@@ -25,7 +25,6 @@ body{
 #globalData{
 	position: absolute;
 	bottom: 20px;
-	left: 20px;
 }
 
 /*NODEDATA*/
@@ -74,8 +73,6 @@ p.notification{
 	-webkit-transition: .65s cubic-bezier(.2,.1,.1,1);
 	
 	transform: translateY(-100%);
-	-o-transform: translateY(-100%);
-	-moz-transform: translateY(-100%);
 	-webkit-transform: translateY(-100%);
 }
 
@@ -89,23 +86,24 @@ p.notification.error{
 
 p.notification.show{ 
 	transform: translateY(0%);
-	-o-transform: translateY(0%);
-	-moz-transform: translateY(0%);
 	-webkit-transform: translateY(0%);
 }
 
 /* Menu de navigation latéral gauche : Recherche de mot, ajout de mot, filtes */
-.contribution, .filters, #lateral-navigation{
-	z-index: 10;
-	position: relative;
-}
 #lateral-navigation {
 	width: 70px;
+	z-index: 10;
+	position: relative;
+	-ms-transform: translateY(50%);
+	-webkit-transform: translateY(50%);
+	transform: translateY(50%);
 }
 .widthauto { /* Pour le #lateral-navigation seulement au click */
 	width: auto !important;
 }
 .left-nav {
+	display: flex;
+	justify-content: center;
 	width: 70px;
 	height: 70px;
 	margin-bottom: 2px;
@@ -115,7 +113,31 @@ p.notification.show{
 	background: #fff;
 	cursor: pointer;
 }
-.hidden-option {
+.left-nav:hover + .optionName {
+	display: block;
+	position: absolute;
+	box-sizing: border-box;
+	left: 67px;
+	z-index: 12;
+	padding: 0 10px;
+	height: 70px;
+	line-height: 70px;
+	border-left: 3px solid #3277df;
+
+	font-family: 'Open Sans', sans-serif;
+	font-size: 28px;
+	color: #3277df;
+}
+.left-nav:hover + #optionName1{
+	top: 0;
+}
+.left-nav:hover + #optionName2{
+	top: 72px;
+}
+.left-nav:hover + #optionName3{
+	top: 144px;
+}
+.hidden-option, .optionName {
 	display: none;
 }
 .modalApparition {
@@ -123,45 +145,126 @@ p.notification.show{
 	box-sizing: border-box;
 	position: absolute;
 	top: 0;
-	left: 70px;
+	left: -1875px;
 	right: 0;
 	height: 214px;
 	background-color: #fff;
 	color: #000;
-	opacity: 0.95;
+	opacity: 0.9;
 }
-.flaticons {
+
+/* Icônes du menu */
+#lateral-navigation .flaticons {
 	height: 70px;
 	line-height: 70px;
+	color: #AFAFAF;
 }
-.closeMenu {
+.left-nav:hover .flaticons:before {
+	color: #3277df;
+}
+.flaticon-cross97 {
 	float: right;
+	padding: 15px 20px;
 }
-#searchWordForm {
+.flaticon-cross97:hover {
+	cursor: pointer;
+}
+.optionsForm {
+	height: 100%;
 	display: flex;
+	flex-direction: column;
 	align-items: center;
 	justify-content: center;
-	height: 214px;
 }
-#searchInput {
+#searchWordForm {
+	height: 214px;
+	margin-left: 82px;
+}
+.optionsInputText {
 	display: inline-block;
-	height: 60px;
 	padding: 15px 50px;
 	border: none;
 	border-left: 1px solid #434343;
 	font-family: 'Open Sans', sans-serif;
+	color: #434343;
+}
+#searchInput {
+	height: 60px;
+	width: 502px;
+	font-size: 48px;
+}
+#proposedWord { /* (paragraphe) Phrase contenant le mot proposé */
+	margin: 10px 0;
+	font-family: 'Open Sans', sans-serif;
 	font-size: 48px;
 	color: #434343;
 }
+#proposedWordText { /* Span contenant uniquement le mot proposé */
+	color: #3277df; /* bleu primaire */
+}
+#writehWordForm { /* Pour gommer les 82px de droite que prend le bouton close */
+	margin-left: 82px;
+}
+#addContribution { /* Input text pour ajouter un mot */
+	margin: 10px 0;
+	padding: 8px 30px;
+	width: 490px;
+	height: 50px;
+	font-size: 28px;
+}
+.filter-container {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	height: 100%;
+	margin-left: 82px;
+}
+.filters {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	width: 350px;
+	margin: 0 10px; 
+}
+.filters p {
+	margin: 20px 0;
+	font-family: 'Open Sans', sans-serif;
+	font-size: 40px;
+}
+.filters .resetFilters {
+	margin: 20px 0;
+	padding: 0;
+	border: 0;
+	background: none;
+	font-family: 'Open Sans', sans-serif;
+	font-size: 40px;
+}
+.filterbuttons {
+	margin: 6px;
+	padding: 0;
+	border: 0;
+	background: none;
+	font-family: 'Open Sans', sans-serif;
+	font-size: 16px;
+	color: #888888;
+}
+.filters button:hover, .filters button:active, .filters button:focus {
+	cursor: pointer;
+	color: #3277df;
+}
 input::-webkit-input-placeholder {
-	color: #434343;
+	font-style: italic;
 }
 input:-moz-placeholder { /* Firefox 18- */
 	color: #434343;
+	font-style: italic;
 }
 input::-moz-placeholder {  /* Firefox 19+ */
 	color: #434343;
+	font-style: italic;
 }
 input:-ms-input-placeholder {  
 	color: #434343;
+	font-style: italic;
 }

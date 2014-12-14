@@ -56,7 +56,12 @@ var app = {
 
 		document.querySelector('#addContribution').addEventListener('keypress', app.addContribution, false);
 		document.querySelector('#searchInput').addEventListener('keyup', app.searchNode, false);
-		document.querySelector('div.filters button.reset').addEventListener('click', app.resetFilters, false);
+		document.querySelector('div.filters button.resetFilters').addEventListener('click', app.resetFilters, false);
+	
+		/* Gestion des fenêtres du menu */
+        document.getElementById('searchBox').addEventListener("click",app.searchBoxfun,false);
+        document.getElementById('addWordBox').addEventListener("click",app.addWordBoxfun,false);
+        document.getElementById('filterBox').addEventListener("click",app.filterWordBoxfun,false);
 	},
 
 	createCustomEvents: function(){
@@ -168,6 +173,10 @@ var app = {
 				model.addContribution(this.value.toLowerCase(), app.proposedWord, 
 					function(){ //success
 						document.dispatchEvent(app.event.userContribution);
+			            var writehWordModal = document.getElementById("writeWord");
+			            var leftNav = document.getElementById("lateral-navigation");
+			            writehWordModal.classList.remove("modalApparition");
+                		leftNav.classList.remove("widthauto");
 					},
 					function(error){
 						UI.notification('error', error);
@@ -234,11 +243,29 @@ var app = {
 			});
 
 			this.value = '';
-
-			searchWordModal.classList.add("hidden-option");
+			
+			var searchWordModal = document.getElementById("searchWord");
+			var leftNav = document.getElementById("lateral-navigation");
+            leftNav.classList.remove("widthauto");
             searchWordModal.classList.remove("modalApparition");
 		}
 	},
+
+	// Fermeture du menu avec la croix
+    closeModal: function() {
+    	UI.optionsMenu.closeModalView();
+    },
+    // Ouverture des 3 fenêtres d'options
+	searchBoxfun: function() {
+		UI.optionsMenu.searchBoxView();
+	},
+	addWordBoxfun: function() {
+		UI.optionsMenu.addWordBoxView();
+	},
+	filterWordBoxfun: function() {
+		UI.optionsMenu.filterWordBoxView();
+	}
+
 };
 
 app.init();
