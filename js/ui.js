@@ -564,6 +564,10 @@ var UI = {
 
 		closeModal: function() {
 
+			[].forEach.call(UI.menu.allModals, function(element){
+		        element.style.zIndex = -1;
+        	});
+
 	    	var closeAnim = [
 	        	{
 	        		elements: UI.menu.allModals, 
@@ -585,7 +589,16 @@ var UI = {
 		},
 
 		openModal: function(modal){
-        	
+    		[].forEach.call(UI.menu.allModals, function(element){
+        		element.style.zIndex = -1;
+        	});
+
+			setTimeout(function(){
+	        	[].forEach.call(UI.menu.allModals, function(element){
+	        		element.style.zIndex = 10;
+	        	});
+			}, 250);
+
         	[].forEach.call(UI.menu.allModals, function(element){
         		element.classList.remove('activeTab');
         	});
