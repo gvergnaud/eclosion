@@ -11,7 +11,9 @@ var app = {
 
 	event: {},
 
-	init: function(){
+	init: function(routeParams){
+
+		app.routeParams = routeParams;
 
 		model.initFirebase();
 
@@ -32,16 +34,10 @@ var app = {
 		document.addEventListener('dataupdate', app.onDataUpdate, false);
 
 		//lorsque l'utilisateur ajoute un mot
-		document.addEventListener('usercontribution', function (e) {
-			app.proposeRandomWord();
-			UI.menu.closeModal();
-		}, false);
+		document.addEventListener('usercontribution', app.onUserContribution, false);
 		
 		// Fermeture de la fenetre droite au clic sur la croix
-		document.getElementsByClassName("close")[0].addEventListener("click", function(){
-			UI.nodeData.closeSection();
-			UI.d3.highlightOff();
-		}, false);
+		document.querySelector("#nodeData .close").addEventListener("click", app.blurWord, false);
 
 		//applique l'evenement addContribution à tous les elements ayant la class
 		[].forEach.call(document.querySelectorAll('.addContribution'), function (element) {
@@ -80,6 +76,12 @@ var app = {
 			UI.d3.defineZoom();
 		}));
 
+		if(app.routeParams.word){
+			setTimeout(function(){
+				app.focusWord( decodeURI(app.routeParams.word) );
+			}, 1500);
+		}
+
 		//remove l'event listener
 		e.target.removeEventListener(e.type, arguments.callee);
 	},
@@ -99,13 +101,7 @@ var app = {
 		//au click sur un node, on ouvre le panneau droit et on recupérer toutes les données de ce node
 		UI.d3.svg.selectAll(".nodes>g>circle").on("mouseup", 	function(node){
 			if(d3.event.defaultPrevented == false){ 
-				UI.d3.selectNode(d3.select(this.parentNode));
-				app.getNodeData(node, function(nodeData){
-					UI.nodeData.printData(nodeData);
-					UI.nodeData.openSection();
-					app.activeWord = nodeData.name;
-
-				});	
+				app.focusWord(node.name);
 			}
 		});
 		
@@ -113,6 +109,13 @@ var app = {
 		UI.d3.svg.selectAll(".nodes>g>circle").on("dblclick", 	function(node){
 			d3.event.stopPropagation();
 		});
+	},
+
+	onUserContribution: function (e) {
+		app.proposeRandomWord();
+		if(UI.menu.opened){
+			UI.menu.closeModal();
+		}
 	},
 
 	watchData: function(){
@@ -204,8 +207,31 @@ var app = {
 
 		UI.printWord(app.proposedWord);
 	},
-	
+
+
 	//User interaction
+	focusWord: function(word){
+		UI.d3.searchNode(word);
+
+		var selectedNode = model.getNodeFromWord(word);
+
+		app.getNodeData(selectedNode, function(nodeData){
+			UI.nodeData.openSection();
+			UI.nodeData.printData(nodeData);
+			app.activeWord = nodeData.name;
+		});
+
+		history.pushState({}, word, '#/' + encodeURI(word));
+	},
+
+	blurWord: function(){
+		UI.nodeData.closeSection();
+		UI.d3.highlightOff();
+		app.activeWord = false;
+		
+		history.pushState({}, 'Home', window.location.href.split('#')[0]);
+	},
+
 	addContribution: function(e){
 		if(e.keyCode == 13){
 			if(this.value){
@@ -284,18 +310,9 @@ var app = {
 
 		//envoi de la recherche
 		if(e.keyCode === 13){
-			var selectedVal = document.getElementById("searchInput").value;
+			var word = document.getElementById("searchInput").value;
 
-			UI.d3.searchNode(selectedVal);
-
-			var selectedNode = model.getNodeFromWord(selectedVal);
-
-			app.getNodeData(selectedNode, function(nodeData){
-				UI.nodeData.openSection();
-				UI.nodeData.printData(nodeData);
-				app.activeWord = nodeData.name;
-			});
-			
+			app.focusWord(word);
 
 			this.value = '';
 			
@@ -304,4 +321,9 @@ var app = {
 	}
 };
 
-app.init();
+var routeParams = {};
+
+var hashtab = window.location.hash.split('/');
+routeParams.word = hashtab[1];
+
+app.init(routeParams);
