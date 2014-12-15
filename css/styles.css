@@ -12,8 +12,6 @@ input, button {
 }
 
 .node {
-	stroke: #fff;
-	stroke-width: 1.5px;
 	padding:0;
 	margin:0;
 
@@ -93,6 +91,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', end
 	right: -350px;
 	display: none;
 	background: #eeeeee;
+	z-index: 30;
 }
 
 #nodeData header{
