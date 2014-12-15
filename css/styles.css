@@ -422,7 +422,9 @@ input:-ms-input-placeholder {
 	text-align: center;
 	z-index:20;
 	background-image: url(./../res/zoom.png);
-	background-size: cover;
+	background-size: contain;
+	background-repeat: no-repeat;
+	background-position: center center; 
 }
 
 #zoomBar{
