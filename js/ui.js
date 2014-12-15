@@ -249,7 +249,10 @@ var UI = {
 	         	.style("cursor", "pointer")
 	         	.attr("r", function(d){
 	         		var nbLinks = Math.sqrt(d.nbLinks);
-	         		return nbLinks * (nbLinks * self.nodeSizeCoefficient); 
+	         		if(nbLinks * (nbLinks * self.nodeSizeCoefficient) <= 60)
+	         			return nbLinks * (nbLinks * self.nodeSizeCoefficient); 
+	         		else
+	         			return 60;
 	         	})
 	         	.call(self.force.drag);
 	         	
@@ -260,10 +263,10 @@ var UI = {
 			     .style("font-size", function(d) {return Math.sqrt(d.nbLinks) * 10 + "px"; })
 			     .style("fill", "#4b4b4b")
 			     .attr("transform",function(d) {
-			            return "translate(0," + -(Math.sqrt(d.nbLinks) * (Math.sqrt(d.nbLinks) * self.nodeSizeCoefficient + 2)) + ")";
+			           return "translate(0," + -(Math.sqrt(d.nbLinks) * (Math.sqrt(d.nbLinks) * self.nodeSizeCoefficient + 2)) + ")";
 			        })
 			     .text(function(d) {
-			       return d.name.charAt(0).toUpperCase() + d.name.substring(1).toLowerCase();
+			       	return d.name.charAt(0).toUpperCase() + d.name.substring(1).toLowerCase();
 			     });
 	
 			this.force.on("tick", function() {
@@ -340,7 +343,13 @@ var UI = {
 		        nodeEnter.append("circle")
 		            .attr("class", "node")
 		            .style('fill', "#3177df")
-					.attr("r", function(d) {return Math.sqrt(d.nbLinks) * (Math.sqrt(d.nbLinks) * self.nodeSizeCoefficient); })
+					.attr("r", function(d) {
+						var nbLinks = Math.sqrt(d.nbLinks);
+						if(nbLinks * (nbLinks * self.nodeSizeCoefficient) <= 60)
+		         			return nbLinks * (nbLinks * self.nodeSizeCoefficient); 
+		         		else
+		         			return 60; 
+	         		})
 		            .call(self.force.drag);
 		
 		        nodeEnter.append("text")
@@ -403,6 +412,8 @@ var UI = {
 	            return d.name == selectedVal;
 	        });
 	        
+	        UI.d3.highlightOn(selected);
+	        
 	        // Si la recherche a donné quelque chose
 	        if(selected[0].length > 0){
 	        
@@ -424,6 +435,7 @@ var UI = {
 			    	UI.d3.redrawGraph();
 			    	UI.d3.defineZoom();
 			    }));
+			    
 			}else{
 				UI.notification('error', "Pas de mots trouvés");
 			}
@@ -433,37 +445,10 @@ var UI = {
 		
 		selectNode : function(node){
 			var self = this;
-			var nodes = d3.selectAll(".nodes>g");
-			var links = d3.selectAll(".links>line");
-        		
-			var linkedByIndex = {};
-			for (i = 0; i < self.previousWords.length; i++) {
-			    linkedByIndex[i + "," + i] = 1;
-			};
 			
-			self.previousWords.links.forEach(function (d) {
-			    linkedByIndex[d.source.index + "," + d.target.index] = 1;
-			});
-			
-	        d = node.node().__data__;
-	        
-	        // Changement de couleur des cercles des noeuds
-	        nodes.select("circle").transition().duration(1000).style("fill", function (o) {
-	            return linkedByIndex[d.index + "," + o.index] | linkedByIndex[o.index + "," + d.index] ? "#72a1e9" : "#b8b8b8";
-	        });
-	        
-	        // On remet les propriétés des noeuds à leur état d'origine
-	        nodes.select("text").transition().duration(1000).style("fill", "#4b4b4b").style("font-weight", "400");
-	      
-	        // Changement de couleur des liens
-	        links.transition().duration(1000).style("stroke", function (o) {
-	            return d.index == o.source.index | d.index == o.target.index ? "#72a1e9" : "#b8b8b8";
-	        });
-	        
-	        // On modifie l'apparence du noeud choisi
-        	node.select("circle").transition().duration(1000).style("fill", "#3177df");
-        	node.select("text").transition().duration(1000).style("fill", "#3177df").style("font-weight", "700");
-			
+			// On met liens et nodes en highlight
+			self.highlightOn(node);
+						
 	        var rect = document.querySelector("svg>g>g").getBoundingClientRect();
 	        
 	        var x = ((window.innerWidth / 2) - (parseInt(node.attr("cx")) + parseInt(rect.left))) 
@@ -514,6 +499,40 @@ var UI = {
 					return x1 > nx2 || x2 < nx1 || y1 > ny2 || y2 < ny1;
 			    });
 			};
+		},
+		
+		highlightOn : function(node){
+			var self = this;
+			var nodes = d3.selectAll(".nodes>g");
+			var links = d3.selectAll(".links>line");
+        		
+			var linkedByIndex = {};
+			for (i = 0; i < self.previousWords.length; i++) {
+			    linkedByIndex[i + "," + i] = 1;
+			};
+			
+			self.previousWords.links.forEach(function (d) {
+			    linkedByIndex[d.source.index + "," + d.target.index] = 1;
+			});
+			
+	        d = node.node().__data__;
+	        
+	        // Changement de couleur des cercles des noeuds
+	        nodes.select("circle").transition().duration(1000).style("fill", function (o) {
+	            return linkedByIndex[d.index + "," + o.index] | linkedByIndex[o.index + "," + d.index] ? "#72a1e9" : "#b8b8b8";
+	        });
+	        
+	        // On remet les propriétés des noeuds à leur état d'origine
+	        nodes.select("text").transition().duration(1000).style("fill", "#4b4b4b").style("font-weight", "400");
+	      
+	        // Changement de couleur des liens
+	        links.transition().duration(1000).style("stroke", function (o) {
+	            return d.index == o.source.index | d.index == o.target.index ? "#72a1e9" : "#b8b8b8";
+	        });
+	        
+	        // On modifie l'apparence du noeud choisi
+        	node.select("circle").transition().duration(1000).style("fill", "#3177df");
+        	node.select("text").transition().duration(1000).style("fill", "#3177df").style("font-weight", "700");
 		},
 		
 		highlightOff : function(){
