@@ -325,15 +325,15 @@ p.notification.show{
 	color: #3277df;
 }
 
-#lateral-navigation .flaticon-cross97 {
+/* La croix apparait deux fois, donc ne surtout pas mettre de sélecteurs plus précis */
+.flaticon-cross97 {
 	float: right;
 	padding: 15px 20px;
 }
-#lateral-navigation .flaticon-cross97:before {
+.flaticon-cross97:before {
 	font-size: 20px;
 	color: #A4A4A4;
 }
-
 
 #lateral-navigation .flaticon-cross97:hover {
 	cursor: pointer;
