@@ -36,6 +36,11 @@ var app = {
 			app.proposeRandomWord();
 			UI.menu.closeModal();
 		}, false);
+		
+		document.getElementsByClassName("close")[0].addEventListener("click", function(){
+			UI.nodeData.closeSection();
+			UI.d3.highlightOff();
+		});
 
 		//applique l'evenement addContribution a tous les elements ayant la class
 		[].forEach.call(document.querySelectorAll('.addContribution'), function (element) {
@@ -103,8 +108,9 @@ var app = {
 			}
 		});
 		
-		UI.d3.svg.selectAll(".nodes>g>circle").on("dbclick", 	function(node){
-			d3.event.preventDefault();
+		// On désactive le double click sur les noeuds
+		UI.d3.svg.selectAll(".nodes>g>circle").on("dblclick", 	function(node){
+			d3.event.stopPropagation();
 		});
 	},
 
