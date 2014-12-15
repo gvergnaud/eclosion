@@ -304,6 +304,9 @@ p.notification.show{
 	display: none;
 }
 
+#lateral-navigation .optioncontainer {
+	width: 70px;
+}
 #lateral-navigation .activeTab {
 	display: block;
 	box-sizing: border-box;
