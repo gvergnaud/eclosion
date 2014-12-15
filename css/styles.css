@@ -92,6 +92,11 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', end
 	z-index: 30;
 }
 
+#nodeData .close i:before{
+	color: #fff;
+	cursor: pointer;
+}
+
 #nodeData header{
 	text-transform: uppercase;
 	background: #3177df;
