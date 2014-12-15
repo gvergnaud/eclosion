@@ -1,5 +1,3 @@
-@import url(http://fonts.googleapis.com/css?family=Fjalla+One);
-
 body{
 	color: #fff;
 	background-color: #888888;
@@ -122,12 +120,21 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', end
 }
 
 #nodeData header .contribution input{
+	color:white;
 	font-family: 'Open Sans';
 	font-size: 2rem;
 	padding: 5px;
 	margin-top: 5px;
 	background: transparent;
 	border: none;
+}
+
+input::-webkit-input-placeholder{
+	color:#1e60c2;
+}
+
+input:-moz-placeholder{
+	color:#1e60c2;
 }
 
 #nodeData header .contribution input:focus{
@@ -167,7 +174,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', end
 #nodeData div.stats .stat.fat{
 	font-size: 3rem;
 	font-family: 'Fjalla One';
-	text-shadow: 2px 1px 0px rgba(100, 100, 100, 1);
+	text-shadow: 2px 1px 0px #194e9f;
 }
 
 #nodeData div.stats .data{
@@ -421,17 +428,19 @@ input:-ms-input-placeholder {
 	top:20%;
 	text-align: center;
 	z-index:20;
-	background-image: url(./../res/zoom.png);
-	background-size: contain;
+	background-image: url(./../res/zoom.svg);
+	background-size: cover;
 	background-repeat: no-repeat;
-	background-position: center center; 
+	background-position: center center;
 }
 
 #zoomBar{
 	height:100%;
-	width:3px;
+	width:2px;
 	background-color: #b8b8b8;
 	margin: auto;
+	margin-bottom: 7.5px;
+	margin-top: 7.5px;
 }
 
 .zoomConf{
@@ -444,7 +453,7 @@ input:-ms-input-placeholder {
 	height:15px;
 	position: relative;
 	top:100%;
-	left:-6px;
+	left:-7px;
 	border-radius: 50%;
 	background-color:#3177df;
 }

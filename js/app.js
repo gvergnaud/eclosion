@@ -35,6 +35,11 @@ var app = {
 		document.addEventListener('usercontribution', function (e) {
 			app.proposeRandomWord();
 		}, false);
+		
+		document.getElementsByClassName("close")[0].addEventListener("click", function(){
+			UI.nodeData.closeSection();
+			UI.d3.highlightOff();
+		});
 
 		//applique l'evenement addContribution a tous les elements ayant la class
 		[].forEach.call(document.querySelectorAll('.addContribution'), function (element) {

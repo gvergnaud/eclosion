@@ -204,18 +204,17 @@ var UI = {
 			// Création du SVG
 			this.svg = d3.select("#wordGraph").attr("width", width) 
 			    .attr("pointer-events", "all")
-			    //.style("background-color", "white")
-			    .attr("height", height);
+			    .attr("height", height)
+			    .call(d3.behavior.drag().on("dragstart", function(){
+				    self.svg.style("cursor", "-webkit-grabbing");
+			    }).on("dragend", function(){
+				    self.svg.style("cursor", "default");
+			    }));
 		    	
 		    this.g = this.svg.append('svg:g')
 			   	.style("background-color", "transparent")
 			    .append('svg:g')
 			    .style("background-color", "transparent");
-			
-			//this.g.append('svg:rect')
-			  //  .attr('width', width)
-			    //.attr('height', height)
-			    //.attr('fill', 'white');
 			    
 			this.force
 				.nodes(words.nodes)
@@ -385,8 +384,11 @@ var UI = {
 			}else{
 				value = 1;
 			}
-				
-			document.getElementById("cursor").style.top = (100 - ((value - 0.5) * 100 / 2.5)) + "%";
+			
+			var zoombarHeight = document.getElementById("zoom").offsetHeight;
+			
+			// Déplacement du cursor
+			document.getElementById("cursor").style.top = ((100 - ((value - 0.5) * 100 / 2.5))) - ((100 * 7.5) / zoombarHeight) + "%";
 		},
 		
 		searchNode : function(selectedVal){
@@ -452,7 +454,7 @@ var UI = {
 	        });
 	        
 	        // On remet les propriétés des noeuds à leur état d'origine
-	        nodes.select("text").transition().duration(1000).style("fill", "#4b4b4b").style("font-weight", "normal");
+	        nodes.select("text").transition().duration(1000).style("fill", "#4b4b4b").style("font-weight", "400");
 	      
 	        // Changement de couleur des liens
 	        links.transition().duration(1000).style("stroke", function (o) {
@@ -461,7 +463,7 @@ var UI = {
 	        
 	        // On modifie l'apparence du noeud choisi
         	node.select("circle").transition().duration(1000).style("fill", "#3177df");
-        	node.select("text").transition().duration(1000).style("fill", "#3177df").style("font-weight", "bold");
+        	node.select("text").transition().duration(1000).style("fill", "#3177df").style("font-weight", "700");
 			
 	        var rect = document.querySelector("svg>g>g").getBoundingClientRect();
 	        
@@ -513,6 +515,12 @@ var UI = {
 					return x1 > nx2 || x2 < nx1 || y1 > ny2 || y2 < ny1;
 			    });
 			};
+		},
+		
+		highlightOff : function(){
+			this.svg.selectAll("text").transition().duration(1000).style("fill", "#4b4b4b").style("font-weight", "400");
+			this.svg.selectAll("circle").transition().duration(1000).style("fill", "#b8b8b8");
+			this.svg.selectAll("line").transition().duration(1000).style("stroke", "#b8b8b8");
 		}
 	},
 	optionsMenu: {
