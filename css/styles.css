@@ -308,7 +308,6 @@ p.notification.show{
 	display: block;
 	box-sizing: border-box;
 	position: absolute;
-	z-index: -1;
 	top: 0;
 	left: -1875px;
 	right: 0;
