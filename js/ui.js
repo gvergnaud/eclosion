@@ -449,7 +449,7 @@ var UI = {
 	        
 	        // Changement de couleur des cercles des noeuds
 	        nodes.select("circle").transition().duration(1000).style("fill", function (o) {
-	            return linkedByIndex[d.index + "," + o.index] | linkedByIndex[o.index + "," + d.index] ? "#72a1e9" : "#b8d0f4";
+	            return linkedByIndex[d.index + "," + o.index] | linkedByIndex[o.index + "," + d.index] ? "#72a1e9" : "#b8b8b8";
 	        });
 	        
 	        // On remet les propriétés des noeuds à leur état d'origine
@@ -457,7 +457,7 @@ var UI = {
 	      
 	        // Changement de couleur des liens
 	        links.transition().duration(1000).style("stroke", function (o) {
-	            return d.index == o.source.index | d.index == o.target.index ? "#72a1e9" : "#b8d0f4";
+	            return d.index == o.source.index | d.index == o.target.index ? "#72a1e9" : "#b8b8b8";
 	        });
 	        
 	        // On modifie l'apparence du noeud choisi
