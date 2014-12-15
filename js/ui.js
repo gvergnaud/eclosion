@@ -183,7 +183,7 @@ var UI = {
 	d3: {
 		previousWords : false,
 		nodeSizeCoefficient : 4,
-		collision : 1,
+		collision : 3,
 		
 		createGraph: function(words){
 			var self = this;
