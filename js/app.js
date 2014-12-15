@@ -321,15 +321,18 @@ var app = {
 			});
 		}
 
-		var datalist = document.getElementById('searchAutoComplete');
+		var list = document.getElementById('searchAutoComplete');
 
-		datalist.innerHTML = '';
+		list.innerHTML = '';
 
 		if(matches){
 			matches.forEach(function(match){
-				var option = document.createElement('option');
+				var option = document.createElement('p');
 				option.innerHTML = match.name;
-				datalist.appendChild(option);
+				list.appendChild(option);
+				option.addEventListener('click', function(){
+					app.focusWord(match.name);
+				},false);
 			});
 		}
 

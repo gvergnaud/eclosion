@@ -1,3 +1,37 @@
+
+input::-webkit-input-placeholder {
+	font-style: italic;
+}
+
+input:-moz-placeholder { /* Firefox 18- */
+	color: #434343;
+	font-style: italic;
+}
+
+input::-moz-placeholder {  /* Firefox 19+ */
+	color: #434343;
+	font-style: italic;
+}
+
+input:-ms-input-placeholder {  
+	color: #434343;
+	font-style: italic;
+}
+
+
+::-webkit-scrollbar {  
+    width: 8px;  
+}  
+::-webkit-scrollbar-track {  
+    background-color: transparent;  
+}  
+::-webkit-scrollbar-thumb {  
+    background-color: #ccc;  
+}  
+::-webkit-scrollbar-thumb:hover {  
+    background-color: #aaa;  
+}
+
 body{
 	color: #fff;
 	background-color: #888888;
@@ -370,6 +404,24 @@ p.notification.show{
 	color: #434343;
 }
 
+#searchAutoComplete{
+	display: inline-block;
+	width: 502px;
+	max-height: 100px;
+	overflow: auto;
+	font-family: 'Open Sans', sans-serif;
+	font-size: 24px;
+}
+
+#searchAutoComplete p{
+	margin: 2px 0;
+	cursor: pointer;
+}
+
+#searchAutoComplete p:hover{
+	color: #3177df;
+}
+
 #searchInput {
 	height: 60px;
 	width: 502px;
@@ -449,24 +501,6 @@ p.notification.show{
 	cursor: pointer;
 }
 
-input::-webkit-input-placeholder {
-	font-style: italic;
-}
-
-input:-moz-placeholder { /* Firefox 18- */
-	color: #434343;
-	font-style: italic;
-}
-
-input::-moz-placeholder {  /* Firefox 19+ */
-	color: #434343;
-	font-style: italic;
-}
-
-input:-ms-input-placeholder {  
-	color: #434343;
-	font-style: italic;
-}
 
 /* Barre de Zoom */
 #zoom{
