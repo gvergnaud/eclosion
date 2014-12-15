@@ -48,10 +48,11 @@ var UI = {
 		        		options: {duration: 250, easing: 'easeInOutBack'}
 		        	}
 		        ];
+		        
 				this.element.style.display = 'block';
 
-			    var addContribution = document.querySelectorAll('.addContribution');
-			    addContribution[1].focus();
+			    // var addContribution = document.querySelectorAll('.addContribution');
+			    // addContribution[1].focus();
 
 				Velocity.RunSequence(openAnim);
 
