@@ -381,7 +381,6 @@ var UI = {
 		defineZoom : function(){
 			var value;
 			if(d3.event != null && d3.event.scale != undefined){
-				console.log(d3.event.scale);
 				value = d3.event.scale;
 			}else{
 				value = 1;

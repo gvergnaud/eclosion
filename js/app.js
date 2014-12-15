@@ -101,6 +101,10 @@ var app = {
 				});	
 			}
 		});
+		
+		UI.d3.svg.selectAll(".nodes>g>circle").on("dbclick", 	function(node){
+			d3.event.preventDefault();
+		});
 	},
 
 	watchData: function(){
