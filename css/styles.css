@@ -144,7 +144,6 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', end
 }
 
 #nodeData div.stats h1.statTitle{
-	text-transform: uppercase;
 	margin: 10px 0 10px 0;
 	color:#4b4b4b;
 	font-size: 1.1rem;
@@ -153,6 +152,10 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', end
 #nodeData div.stats h1.statTitle i{
 	color: #b8b8b8;
 	font-size: 1.6rem;
+}
+
+#nodeData div.stats h1.statTitle i:before{
+	margin-right: 10px;
 }
 
 #nodeData div.stats .stat{
