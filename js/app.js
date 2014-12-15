@@ -37,6 +37,20 @@ var app = {
 			UI.menu.closeModal();
 		}, false);
 		
+		// Gestion du drag du zoom
+		var zoomCursor = document.querySelector('#cursor');
+		var draggie = new Draggabilly( zoomCursor, {
+		  axis: 'y',
+		  containment: '#zoomBar'
+		});
+		
+		draggie.on( 'dragMove', function(instance, event, pointer){
+			var zoombarHeight = document.getElementById("zoom").offsetHeight;
+			var scale = 1;
+			//console.log(scale);
+			UI.d3.svg.select("g").select("g").attr("transform"," scale(" + scale + ")");
+		});
+		
 		// Fermeture de la fenetre droite au clic sur la croix
 		document.getElementsByClassName("close")[0].addEventListener("click", function(){
 			UI.nodeData.closeSection();

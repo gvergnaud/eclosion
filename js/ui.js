@@ -388,15 +388,15 @@ var UI = {
 		defineZoom : function(){
 			var value;
 			if(d3.event != null && d3.event.scale != undefined){
-				value = d3.event.scale;
+				scale = d3.event.scale;
 			}else{
-				value = 1;
+				scale = 1;
 			}
 			
 			var zoombarHeight = document.getElementById("zoom").offsetHeight;
 			
 			// Déplacement du cursor
-			document.querySelector("#cursor").style.top = ((100 - ((value - 0.5) * 100 / 2.5))) - ((100 * 7.5) / zoombarHeight) + "%";
+			document.querySelector("#cursor").style.top = ((100 - ((scale - 0.5) * 100 / 2.5))) - ((100 * 7.5) / zoombarHeight) + "%";
 		},
 		
 		searchNode : function(selectedVal){
