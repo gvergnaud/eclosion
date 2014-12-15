@@ -535,10 +535,12 @@ var UI = {
 	    searchInput: document.querySelector("#searchInput"),
 	    addContribution: document.querySelectorAll('.addContribution'),
 
+	    opened: false,
+
 	    styleModal: function() {
-		    UI.menu.allModals[0].style.right = window.innerWidth + "px";
-		    UI.menu.allModals[1].style.right = window.innerWidth + "px";
-		    UI.menu.allModals[2].style.right = window.innerWidth + "px";
+	    	if(UI.menu.opened){
+	    		UI.menu.menuElement.style.width =  window.innerWidth + "px";
+	    	}
 	    },
 
 		closeModal: function() {
@@ -558,6 +560,7 @@ var UI = {
 	        	});
 
 	        	UI.menu.menuElement.style.width = '70px';
+	       		UI.menu.opened = false;
 			}, 250);
 
 		},
@@ -582,6 +585,8 @@ var UI = {
 	        ];
 
 	        UI.menu.menuElement.style.width = window.innerWidth + 'px';
+
+	        UI.menu.opened = true;
 
 			Velocity.RunSequence(openAnim);
 
@@ -619,6 +624,37 @@ var UI = {
 		        UI.menu.closeModal();
 	        }
 
+		},
+
+		addActiveFilter: function(element){
+
+			UI.menu.removeActiveFilter(element);
+
+			element.classList.add('active');
+		},
+
+		removeActiveFilter: function(element){
+			var filters;
+
+			if(element.classList.contains('sexe')){
+				filters = document.querySelectorAll('#lateral-navigation .filterbuttons.sexe');
+			}else{
+				filters = document.querySelectorAll('#lateral-navigation .filterbuttons.age');
+			}
+
+			[].forEach.call(filters, function(filter){
+				filter.classList.remove('active');
+			});
+		},
+
+		removeAllActiveFilter: function(element){
+			var filters;
+
+			filters = document.querySelectorAll('#lateral-navigation .filterbuttons');
+
+			[].forEach.call(filters, function(filter){
+				filter.classList.remove('active');
+			});
 		}
 	}
 };

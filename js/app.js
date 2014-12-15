@@ -233,9 +233,16 @@ var app = {
 		}
 	},
 
-	addFilter: function(filter, value){
+	addFilter: function(e, filter, value){
 
-		app.filters[filter] = value;
+		if(!e.target.classList.contains('active')){
+			UI.menu.addActiveFilter(e.target);
+			app.filters[filter] = value;
+
+		}else{
+			UI.menu.removeActiveFilter(e.target);
+			app.filters[filter] = false;
+		}
 
 		app.reloadData();		
 	},
@@ -244,6 +251,8 @@ var app = {
 		
 		app.filters.sexe = false;
 		app.filters.age = false;
+		
+		UI.menu.removeAllActiveFilter();
 		
 		app.reloadData();		
 		
