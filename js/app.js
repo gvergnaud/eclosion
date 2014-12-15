@@ -36,8 +36,14 @@ var app = {
 			app.proposeRandomWord();
 			UI.menu.closeModal();
 		}, false);
+		
+		// Fermeture de la fenetre droite au clic sur la croix
+		document.getElementsByClassName("close")[0].addEventListener("click", function(){
+			UI.nodeData.closeSection();
+			UI.d3.highlightOff();
+		}, false);
 
-		//applique l'evenement addContribution a tous les elements ayant la class
+		//applique l'evenement addContribution à tous les elements ayant la class
 		[].forEach.call(document.querySelectorAll('.addContribution'), function (element) {
 			element.addEventListener('keyup', app.addContribution, false);
 		});
@@ -103,8 +109,9 @@ var app = {
 			}
 		});
 		
-		UI.d3.svg.selectAll(".nodes>g>circle").on("dbclick", 	function(node){
-			d3.event.preventDefault();
+		// On désactive le double click sur les noeuds
+		UI.d3.svg.selectAll(".nodes>g>circle").on("dblclick", 	function(node){
+			d3.event.stopPropagation();
 		});
 	},
 
@@ -288,6 +295,7 @@ var app = {
 				UI.nodeData.printData(nodeData);
 				app.activeWord = nodeData.name;
 			});
+			
 
 			this.value = '';
 			
