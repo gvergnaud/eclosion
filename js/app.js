@@ -70,6 +70,7 @@ var app = {
 
 		UI.d3.svg.call(d3.behavior.zoom().scaleExtent([0.25, 3]).on("zoom", function(){
 			UI.d3.redrawGraph();
+			UI.d3.defineZoom();
 		}));
 
 		//remove l'event listener
@@ -90,12 +91,15 @@ var app = {
 
 		//au click sur un node, on ouvre le panneau droit et on recupérer toutes les données de ce node
 		UI.d3.svg.selectAll(".nodes>g>circle").on("click", 	function(node){
-			app.getNodeData(node, function(nodeData){
-				UI.nodeData.printData(nodeData);
-				UI.nodeData.openSection();
-				app.activeWord = nodeData.name;
+			if(d3.event.defaultPrevented == false){ 
+				UI.d3.selectNode(d3.select(this.parentNode));
+				app.getNodeData(node, function(nodeData){
+					UI.nodeData.printData(nodeData);
+					UI.nodeData.openSection();
+					app.activeWord = nodeData.name;
 
-			});
+				});	
+			}
 		});
 	},
 

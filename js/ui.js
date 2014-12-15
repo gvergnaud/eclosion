@@ -182,7 +182,8 @@ var UI = {
 	// D3.js 
 	d3: {
 		previousWords : false,
-		nodeSizeCoefficient : 10,
+		nodeSizeCoefficient : 4,
+		collision : 1,
 		
 		createGraph: function(words){
 			var self = this;
@@ -203,18 +204,18 @@ var UI = {
 			// Création du SVG
 			this.svg = d3.select("#wordGraph").attr("width", width) 
 			    .attr("pointer-events", "all")
-			    .style("background-color", "black")
+			    //.style("background-color", "white")
 			    .attr("height", height);
 		    	
 		    this.g = this.svg.append('svg:g')
-			   	.style("background-color", "black")
+			   	.style("background-color", "transparent")
 			    .append('svg:g')
-			    .style("background-color", "black");
+			    .style("background-color", "transparent");
 			
-			this.g.append('svg:rect')
-			    .attr('width', width)
-			    .attr('height', height)
-			    .attr('fill', 'black');
+			//this.g.append('svg:rect')
+			  //  .attr('width', width)
+			    //.attr('height', height)
+			    //.attr('fill', 'white');
 			    
 			this.force
 				.nodes(words.nodes)
@@ -228,7 +229,7 @@ var UI = {
 				.data(words.links)
 				.enter().append("line")
 				.attr("class", "link")
-				.style("stroke", "white")
+				.style("stroke", "#dfdede")
 				.style("stroke-width", function(d) { return Math.sqrt(d.value); });
 				
 			// Création des noeuds
@@ -236,25 +237,35 @@ var UI = {
 	           	.selectAll("node")
 				.data(words.nodes)
 				.enter()
-				.append("g");
+				.append("g").call(d3.behavior.drag().on("drag", function(d, i){
+					self.force.drag;
+				}).on("dragend", function(d){
+					self.force.resume();
+				}));
 	         
+	        // Ajout d'un cercle pour chaque noeud
 			node.append("circle")
 	         	.attr("class", "node")
 	         	.attr("pointer-events", "drag")
-	         	.style('fill', "white")
-	         	.attr("r", function(d) {return Math.sqrt(d.nbLinks) * self.nodeSizeCoefficient; })
+	         	.style('fill', "#b8b8b8")
+	         	.style("cursor", "pointer")
+	         	.attr("r", function(d){
+	         		var nbLinks = Math.sqrt(d.nbLinks);
+	         		return nbLinks * (nbLinks * self.nodeSizeCoefficient); 
+	         	})
 	         	.call(self.force.drag);
+	         	
 
-			// Ajout d'un texte pour les noeuds
+			// Ajout d'un texte pour chaque noeud
 			node.append("text")
 			     .attr("text-anchor", "middle")
 			     .style("font-size", function(d) {return Math.sqrt(d.nbLinks) * 10 + "px"; })
-			     .style("fill", "white")
+			     .style("fill", "#4b4b4b")
 			     .attr("transform",function(d) {
-			            return "translate(0," + -(Math.sqrt(d.nbLinks) * (self.nodeSizeCoefficient + 2)) + ")";
+			            return "translate(0," + -(Math.sqrt(d.nbLinks) * (Math.sqrt(d.nbLinks) * self.nodeSizeCoefficient + 2)) + ")";
 			        })
 			     .text(function(d) {
-			       return d.name;
+			       return d.name.charAt(0).toUpperCase() + d.name.substring(1).toLowerCase();
 			     });
 	
 			this.force.on("tick", function() {
@@ -268,9 +279,12 @@ var UI = {
 					.attr("transform", function(d) {
 			            return "translate(" + d.x + "," + d.y + ")";
 			        }); 
+			    node.each(self.collide(0.5));
 			});
 			
 			this.previousWords = words;
+			
+			self.defineZoom();
 			
 			document.dispatchEvent(app.event.graphReady);
 		},
@@ -306,54 +320,74 @@ var UI = {
 				var link = this.svg.select(".links").selectAll(".link")
 		            .data(self.previousWords.links);
 		
-		        link.enter().insert("line")
-		            .attr("class", "link")
-					.style("stroke", "white")
+		        var newLink = link.enter().insert("line");
+		        
+		        newLink.attr("class", "link")
+					.style("stroke", "#3177df")
 					.style("stroke-width", function(d) { return Math.sqrt(d.value); });
 		
+				newLink.transition().duration(5000).style("stroke", "#b8b8b8");
+				
 		        link.exit().remove();
 		
 		        var node = this.svg.select(".nodes").selectAll("g")
 		            .data(self.previousWords.nodes);
 		
-		        var nodeEnter = node.enter().append("g");
+		        var nodeEnter = node.enter().append("g").call(d3.behavior.drag().on("drag", function(d, i){
+						self.force.drag;
+					}).on("dragend", function(d){
+						self.force.resume();
+					}));
 		        
 		        nodeEnter.append("circle")
 		            .attr("class", "node")
-		            .style('fill', "white")
-					.attr("r", function(d) {return Math.sqrt(d.nbLinks) * self.nodeSizeCoefficient; })
+		            .style('fill', "#3177df")
+					.attr("r", function(d) {return Math.sqrt(d.nbLinks) * (Math.sqrt(d.nbLinks) * self.nodeSizeCoefficient); })
 		            .call(self.force.drag);
 		
 		        nodeEnter.append("text")
 		            .attr("text-anchor", "middle")
 				    .style("font-size", function(d) {return Math.sqrt(d.nbLinks) * 10 + "px";})
-				    .style("fill", "white")
+				    .style("fill", "#3177df")
 				    .attr("transform",function(d) {
-			            return "translate(0," + -(Math.sqrt(d.nbLinks) * (self.nodeSizeCoefficient + 2)) + ")";
+			            return "translate(0," + -(Math.sqrt(d.nbLinks) * (Math.sqrt(d.nbLinks) * self.nodeSizeCoefficient + 2)) + ")";
 			        })
 				    .text(function(d) {
-					    return d.name;
+					    return d.name.charAt(0).toUpperCase() + d.name.substring(1).toLowerCase();
 				    });
 		
+				nodeEnter.select("circle").transition().duration(5000).style("fill", "#b8b8b8");
+		        nodeEnter.select("text").transition().duration(5000).style("fill", "#4b4b4b");
+		        
 		        node.exit().remove();
 		
 		        this.force.on("tick", function() {
-		         	 link.attr("x1", function(d) { return d.source.x; })
+		        	link.attr("x1", function(d) { return d.source.x; })
 		         	 	.attr("y1", function(d) { return d.source.y; })
 		         	 	.attr("x2", function(d) { return d.target.x; })
 		         	 	.attr("y2", function(d) { return d.target.y; });
 		
-		             node.attr("cx", function(d) { return d.x; })
+		            node.attr("cx", function(d) { return d.x; })
 						.attr("cy", function(d) { return d.y; })
 						.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+					node.each(self.collide(0.5));
 		        });
 			
 			    this.force.start();
+			    
 			}
 		},
 		
 		defineZoom : function(){
-			// Dessiner le zoom sur barre verticale, d3.event.scale
+			var value;
+			if(d3.event != null && d3.event.scale != undefined){
+				console.log(d3.event.scale);
+				value = d3.event.scale;
+			}else{
+				value = 1;
+			}
+				
+			document.getElementById("cursor").style.top = (100 - ((value - 0.5) * 100 / 2.5)) + "%";
 		},
 		
 		searchNode : function(selectedVal){
@@ -369,25 +403,117 @@ var UI = {
 	            return d.name == selectedVal;
 	        });
 	        
+	        // Si la recherche a donné quelque chose
 	        if(selected[0].length > 0){
 	        
+	        	// Obtenir position du g
+				var rect = document.querySelector("svg>g>g").getBoundingClientRect();
+				
 				// On calcule le x et y du translate
-		        var x = (window.innerWidth / 2) - selected.attr("cx");
-		        var y = (window.innerHeight / 2) - selected.attr("cy");
+		        var x = ((window.innerWidth / 2) - (parseInt(selected.attr("cx")) + parseInt(rect.left))) 
+		       		+ parseInt(rect.left);
+		        var y = ((window.innerHeight / 2) - (parseInt(selected.attr("cy")) + parseInt(rect.top))) 
+		        	+ parseInt(rect.top);
 		        
 		        this.svg.select("g").select("g").transition().duration(1500).attr("transform",
 				  "translate(" + x + " ," + y + ")"
-				 + "scale(1.3)"
 				);
 				
 				// On redéfini le zoom avec ses nouvelles valeurs d'origines
-				this.svg.call(d3.behavior.zoom().scale(1.3).translate([x, y]).scaleExtent([0.25, 3]).on("zoom", function(){
-			    		UI.d3.redrawGraph();
-			    		// Dessiner le zoom sur barre verticale, d3.event.scale
+				this.svg.call(d3.behavior.zoom().translate([x, y]).scaleExtent([0.5, 3]).on("zoom", function(){
+			    	UI.d3.redrawGraph();
+			    	UI.d3.defineZoom();
 			    }));
 			}else{
 				UI.notification('error', "Pas de mots trouvés");
 			}
+			
+			self.defineZoom();
+		},
+		
+		selectNode : function(node){
+			var self = this;
+			var nodes = d3.selectAll(".nodes>g");
+			var links = d3.selectAll(".links>line");
+        		
+			var linkedByIndex = {};
+			for (i = 0; i < self.previousWords.length; i++) {
+			    linkedByIndex[i + "," + i] = 1;
+			};
+			
+			self.previousWords.links.forEach(function (d) {
+			    linkedByIndex[d.source.index + "," + d.target.index] = 1;
+			});
+			
+	        d = node.node().__data__;
+	        
+	        // Changement de couleur des cercles des noeuds
+	        nodes.select("circle").transition().duration(1000).style("fill", function (o) {
+	            return linkedByIndex[d.index + "," + o.index] | linkedByIndex[o.index + "," + d.index] ? "#72a1e9" : "#b8d0f4";
+	        });
+	        
+	        // On remet les propriétés des noeuds à leur état d'origine
+	        nodes.select("text").transition().duration(1000).style("fill", "#4b4b4b").style("font-weight", "normal");
+	      
+	        // Changement de couleur des liens
+	        links.transition().duration(1000).style("stroke", function (o) {
+	            return d.index == o.source.index | d.index == o.target.index ? "#72a1e9" : "#b8d0f4";
+	        });
+	        
+	        // On modifie l'apparence du noeud choisi
+        	node.select("circle").transition().duration(1000).style("fill", "#3177df");
+        	node.select("text").transition().duration(1000).style("fill", "#3177df").style("font-weight", "bold");
+			
+	        var rect = document.querySelector("svg>g>g").getBoundingClientRect();
+	        
+	        var x = ((window.innerWidth / 2) - (parseInt(node.attr("cx")) + parseInt(rect.left))) 
+		       		+ parseInt(rect.left);
+	        var y = ((window.innerHeight / 2) - (parseInt(node.attr("cy")) + parseInt(rect.top))) 
+	        	+ parseInt(rect.top);
+			
+			// On fait un translate pour avoir le noeud choisi au centre
+			this.svg.select("g").select("g").transition().duration(1500).attr("transform",
+				 "translate(" + x + " ," + y + ")"
+			);
+			
+			self.defineZoom();
+			
+			// On redéfini le zoom avec ses nouvelles valeurs
+			this.svg.call(d3.behavior.zoom().translate([x, y]).scaleExtent([0.5, 3]).on("zoom", function(){
+		    	UI.d3.redrawGraph();
+		    	UI.d3.defineZoom();
+		    }));
+        	
+        	self.force.resume();
+		},
+		
+		collide : function(alpha) {
+			var self = this;
+			var	radius = 8; 
+			var quadtree = d3.geom.quadtree(self.previousWords.nodes);
+			return function(d) {
+			    var rb = 2 * radius + self.collision,
+			        nx1 = d.x - rb,
+			        nx2 = d.x + rb,
+			        ny1 = d.y - rb,
+			        ny2 = d.y + rb;
+			        
+			    quadtree.visit(function(quad, x1, y1, x2, y2) {
+					if (quad.point && (quad.point !== d)) {
+						var x = d.x - quad.point.x,
+							y = d.y - quad.point.y,
+							l = Math.sqrt(x * x + y * y);
+						if (l < rb) {
+							l = (l - rb) / l * alpha;
+							d.x -= x *= l;
+							d.y -= y *= l;
+							quad.point.x += x;
+							quad.point.y += y;
+						}
+					}
+					return x1 > nx2 || x2 < nx1 || y1 > ny2 || y2 < ny1;
+			    });
+			};
 		}
 	},
 	optionsMenu: {

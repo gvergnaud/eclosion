@@ -1,3 +1,5 @@
+@import url(http://fonts.googleapis.com/css?family=Fjalla+One);
+
 body{
 	color: #fff;
 	background-color: #888888;
@@ -12,11 +14,34 @@ input, button {
 .node {
 	stroke: #fff;
 	stroke-width: 1.5px;
+	padding:0;
+	margin:0;
+
 }
 
 .link {
 	stroke: #c1c1c1;
 	stroke-opacity: .6;
+}
+
+.nodes>g>text{
+	font-family: "Open sans";
+}
+
+input{
+	z-index: 10;
+	position: relative;
+}
+
+svg{
+	background: rgba(255,255,255,1);
+background: -moz-radial-gradient(center, ellipse cover, rgba(255,255,255,1) 0%, rgba(237,237,237,1) 50%, rgba(255,255,255,1) 100%);
+background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(0%, rgba(255,255,255,1)), color-stop(50%, rgba(237,237,237,1)), color-stop(100%, rgba(255,255,255,1)));
+background: -webkit-radial-gradient(center, ellipse cover, rgba(255,255,255,1) 0%, rgba(237,237,237,1) 50%, rgba(255,255,255,1) 100%);
+background: -o-radial-gradient(center, ellipse cover, rgba(255,255,255,1) 0%, rgba(237,237,237,1) 50%, rgba(255,255,255,1) 100%);
+background: -ms-radial-gradient(center, ellipse cover, rgba(255,255,255,1) 0%, rgba(237,237,237,1) 50%, rgba(255,255,255,1) 100%);
+background: radial-gradient(ellipse at center, rgba(255,255,255,1) 0%, rgba(237,237,237,1) 50%, rgba(255,255,255,1) 100%);
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#ffffff', GradientType=1 );
 }
 
 #wordGraph{
@@ -386,4 +411,39 @@ input::-moz-placeholder {  /* Firefox 19+ */
 input:-ms-input-placeholder {  
 	color: #434343;
 	font-style: italic;
+}
+
+/* Barre de Zoom */
+#zoom{
+	height:60%;
+	width:140px;
+	position: absolute;
+	right:10px;
+	top:20%;
+	text-align: center;
+	z-index:20;
+	background-image: url(./../res/zoom.png);
+	background-size: cover;
+}
+
+#zoomBar{
+	height:100%;
+	width:3px;
+	background-color: #b8b8b8;
+	margin: auto;
+}
+
+.zoomConf{
+	color:#b8b8b8;
+}
+
+#cursor{
+	width:15px;
+	cursor: pointer;
+	height:15px;
+	position: relative;
+	top:100%;
+	left:-6px;
+	border-radius: 50%;
+	background-color:#3177df;
 }
