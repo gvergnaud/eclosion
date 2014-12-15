@@ -393,6 +393,7 @@ p.notification.show{
 	height: 100%;
 	margin-left: 82px;
 }
+
 .filters {
 	display: flex;
 	flex-direction: column;
@@ -401,11 +402,13 @@ p.notification.show{
 	width: 350px;
 	margin: 0 10px; 
 }
+
 .filters p {
 	margin: 20px 0;
 	font-family: 'Open Sans', sans-serif;
 	font-size: 40px;
 }
+
 .filters .resetFilters {
 	margin: 20px 0;
 	padding: 0;
@@ -414,6 +417,7 @@ p.notification.show{
 	font-family: 'Open Sans', sans-serif;
 	font-size: 40px;
 }
+
 .filterbuttons {
 	margin: 6px;
 	padding: 0;
@@ -423,21 +427,29 @@ p.notification.show{
 	font-size: 16px;
 	color: #888888;
 }
-.filters button:hover, .filters button:active, .filters button:focus {
-	cursor: pointer;
+
+.filterbuttons.active{
 	color: #3277df;
 }
+
+.filters button:hover{
+	cursor: pointer;
+}
+
 input::-webkit-input-placeholder {
 	font-style: italic;
 }
+
 input:-moz-placeholder { /* Firefox 18- */
 	color: #434343;
 	font-style: italic;
 }
+
 input::-moz-placeholder {  /* Firefox 19+ */
 	color: #434343;
 	font-style: italic;
 }
+
 input:-ms-input-placeholder {  
 	color: #434343;
 	font-style: italic;
