@@ -177,7 +177,7 @@ input:-moz-placeholder{
 #nodeData div.stats .stat.fat{
 	font-size: 3rem;
 	font-family: 'Fjalla One';
-	text-shadow: 2px 1px 0px #194e9f;
+	text-shadow: 1px 1px 0px #194e9f;
 }
 
 #nodeData div.stats .data{
