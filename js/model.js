@@ -39,14 +39,6 @@ var model = {
 					return res;
 				};
 			}
-		},
-
-		hasClassName: function(elmt, className)
-		{
-		   if(typeof elmt == "string")
-		      elmt = document.getElementById(elmt);
-		   var regex = new RegExp("\\b" + className + "\\b");
-		   return regex.test(elmt.className);
 		}
 	},
 

@@ -35,9 +35,9 @@
                     <i class="flaticons icon-search"></i> 
                 </div>
                 <div class="optionName" id="optionName1">Rechercher</div>
-                <div class="hidden-option" id="searchWord">
+                <div class="modal" id="searchWord">
                     <!-- Menu caché pour la recherche -->
-                    <i class="closeMenu flaticon-cross97" onclick="app.closeModal();"></i>
+                    <i class="closeMenu flaticon-cross97" onclick="UI.menu.closeModal()"></i>
                     <div id="searchWordForm" class="optionsForm">
                         <input type="text" id="searchInput" class="optionsInputText" list="searchAutoComplete" placeholder="Rechercher un mot"/>
                         <datalist id="searchAutoComplete"></datalist>
@@ -51,9 +51,9 @@
                     <i class="flaticons icon-edit"></i> 
                 </div>
                 <div class="optionName" id="optionName2">Contribuer</div>
-                <div class="hidden-option" id="writeWord">
+                <div class="modal" id="writeWord">
                     <!-- Menu caché pour l'ajout de mot -->
-                    <i class="closeMenu flaticon-cross97" onclick="app.closeModal();"></i>
+                    <i class="closeMenu flaticon-cross97" onclick="UI.menu.closeModal()"></i>
                     <div id="writehWordForm" class="optionsForm">
                         <p id="proposedWord">Si je vous dit :&nbsp;<span id="proposedWordText"></span>...</p>
                         <input type="text" class="addContribution optionsInputText" class="optionsInputText" placeholder="Ecrivez le mot qui vous vient à l'esprit" />
@@ -67,9 +67,9 @@
                     <i class="flaticons icon-filter"></i> 
                 </div>
                 <div class="optionName" id="optionName3">Filtrer</div>
-                <div class="hidden-option" id="filterWord">
+                <div class="modal" id="filterWord">
                     <!-- Menu caché pour filtrer la vue -->
-                    <i class="closeMenu flaticon-cross97" onclick="app.closeModal();"></i>
+                    <i class="closeMenu flaticon-cross97" onclick="UI.menu.closeModal()"></i>
                     <div class="filter-container">
                         <div class="filters">
                             <p><button class="resetFilters">AUCUN</button></p>

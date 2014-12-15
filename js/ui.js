@@ -7,14 +7,13 @@ var UI = {
 
 		this.setSVGSize();
 		this.nodeData.style();
+		UI.menu.styleModal();
 
 		window.addEventListener('resize', function(){
 			UI.setSVGSize();
 			UI.nodeData.style();
+			UI.menu.styleModal();
 		}, false);
-
-		/* Right dynamique pour ne pas voir arriver la modal */
-		this.optionsMenu.styleModal();
 	},
 
 	setSVGSize: function(){
@@ -388,7 +387,7 @@ var UI = {
 			var zoombarHeight = document.getElementById("zoom").offsetHeight;
 			
 			// Déplacement du cursor
-			document.getElementById("cursor").style.top = ((100 - ((value - 0.5) * 100 / 2.5))) - ((100 * 7.5) / zoombarHeight) + "%";
+			document.querySelector("#cursor").style.top = ((100 - ((value - 0.5) * 100 / 2.5))) - ((100 * 7.5) / zoombarHeight) + "%";
 		},
 		
 		searchNode : function(selectedVal){
@@ -523,31 +522,30 @@ var UI = {
 			this.svg.selectAll("line").transition().duration(1000).style("stroke", "#b8b8b8");
 		}
 	},
-	optionsMenu: {
 
-		element: document.querySelectorAll('.hidden-option'),
-		menuElement: document.getElementById('lateral-navigation'),
+	menu: {
+
+		allModals: document.querySelectorAll('.modal'),
+		menuElement: document.querySelector('#lateral-navigation'),
 		/* Les 3 fenêtres d'options */
-		searchWordModal: document.getElementById("searchWord"),
-	    writehWordModal: document.getElementById("writeWord"),
-	    filterWordModal: document.getElementById("filterWord"),
+		searchWordModal: document.querySelector("#searchWord"),
+	    writehWordModal: document.querySelector("#writeWord"),
+	    filterWordModal: document.querySelector("#filterWord"),
 	    /* Les deux input à autofocus */
-	    searchInput: document.getElementById("searchInput"),
+	    searchInput: document.querySelector("#searchInput"),
 	    addContribution: document.querySelectorAll('.addContribution'),
-	    largeurEcran: window.innerWidth+"px",
 
 	    styleModal: function() {
-		    this.element[0].style.right = this.largeurEcran;
-		    this.element[1].style.right = this.largeurEcran;
-		    this.element[2].style.right = this.largeurEcran;
+		    UI.menu.allModals[0].style.right = window.innerWidth + "px";
+		    UI.menu.allModals[1].style.right = window.innerWidth + "px";
+		    UI.menu.allModals[2].style.right = window.innerWidth + "px";
 	    },
 
-		closeModalView: function() {
-	    	console.log(this.element);
+		closeModal: function() {
 
 	    	var closeAnim = [
 	        	{
-	        		elements: this.element, 
+	        		elements: UI.menu.allModals, 
 	        		properties: {left: '-1875px'},
 	        		options: {duration: 250, easing: 'easeInOutBack'}
 	        	}	        	
@@ -555,137 +553,70 @@ var UI = {
 			Velocity.RunSequence(closeAnim);
 
 			setTimeout(function(){
-				UI.optionsMenu.searchWordModal.classList.remove("modalApparition");
-				UI.optionsMenu.writehWordModal.classList.remove("modalApparition");
-				UI.optionsMenu.filterWordModal.classList.remove("modalApparition");
-				UI.optionsMenu.menuElement.classList.remove("widthauto");
+				[].forEach.call(UI.menu.allModals, function(element){
+	        		element.classList.remove('activeTab');
+	        	});
+
+	        	UI.menu.menuElement.style.width = '70px';
 			}, 250);
 
 		},
 
+		openModal: function(modal){
+        	
+        	[].forEach.call(UI.menu.allModals, function(element){
+        		element.classList.remove('activeTab');
+        	});
+
+			var openAnim = [
+	        	{
+	        		elements: UI.menu.allModals,
+	        		properties: {left: "-1875px"},
+	        		options: {duration: 0, easing: 'easeInOutBack'}
+	        	},
+	        	{
+	        		elements: modal,
+	        		properties: {left: "70px", opacity: "0.9", right: 0},
+	        		options: {duration: 250, easing: 'easeInOutBack'}
+	        	}
+	        ];
+
+	        UI.menu.menuElement.style.width = window.innerWidth + 'px';
+
+			Velocity.RunSequence(openAnim);
+
+        	modal.classList.add('activeTab');
+		},
+
 		searchBoxView: function() {
 	        // Si on doit l'afficher, animation vers la droite
-	        if(!model.toolbox.hasClassName(this.searchWordModal, "modalApparition")) {
-		        var openAnim = [
-		        	{
-		        		elements: this.element,
-		        		properties: {left: "-1875px"},
-		        		options: {duration: 0, easing: 'easeInOutBack'}
-		        	},
-		        	{
-		        		elements: this.searchWordModal,
-		        		properties: {left: "70px", opacity: "0.9", right: 0},
-		        		options: {duration: 250, easing: 'easeInOutBack'}
-		        	}
-		        ];
-				Velocity.RunSequence(openAnim);
-	        	this.writehWordModal.classList.remove("modalApparition");				
-				this.filterWordModal.classList.remove("modalApparition");
-	        	this.menuElement.classList.add("widthauto");
-
-	        	this.searchWordModal.classList.add("modalApparition");
+	        if(!UI.menu.searchWordModal.classList.contains('activeTab')) {
+		        UI.menu.openModal(UI.menu.searchWordModal);
+	        	UI.menu.searchInput.focus();
 	        }
 	        else {
-		        var closeAnim = [
-		        	{
-		        		elements: this.element,
-		        		properties: {left: "-1875px", opacity: "0.7", right: this.largeurEcran},
-		        		options: {duration: 250, easing: 'easeInOutBack'}
-		        	}
-		        ];
-				Velocity.RunSequence(closeAnim);
-				this.writehWordModal.classList.remove("modalApparition");
-		        this.filterWordModal.classList.remove("modalApparition");
-
-				setTimeout(function(){
-					UI.optionsMenu.searchWordModal.classList.remove("modalApparition");
-		        	UI.optionsMenu.menuElement.classList.remove("widthauto");
-				}, 250);
-
+		        UI.menu.closeModal();
 	        }
-	        this.searchInput.focus();
 
 		},
 
 		addWordBoxView: function() {
 	        // Si on doit l'afficher, animation vers la droite
-	        if(!model.toolbox.hasClassName(this.writehWordModal, "modalApparition")) {
-		        var openAnim = [
-		        	{
-		        		elements: this.element,
-		        		properties: {left: "-1875px"},
-		        		options: {duration: 0, easing: 'easeInOutBack'}
-		        	},
-		        	{
-		        		elements: this.writehWordModal,
-		        		properties: {left: "70px", opacity: "0.9", right: 0},
-		        		options: {duration: 250, easing: 'easeInOutBack'}
-		        	}
-		        ];
-				Velocity.RunSequence(openAnim);
-	        	this.searchWordModal.classList.remove("modalApparition");
-				this.filterWordModal.classList.remove("modalApparition");
-	        	this.menuElement.classList.add("widthauto");
-
-	        	this.writehWordModal.classList.add("modalApparition");		
+	        if(!UI.menu.writehWordModal.classList.contains('activeTab')) {
+		        UI.menu.openModal(UI.menu.writehWordModal);
+	        	UI.menu.addContribution[0].focus();
 	        }
 	        else {
-		        var closeAnim = [
-		        	{
-		        		elements: this.element,
-		        		properties: {left: "-1875px", opacity: "0.7", right: this.largeurEcran},
-		        		options: {duration: 250, easing: 'easeInOutBack'}
-		        	}
-		        ];
-				Velocity.RunSequence(closeAnim);
-				this.searchWordModal.classList.remove("modalApparition");
-		        this.filterWordModal.classList.remove("modalApparition");
-
-				setTimeout(function(){
-					UI.optionsMenu.writehWordModal.classList.remove("modalApparition");
-		        	UI.optionsMenu.menuElement.classList.remove("widthauto");
-				}, 250);
-
+		        UI.menu.closeModal();
 	        }
-	        this.addContribution[0].focus();
 		},
 
 		filterWordBoxView: function() {
-	        if(!model.toolbox.hasClassName(this.filterWordModal, "modalApparition")) {
-		        var openAnim = [
-		        	{
-		        		elements: this.element,
-		        		properties: {left: "-1875px"},
-		        		options: {duration: 0, easing: 'easeInOutBack'}
-		        	},
-		        	{
-		        		elements: this.filterWordModal,
-		        		properties: {left: "70px", opacity: "0.9", right: 0},
-		        		options: {duration: 250, easing: 'easeInOutBack'}
-		        	}
-		        ];
-				Velocity.RunSequence(openAnim);
-				this.searchWordModal.classList.remove("modalApparition");
-		        this.writehWordModal.classList.remove("modalApparition");
-	        	this.menuElement.classList.add("widthauto");
-				this.filterWordModal.classList.add("modalApparition");
+	        if(!UI.menu.filterWordModal.classList.contains('activeTab')) {
+		        UI.menu.openModal(UI.menu.filterWordModal);
 	        }
 	        else {
-		        var closeAnim = [
-		        	{
-		        		elements: this.element,
-		        		properties: {left: "-1875px", opacity: "0.7", right: this.largeurEcran},
-		        		options: {duration: 250, easing: 'easeInOutBack'}
-		        	}
-		        ];
-				Velocity.RunSequence(closeAnim);
-				this.searchWordModal.classList.remove("modalApparition");
-		        this.writehWordModal.classList.remove("modalApparition");
-
-				setTimeout(function(){
-					UI.optionsMenu.filterWordModal.classList.remove("modalApparition");
-		        	UI.optionsMenu.menuElement.classList.remove("widthauto");
-				}, 250);
+		        UI.menu.closeModal();
 	        }
 
 		}
