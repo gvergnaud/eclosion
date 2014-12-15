@@ -126,6 +126,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', end
 	font-size: 2rem;
 	padding: 5px;
 	margin-top: 5px;
+	color: #fff;
 	background: transparent;
 	border: none;
 }

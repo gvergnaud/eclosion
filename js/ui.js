@@ -528,9 +528,7 @@ var UI = {
 	    addContribution: document.querySelectorAll('.addContribution'),
 
 	    styleModal: function() {
-		    UI.menu.allModals[0].style.right = window.innerWidth + "px";
-		    UI.menu.allModals[1].style.right = window.innerWidth + "px";
-		    UI.menu.allModals[2].style.right = window.innerWidth + "px";
+	    	UI.menu.menuElement.style.width =  window.innerWidth + "px";
 	    },
 
 		closeModal: function() {
