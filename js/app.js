@@ -97,7 +97,7 @@ var app = {
 		}
 
 		//au click sur un node, on ouvre le panneau droit et on recupérer toutes les données de ce node
-		UI.d3.svg.selectAll(".nodes>g>circle").on("click", 	function(node){
+		UI.d3.svg.selectAll(".nodes>g>circle").on("mouseup", 	function(node){
 			if(d3.event.defaultPrevented == false){ 
 				UI.d3.selectNode(d3.select(this.parentNode));
 				app.getNodeData(node, function(nodeData){
