@@ -46,13 +46,27 @@ var app = {
 			element.addEventListener('keyup', app.addContribution, false);
 		});
 
+		// lorsque l'utilisateur tape un caractère dans l'espace recherche
 		document.querySelector('#searchInput').addEventListener('keyup', app.searchNode, false);
+
+		// lorsque l'utilisateur tape un caractère dans l'espace recherche
 		document.querySelector('div.filters button.resetFilters').addEventListener('click', app.resetFilters, false);
 	
 		/* Gestion des fenêtres du menu */
-        document.getElementById('searchBox').addEventListener("click", UI.menu.searchBoxView, false);
-        document.getElementById('addWordBox').addEventListener("click", UI.menu.addWordBoxView, false);
-        document.getElementById('filterBox').addEventListener("click", UI.menu.filterWordBoxView, false);
+        document.getElementById('searchBox').addEventListener("click", function(){
+        	UI.menu.searchBoxView();
+        	app.blurWord();
+        }, false);
+
+        document.getElementById('addWordBox').addEventListener("click", function(){
+        	UI.menu.addWordBoxView();
+        	app.blurWord();
+        }, false);
+
+        document.getElementById('filterBox').addEventListener("click", function(){
+        	UI.menu.filterWordBoxView();
+        	app.blurWord();
+        }, false);
 	},
 
 	getRouteParams: function(){
@@ -108,7 +122,8 @@ var app = {
 
 		//au click sur un node, on ouvre le panneau droit et on recupérer toutes les données de ce node
 		UI.d3.svg.selectAll(".nodes>g>circle").on("mouseup", 	function(node){
-			if(d3.event.defaultPrevented == false){ 
+			if(d3.event.defaultPrevented == false){
+				UI.d3.selectNode(d3.select(this.parentNode));
 				app.focusWord(node.name);
 			}
 		});
@@ -229,6 +244,8 @@ var app = {
 			app.activeWord = nodeData.name;
 		});
 
+		UI.menu.closeModal();
+
 		history.pushState({}, word, '#/' + encodeURI(word));
 	},
 
@@ -323,8 +340,6 @@ var app = {
 			app.focusWord(word);
 
 			this.value = '';
-			
-			UI.menu.closeModal();
 		}
 	}
 };

@@ -570,23 +570,25 @@ var UI = {
 	    },
 
 		closeModal: function() {
-	    	var closeAnim = [
-	        	{
-	        		elements: UI.menu.allModals, 
-	        		properties: {left: '-1875px'},
-	        		options: {duration: 250, easing: 'easeInOutBack'}
-	        	}	        	
-	        ];
-			Velocity.RunSequence(closeAnim);
+			if(UI.menu.opened){
+		    	var closeAnim = [
+		        	{
+		        		elements: UI.menu.allModals, 
+		        		properties: { left: - window.innerWidth + 'px'},
+		        		options: {duration: 250, easing: 'easeInOutBack'}
+		        	}
+		        ];
+				Velocity.RunSequence(closeAnim);
 
-			setTimeout(function(){
-				[].forEach.call(UI.menu.allModals, function(element){
-	        		element.classList.remove('activeTab');
-	        	});
+				setTimeout(function(){
+					[].forEach.call(UI.menu.allModals, function(element){
+		        		element.classList.remove('activeTab');
+		        	});
 
-	        	UI.menu.menuElement.style.width = '70px';
-	       		UI.menu.opened = false;
-			}, 250);
+		        	UI.menu.menuElement.style.width = '70px';
+		       		UI.menu.opened = false;
+				}, 250);
+			}
 
 		},
 
@@ -599,12 +601,12 @@ var UI = {
 			var openAnim = [
 	        	{
 	        		elements: UI.menu.allModals,
-	        		properties: {left: "-1875px"},
+	        		properties: {left: - window.innerWidth + 'px'},
 	        		options: {duration: 0, easing: 'easeInOutBack'}
 	        	},
 	        	{
 	        		elements: modal,
-	        		properties: {left: "70px", opacity: "0.9", right: 0},
+	        		properties: {left: "70px", opacity: "0.9", width: window.innerWidth -70 + 'px'},
 	        		options: {duration: 250, easing: 'easeInOutBack'}
 	        	}
 	        ];

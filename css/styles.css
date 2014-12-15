@@ -313,8 +313,6 @@ p.notification.show{
 	position: absolute;
 	z-index: -1;
 	top: 0;
-	left: -1875px;
-	right: 0;
 	height: 214px;
 	background-color: #fff;
 	color: #000;
