@@ -77,18 +77,18 @@
                         <div class="filters">
                             <p>AGE</p>
                             <div class="agefilter">
-                                <button class="filterbuttons" onclick="app.addFilter('age','under25')">-25 ans</button>
-                                <button class="filterbuttons" onclick="app.addFilter('age','25to35')">25-35 ans</button>
-                                <button class="filterbuttons" onclick="app.addFilter('age','35to45')">35-45 ans</button>
-                                <button class="filterbuttons" onclick="app.addFilter('age','above45)">+45 ans</button>
+                                <button class="filterbuttons age" onclick="app.addFilter(event, 'age', 'under25')">-25 ans</button>
+                                <button class="filterbuttons age" onclick="app.addFilter(event, 'age', '25to35')">25-35 ans</button>
+                                <button class="filterbuttons age" onclick="app.addFilter(event, 'age', '35to45')">35-45 ans</button>
+                                <button class="filterbuttons age" onclick="app.addFilter(event, 'age', 'above45')">+45 ans</button>
                             </div>
                         </div>
                         <div class="filters">
                             <p>SEXE</p>
                             <div class="sexfilter">
-                                <button class="filterbuttons" onclick="app.addFilter('sexe','male')">Homme</button>
-                                <button class="filterbuttons" onclick="app.addFilter('sexe','female')">Femme</button>
-                                <button class="filterbuttons" onclick="app.addFilter('sexe','unknown')">Inconnu</button>
+                                <button class="filterbuttons sexe" onclick="app.addFilter(event, 'sexe', 'male')">Homme</button>
+                                <button class="filterbuttons sexe" onclick="app.addFilter(event, 'sexe', 'female')">Femme</button>
+                                <button class="filterbuttons sexe" onclick="app.addFilter(event, 'sexe', 'unknown')">Inconnu</button>
                             </div>
                         </div>
                     </div>
