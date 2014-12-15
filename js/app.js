@@ -1,5 +1,7 @@
 var app = {
 
+	routeParams: {},
+
 	proposedWord : false,
 
 	activeWord : false,
@@ -11,9 +13,9 @@ var app = {
 
 	event: {},
 
-	init: function(routeParams){
+	init: function(){
 
-		app.routeParams = routeParams;
+		app.getRouteParams();
 
 		model.initFirebase();
 
@@ -53,6 +55,11 @@ var app = {
         document.getElementById('filterBox').addEventListener("click", UI.menu.filterWordBoxView, false);
 	},
 
+	getRouteParams: function(){
+		var hashtab = window.location.hash.split('/');
+		app.routeParams.word = hashtab[1];
+	},
+
 	createCustomEvents: function(){
 		// CrÃ©e l'evenement
 		app.event.graphReady = document.createEvent('Event');
@@ -76,6 +83,7 @@ var app = {
 			UI.d3.defineZoom();
 		}));
 
+		//si un mot est passé en parametre, on le focus
 		if(app.routeParams.word){
 			setTimeout(function(){
 				app.focusWord( decodeURI(app.routeParams.word) );
@@ -321,9 +329,4 @@ var app = {
 	}
 };
 
-var routeParams = {};
-
-var hashtab = window.location.hash.split('/');
-routeParams.word = hashtab[1];
-
-app.init(routeParams);
+app.init();
