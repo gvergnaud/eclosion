@@ -3,23 +3,75 @@ var UI = {
     currentNotifications: [], //tableau qui contient toutes les notifications en cours
 	
 	init: function(){
-		this.wordGraph = document.querySelector('#wordGraph');
 
-		this.setSVGSize();
+		this.d3.style();
 		this.nodeData.style();
-		UI.menu.styleModal();
+		UI.menu.style();
 
 		window.addEventListener('resize', function(){
-			UI.setSVGSize();
+			UI.d3.style();
 			UI.nodeData.style();
-			UI.menu.styleModal();
+			UI.menu.style();
 		}, false);
 	},
 
-	setSVGSize: function(){
-		this.wordGraph.style.width = window.innerWidth;
-		this.wordGraph.style.height = window.innerHeight;
-	},
+	notification: function(type, msg){
+        //Si le message n'est pas déjà dans la liste d'attente
+        if(UI.currentNotifications.indexOf(msg) === -1){
+
+            //si il n'y a rien dans la liste d'attente, on affiche la notif
+            if(UI.currentNotifications.length === 0){
+                //on met le messsage en liste d'attente
+                UI.currentNotifications.push(msg);
+
+
+                var notifContainer = document.querySelector('aside#notifications');
+                var newNotif = document.createElement('p');
+
+                newNotif.innerHTML = msg;
+
+                newNotif.classList.add('notification');
+                if(type){
+                    newNotif.classList.add(type);
+                }
+
+                notifContainer.innerHTML = '';
+                notifContainer.style.display = 'block';
+                notifContainer.appendChild(newNotif);
+
+                setTimeout(function(){	
+                    newNotif.classList.add('show');
+                }, 100);
+
+                setTimeout(function(){
+                    //on cache la notif 
+                    newNotif.classList.remove('show');
+
+                    setTimeout(function(){
+
+                        notifContainer.style.display = 'none';
+                    	newNotif.parentNode.removeChild(newNotif);
+                        //on retire le message de la liste d'attente
+                        UI.currentNotifications.splice(UI.currentNotifications.indexOf(msg), 1);
+                    }, 650);
+
+
+                }, 3000);
+
+                newNotif.addEventListener('click', function(){
+                    notifContainer.style.display = 'none';
+                    newNotif.parentNode.removeChild(newNotif);
+                    //on retire le message de la liste d'attente
+                    UI.currentNotifications.splice(UI.currentNotifications.indexOf(msg), 1);
+                });
+
+            }else{
+                setTimeout(function(){
+                    UI.notification(type, msg);
+                }, 1000);
+            }
+        }
+    },
 	
 	printWord: function(word){
 		document.querySelector('#proposedWordText').innerText = word;
@@ -126,67 +178,10 @@ var UI = {
 			this.element.querySelector('div.stats').style.maxHeight = window.innerHeight - 260 + 'px';
 		}
 	},
-
-	notification: function(type, msg){
-        //Si le message n'est pas déjà dans la liste d'attente
-        if(UI.currentNotifications.indexOf(msg) === -1){
-
-            //si il n'y a rien dans la liste d'attente, on affiche la notif
-            if(UI.currentNotifications.length === 0){
-                //on met le messsage en liste d'attente
-                UI.currentNotifications.push(msg);
-
-
-                var notifContainer = document.querySelector('aside#notifications');
-                var newNotif = document.createElement('p');
-
-                newNotif.innerHTML = msg;
-
-                newNotif.classList.add('notification');
-                if(type){
-                    newNotif.classList.add(type);
-                }
-
-                notifContainer.innerHTML = '';
-                notifContainer.style.display = 'block';
-                notifContainer.appendChild(newNotif);
-
-                setTimeout(function(){	
-                    newNotif.classList.add('show');
-                }, 100);
-
-                setTimeout(function(){
-                    //on cache la notif 
-                    newNotif.classList.remove('show');
-
-                    setTimeout(function(){
-
-                        notifContainer.style.display = 'none';
-                    	newNotif.parentNode.removeChild(newNotif);
-                        //on retire le message de la liste d'attente
-                        UI.currentNotifications.splice(UI.currentNotifications.indexOf(msg), 1);
-                    }, 650);
-
-
-                }, 3000);
-
-                newNotif.addEventListener('click', function(){
-                    notifContainer.style.display = 'none';
-                    newNotif.parentNode.removeChild(newNotif);
-                    //on retire le message de la liste d'attente
-                    UI.currentNotifications.splice(UI.currentNotifications.indexOf(msg), 1);
-                });
-
-            }else{
-                setTimeout(function(){
-                    UI.notification(type, msg);
-                }, 1000);
-            }
-        }
-    },
 	
 	// D3.js 
 	d3: {
+		wordGraph: document.querySelector('#wordGraph'),
 		previousWords : false,
 		nodeSizeCoefficient : 4,
 		collision : 3,
@@ -200,7 +195,7 @@ var UI = {
 			var width = window.innerWidth,
 				height = window.innerHeight;
 	
-			UI.wordGraph.innerHTML = '';
+			UI.d3.wordGraph.innerHTML = '';
 	
 			var color = d3.scale.category20();
 	
@@ -556,6 +551,11 @@ var UI = {
 			this.svg.selectAll("text").transition().duration(1000).style("fill", "#4b4b4b").style("font-weight", "400");
 			this.svg.selectAll("circle").transition().duration(1000).style("fill", "#83adec");
 			this.svg.selectAll("line").transition().duration(1000).style("stroke", "#b8b8b8");
+		},
+
+		style: function(){
+			UI.d3.wordGraph.style.width = window.innerWidth;
+			UI.d3.wordGraph.style.height = window.innerHeight;
 		}
 	},
 
@@ -573,9 +573,9 @@ var UI = {
 
 	    opened: false,
 
-	    styleModal: function() {
+	    style: function() {
 	    	if(UI.menu.opened){
-	    		UI.menu.menuElement.style.width =  window.innerWidth + "px";
+	    		UI.menu.menuElement.style.width = window.innerWidth + "px";
 	    	}
 	    },
 

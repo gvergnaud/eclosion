@@ -365,11 +365,17 @@ var app = {
 
 		//envoi de la recherche
 		if(e.keyCode === 13){
-			var word = document.getElementById("searchInput").value;
 
-			app.focusWord(word);
+			var node = model.getNodeFromWord(value);
+			if(node){
+				app.focusWord(value);
+				this.value = '';
+			}else{
+				if(model.isAFrenchWord(value)){
+					
+				}
+			}
 
-			this.value = '';
 		}
 	}
 };
