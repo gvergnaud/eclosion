@@ -549,6 +549,14 @@ var UI = {
 		}
 	},
 
+	footer: {
+		overlayApropos: document.querySelector('#aproposOverlay'),
+
+		openOverlay: function() {
+			this.overlayApropos.classList.add('active');
+		}
+	},
+
 	menu: {
 
 		allModals: document.querySelectorAll('.modal'),
