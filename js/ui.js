@@ -696,5 +696,11 @@ var UI = {
 		}, false);
 
 		element.appendChild(cancelIcon);
+	},
+
+	removeAllNotifications: function(){
+		document.querySelector('.searchBox p.error').innerHTML = '';
+		document.querySelector('#nodeData .error').innerHTML = '';
+		document.querySelector('.addWordBox .error').innerHTML = '';
 	}
 };

@@ -177,6 +177,8 @@ var app = {
 		if(UI.menu.opened){
 			UI.menu.closeModal();
 		}
+
+		UI.removeAllNotifications();
 	},
 
 	watchData: function(){
@@ -301,7 +303,7 @@ var app = {
 		if(e.keyCode == 13){
 			if(this.value){
 
-				var contribution = this.value;
+				var contribution = this.value.toLowerCase();
 
 				var proposedWord;
 
@@ -312,9 +314,9 @@ var app = {
 					proposedWord = app.proposedWord;
 				}
 
-				model.addContribution(contribution.toLowerCase(), proposedWord, 
+				model.addContribution(contribution, proposedWord, 
 					function(){ //success
-						app.lastUserContribution = contribution.toLowerCase();
+						app.lastUserContribution = contribution;
 						document.dispatchEvent(app.event.userContribution);
 					},
 					function(error){
