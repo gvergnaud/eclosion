@@ -561,23 +561,14 @@ var UI = {
 	        		elements: UI.about.overlayContainer, 
 	        		properties: { marginTop: '0', opacity: 1},
 	        		options: {duration: 500, easing: 'easeInOutBack'}
-	        	},
+	        	}
 
 	        ];
-	        setTimeout(function(){
 				Velocity.RunSequence(openAnim);
-			}, 150);
 
 		},
 		closeOverlay: function() {
 			var overlayContainer = document.querySelector('#overlay-container');
-
-   //      	overlayContainer.onclick = function (e) {
-			//   e = e || window.event;
-			//   e.cancelBubble = true;
-			//   if (e.stopPropagation)
-			//     e.stopPropagation();
-			// }
 
 			UI.about.overlayApropos.classList.remove('active');
 	    	var closeAnim = [
@@ -587,9 +578,7 @@ var UI = {
 	        		options: {duration: 500, easing: 'easeInOutBack'}
 	        	}
 	        ];
-	        setTimeout(function(){
-				Velocity.RunSequence(closeAnim);
-			}, 150);
+			Velocity.RunSequence(closeAnim);
 		}
 	},
 
