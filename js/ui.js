@@ -289,13 +289,12 @@ var UI = {
 					.attr("y1", function(d) { return d.source.y; })
 					.attr("x2", function(d) { return d.target.x; })
 					.attr("y2", function(d) { return d.target.y; });
-	
-				node.attr("cx", function(d) { return d.x; })
+
+				 node.attr("cx", function(d) { return d.x; })
 					.attr("cy", function(d) { return d.y; })
 					.attr("transform", function(d) {
 			            return "translate(" + d.x + "," + d.y + ")";
 			        }); 
-			    node.each(self.collide(5));
 			});
 			
 			this.previousWords = words;
@@ -411,7 +410,6 @@ var UI = {
 		            node.attr("cx", function(d) { return d.x; })
 						.attr("cy", function(d) { return d.y; })
 						.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
-					node.each(self.collide(0.5));
 		        });
 			
 			    this.force.start();
@@ -514,34 +512,29 @@ var UI = {
         	self.force.resume();
 		},
 		
-		collide : function(alpha) {
-			var self = this;
-			var	radius = 8; 
-			var quadtree = d3.geom.quadtree(self.previousWords.nodes);
-			return function(d) {
-			    var rb = 2 * radius + self.collision,
-			        nx1 = d.x - rb,
-			        nx2 = d.x + rb,
-			        ny1 = d.y - rb,
-			        ny2 = d.y + rb;
-			        
-			    quadtree.visit(function(quad, x1, y1, x2, y2) {
-					if (quad.point && (quad.point !== d)) {
-						var x = d.x - quad.point.x,
-							y = d.y - quad.point.y,
-							l = Math.sqrt(x * x + y * y);
-						if (l < rb) {
-							l = (l - rb) / l * alpha;
-							d.x -= x *= l;
-							d.y -= y *= l;
-							quad.point.x += x;
-							quad.point.y += y;
-						}
+		collide : function(node) {
+			var r = node.radius + 16,
+				nx1 = node.x - r,
+				nx2 = node.x + r,
+				ny1 = node.y - r,
+				ny2 = node.y + r;
+			return function(quad, x1, y1, x2, y2) {
+				if (quad.point && (quad.point !== node)) {
+					var x = node.x - quad.point.x,
+					  	y = node.y - quad.point.y,
+					  	l = Math.sqrt(x * x + y * y),
+					  	r = node.radius + quad.point.radius;
+					if (l < r) {
+						l = (l - r) / l * .5;
+						node.x -= x *= l;
+						node.y -= y *= l;
+						quad.point.x += x;
+						quad.point.y += y;
 					}
-					return x1 > nx2 || x2 < nx1 || y1 > ny2 || y2 < ny1;
-			    });
-			};
-		},
+				}
+				return x1 > nx2 || x2 < nx1 || y1 > ny2 || y2 < ny1;
+			};		
+    	},
 		
 		highlightOn : function(node){
 			var self = this;
