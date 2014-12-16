@@ -1,5 +1,7 @@
 var app = {
 
+	routeParams: {},
+
 	proposedWord : false,
 
 	activeWord : false,
@@ -12,6 +14,8 @@ var app = {
 	event: {},
 
 	init: function(){
+
+		app.getRouteParams();
 
 		model.initFirebase();
 
@@ -32,10 +36,7 @@ var app = {
 		document.addEventListener('dataupdate', app.onDataUpdate, false);
 
 		//lorsque l'utilisateur ajoute un mot
-		document.addEventListener('usercontribution', function (e) {
-			app.proposeRandomWord();
-			UI.menu.closeModal();
-		}, false);
+		document.addEventListener('usercontribution', app.onUserContribution, false);
 		
 		// Gestion du drag du zoom
 		var draggie = new Draggabilly( document.querySelector('#cursor'), {
@@ -63,23 +64,39 @@ var app = {
 		});
 		
 		// Fermeture de la fenetre droite au clic sur la croix
-		document.getElementsByClassName("close")[0].addEventListener("click", function(){
-			UI.nodeData.closeSection();
-			UI.d3.highlightOff();
-		}, false);
+		document.querySelector("#nodeData .close").addEventListener("click", app.blurWord, false);
 
 		//applique l'evenement addContribution à tous les elements ayant la class
 		[].forEach.call(document.querySelectorAll('.addContribution'), function (element) {
 			element.addEventListener('keyup', app.addContribution, false);
 		});
 
+		// lorsque l'utilisateur tape un caractère dans l'espace recherche
 		document.querySelector('#searchInput').addEventListener('keyup', app.searchNode, false);
+
+		// lorsque l'utilisateur tape un caractère dans l'espace recherche
 		document.querySelector('div.filters button.resetFilters').addEventListener('click', app.resetFilters, false);
 	
 		/* Gestion des fenêtres du menu */
-        document.getElementById('searchBox').addEventListener("click", UI.menu.searchBoxView, false);
-        document.getElementById('addWordBox').addEventListener("click", UI.menu.addWordBoxView, false);
-        document.getElementById('filterBox').addEventListener("click", UI.menu.filterWordBoxView, false);
+        document.getElementById('searchBox').addEventListener("click", function(){
+        	UI.menu.searchBoxView();
+        	app.blurWord();
+        }, false);
+
+        document.getElementById('addWordBox').addEventListener("click", function(){
+        	UI.menu.addWordBoxView();
+        	app.blurWord();
+        }, false);
+
+        document.getElementById('filterBox').addEventListener("click", function(){
+        	UI.menu.filterWordBoxView();
+        	app.blurWord();
+        }, false);
+	},
+
+	getRouteParams: function(){
+		var hashtab = window.location.hash.split('/');
+		app.routeParams.word = hashtab[1];
 	},
 
 	createCustomEvents: function(){
@@ -105,6 +122,13 @@ var app = {
 			UI.d3.defineCursor();
 		}));
 
+		//si un mot est passé en parametre, on le focus
+		if(app.routeParams.word){
+			setTimeout(function(){
+				app.focusWord( decodeURI(app.routeParams.word) );
+			}, 1500);
+		}
+
 		//remove l'event listener
 		e.target.removeEventListener(e.type, arguments.callee);
 	},
@@ -122,15 +146,10 @@ var app = {
 		}
 
 		//au click sur un node, on ouvre le panneau droit et on recupérer toutes les données de ce node
-		UI.d3.svg.selectAll(".nodes>g>circle").on("click", 	function(node){
-			if(d3.event.defaultPrevented == false){ 
+		UI.d3.svg.selectAll(".nodes>g>circle").on("mouseup", 	function(node){
+			if(d3.event.defaultPrevented == false){
 				UI.d3.selectNode(d3.select(this.parentNode));
-				app.getNodeData(node, function(nodeData){
-					UI.nodeData.printData(nodeData);
-					UI.nodeData.openSection();
-					app.activeWord = nodeData.name;
-
-				});	
+				app.focusWord(node.name);
 			}
 		});
 		
@@ -138,6 +157,13 @@ var app = {
 		UI.d3.svg.selectAll(".nodes>g>circle").on("dblclick", 	function(node){
 			d3.event.stopPropagation();
 		});
+	},
+
+	onUserContribution: function (e) {
+		app.proposeRandomWord();
+		if(UI.menu.opened){
+			UI.menu.closeModal();
+		}
 	},
 
 	watchData: function(){
@@ -231,8 +257,33 @@ var app = {
 
 		UI.printWord(app.proposedWord);
 	},
-	
+
+
 	//User interaction
+	focusWord: function(word){
+		UI.d3.searchNode(word);
+
+		var selectedNode = model.getNodeFromWord(word);
+
+		app.getNodeData(selectedNode, function(nodeData){
+			UI.nodeData.openSection();
+			UI.nodeData.printData(nodeData);
+			app.activeWord = nodeData.name;
+		});
+
+		UI.menu.closeModal();
+
+		history.pushState({}, word, '#/' + encodeURI(word));
+	},
+
+	blurWord: function(){
+		UI.nodeData.closeSection();
+		UI.d3.highlightOff();
+		app.activeWord = false;
+		
+		history.pushState({}, 'Home', window.location.href.split('#')[0]);
+	},
+
 	addContribution: function(e){
 		if(e.keyCode == 13){
 			if(this.value){
@@ -297,36 +348,28 @@ var app = {
 			});
 		}
 
-		var datalist = document.getElementById('searchAutoComplete');
+		var list = document.getElementById('searchAutoComplete');
 
-		datalist.innerHTML = '';
+		list.innerHTML = '';
 
 		if(matches){
 			matches.forEach(function(match){
-				var option = document.createElement('option');
+				var option = document.createElement('p');
 				option.innerHTML = match.name;
-				datalist.appendChild(option);
+				list.appendChild(option);
+				option.addEventListener('click', function(){
+					app.focusWord(match.name);
+				},false);
 			});
 		}
 
 		//envoi de la recherche
 		if(e.keyCode === 13){
-			var selectedVal = document.getElementById("searchInput").value;
+			var word = document.getElementById("searchInput").value;
 
-			UI.d3.searchNode(selectedVal);
-
-			var selectedNode = model.getNodeFromWord(selectedVal);
-
-			app.getNodeData(selectedNode, function(nodeData){
-				UI.nodeData.openSection();
-				UI.nodeData.printData(nodeData);
-				app.activeWord = nodeData.name;
-			});
-			
+			app.focusWord(word);
 
 			this.value = '';
-			
-			UI.menu.closeModal();
 		}
 	}
 };

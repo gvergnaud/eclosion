@@ -26,9 +26,13 @@ var UI = {
 	},
 
 	printGlobalData: function(nbWords, nbConnections, nbContributors){
-		document.querySelector('#globalData span.words').innerText = nbWords;
-		document.querySelector('#globalData span.connections').innerText = nbConnections;
-		document.querySelector('#globalData span.contributors').innerText = nbContributors;
+		var words = new countUp(document.querySelector('#globalData span.words'), 1, nbWords, 0, 2);
+		var connexions = new countUp(document.querySelector('#globalData span.connections'), 1, nbConnections, 0, 2);
+		var contributors = new countUp(document.querySelector('#globalData span.contributors'), 1, nbContributors, 0, 2);
+		
+		words.start();
+		connexions.start();
+		contributors.start();
 	},
 
 	//Panneau de droite
@@ -82,11 +86,14 @@ var UI = {
 			
 
 			this.element.querySelector('.nodeName').innerText = nodeData.name;
+
 			//affiche le nombre d'utilisation du mot
-			this.element.querySelector('div.occurrence>p.data').innerText = nodeData.occurrence;
-			
+			var occurrence = new countUp(this.element.querySelector('div.occurrence>p.data'), 1, nodeData.occurrence, 0, 1, {useEasing : false});
+			occurrence.start();
+
 			//affiche le nombre de connexions
-			this.element.querySelector('div.nbLinks>p.data').innerText = nodeData.nbLinks;
+			var nbLinks = new countUp(this.element.querySelector('div.nbLinks>p.data'), 1, nodeData.nbLinks, 0, 1, {useEasing : false});
+			nbLinks.start();
 
 			//affiche le nombre dutilisation par sexe
 			this.element.querySelector('div.sexeOccurrence>div.male .data').innerText = nodeData.sexeOccurrence.male;
@@ -573,29 +580,30 @@ var UI = {
 	    },
 
 		closeModal: function() {
+			if(UI.menu.opened){
+		    	var closeAnim = [
+		        	{
+		        		elements: UI.menu.allModals, 
+		        		properties: { left: - window.innerWidth + 'px'},
+		        		options: {duration: 250, easing: 'easeInOutBack'}
+		        	}
+		        ];
+				Velocity.RunSequence(closeAnim);
 
-	    	var closeAnim = [
-	        	{
-	        		elements: UI.menu.allModals, 
-	        		properties: {left: '-1875px'},
-	        		options: {duration: 250, easing: 'easeInOutBack'}
-	        	}	        	
-	        ];
-			Velocity.RunSequence(closeAnim);
+				setTimeout(function(){
+					[].forEach.call(UI.menu.allModals, function(element){
+		        		element.classList.remove('activeTab');
+		        	});
 
-			setTimeout(function(){
-				[].forEach.call(UI.menu.allModals, function(element){
-	        		element.classList.remove('activeTab');
-	        	});
-
-	        	UI.menu.menuElement.style.width = '70px';
-	       		UI.menu.opened = false;
-			}, 250);
+		        	UI.menu.menuElement.style.width = '70px';
+		       		UI.menu.opened = false;
+				}, 250);
+			}
 
 		},
 
 		openModal: function(modal){
-        	
+
         	[].forEach.call(UI.menu.allModals, function(element){
         		element.classList.remove('activeTab');
         	});
@@ -603,12 +611,12 @@ var UI = {
 			var openAnim = [
 	        	{
 	        		elements: UI.menu.allModals,
-	        		properties: {left: "-1875px"},
+	        		properties: {left: - window.innerWidth + 'px'},
 	        		options: {duration: 0, easing: 'easeInOutBack'}
 	        	},
 	        	{
 	        		elements: modal,
-	        		properties: {left: "70px", opacity: "0.9", right: 0},
+	        		properties: {left: "70px", opacity: "0.9", width: window.innerWidth -70 + 'px'},
 	        		options: {duration: 250, easing: 'easeInOutBack'}
 	        	}
 	        ];
