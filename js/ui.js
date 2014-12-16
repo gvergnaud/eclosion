@@ -190,6 +190,9 @@ var UI = {
 		previousWords : false,
 		nodeSizeCoefficient : 4,
 		collision : 3,
+		zoomMin : 0.25,
+		zoomMax : 3,
+		translate : [0, 0],
 		
 		createGraph: function(words){
 			var self = this;
@@ -234,7 +237,7 @@ var UI = {
 				.data(words.links)
 				.enter().append("line")
 				.attr("class", "link")
-				.style("stroke", "#dfdede")
+				.style("stroke", "#b8b8b8")
 				.style("stroke-width", function(d) { return Math.sqrt(d.value); });
 				
 			// Création des noeuds
@@ -252,7 +255,7 @@ var UI = {
 			node.append("circle")
 	         	.attr("class", "node")
 	         	.attr("pointer-events", "drag")
-	         	.style('fill', "#b8b8b8")
+	         	.style('fill', "#83adec")
 	         	.style("cursor", "pointer")
 	         	.attr("r", function(d){
 	         		var nbLinks = Math.sqrt(d.nbLinks);
@@ -292,14 +295,13 @@ var UI = {
 			
 			this.previousWords = words;
 			
-			self.defineZoom();
+			self.defineCursor();
 			
 			document.dispatchEvent(app.event.graphReady);
 		},
 		
 		redrawGraph : function(){
-			var self = this;
-			
+			this.translate = d3.event.translate;
 			this.svg.select("g").select("g").attr("transform",
 			  "translate(" + d3.event.translate + ")"
 			  + " scale(" + d3.event.scale + ")"
@@ -389,21 +391,27 @@ var UI = {
 			
 			    this.force.start();
 			    
+			    
 			}
 		},
 		
-		defineZoom : function(){
-			var value;
-			if(d3.event != null && d3.event.scale != undefined){
-				value = d3.event.scale;
-			}else{
-				value = 1;
-			}
+		defineCursor : function(){
+			var self = this;
+			
+			if(d3.event != null && d3.event.scale != undefined)
+				var scale = d3.event.scale;
+			else
+				var scale = 1;
 			
 			var zoombarHeight = document.getElementById("zoom").offsetHeight;
 			
 			// Déplacement du cursor
-			document.querySelector("#cursor").style.top = ((100 - ((value - 0.5) * 100 / 2.5))) - ((100 * 7.5) / zoombarHeight) + "%";
+			document.querySelector("#cursor").style.top = ((100 - ((scale - self.zoomMin) * 100 / (self.zoomMax - self.zoomMin)))) - ((100 * 7.5) / zoombarHeight) + "%";
+		},
+		
+		defineZoom : function(scale){
+			var self = this;
+			this.svg.select("g").select("g").attr("transform","translate(" + self.translate + ")" + " scale(" + scale + ")");
 		},
 		
 		searchNode : function(selectedVal){
@@ -419,7 +427,6 @@ var UI = {
 	            return d.name == selectedVal;
 	        });
 	        
-	        UI.d3.highlightOn(selected);
 	        
 	        // Si la recherche a donné quelque chose
 	        if(selected[0].length > 0){
@@ -438,16 +445,19 @@ var UI = {
 				);
 				
 				// On redéfini le zoom avec ses nouvelles valeurs d'origines
-				this.svg.call(d3.behavior.zoom().translate([x, y]).scaleExtent([0.5, 3]).on("zoom", function(){
+				this.svg.call(d3.behavior.zoom().translate([x, y]).scaleExtent([self.zoomMin, self.zoomMax]).on("zoom", function(){
 			    	UI.d3.redrawGraph();
-			    	UI.d3.defineZoom();
+			    	UI.d3.defineCursor();
 			    }));
+			    
+			    // On met notre node et ses liens en highlight
+			    UI.d3.highlightOn(selected);
 			    
 			}else{
 				UI.notification('error', "Pas de mots trouvés");
 			}
 			
-			self.defineZoom();
+			self.defineCursor();
 		},
 		
 		selectNode : function(node){
@@ -468,12 +478,12 @@ var UI = {
 				 "translate(" + x + " ," + y + ")"
 			);
 			
-			self.defineZoom();
+			self.defineCursor();
 			
 			// On redéfini le zoom avec ses nouvelles valeurs
-			this.svg.call(d3.behavior.zoom().translate([x, y]).scaleExtent([0.5, 3]).on("zoom", function(){
+			this.svg.call(d3.behavior.zoom().translate([x, y]).scaleExtent([self.zoomMin, self.zoomMax]).on("zoom", function(){
 		    	UI.d3.redrawGraph();
-		    	UI.d3.defineZoom();
+		    	UI.d3.defineCursor();
 		    }));
         	
         	self.force.resume();
@@ -544,7 +554,7 @@ var UI = {
 		
 		highlightOff : function(){
 			this.svg.selectAll("text").transition().duration(1000).style("fill", "#4b4b4b").style("font-weight", "400");
-			this.svg.selectAll("circle").transition().duration(1000).style("fill", "#b8b8b8");
+			this.svg.selectAll("circle").transition().duration(1000).style("fill", "#83adec");
 			this.svg.selectAll("line").transition().duration(1000).style("stroke", "#b8b8b8");
 		}
 	},
