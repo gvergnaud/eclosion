@@ -30,7 +30,7 @@
         <!-- Menu de navigation gauche -->
         <nav role="navigation" id="lateral-navigation">
             <!-- Recherche d'un mot -->
-            <div class="optioncontainer">
+            <div class="optioncontainer searchBox">
                 <div class="left-nav" id="searchBox">
                     <i class="flaticons icon-search"></i> 
                 </div>
@@ -40,13 +40,14 @@
                     <i class="closeMenu flaticon-cross97" onclick="UI.menu.closeModal()"></i>
                     <div id="searchWordForm" class="optionsForm">
                         <input type="text" id="searchInput" class="optionsInputText" list="searchAutoComplete" placeholder="Rechercher un mot"/>
+                        <p class="error"></p>
                         <div id="searchAutoComplete"></div>
                     </div>
                 </div>
             </div>
 
             <!-- Ajout d'un mot -->
-            <div class="optioncontainer">
+            <div class="optioncontainer addWordBox">
                 <div class="left-nav" id="addWordBox">
                     <i class="flaticons icon-edit"></i> 
                 </div>
@@ -57,12 +58,13 @@
                     <div id="writehWordForm" class="optionsForm">
                         <p id="proposedWord">Si je vous dit :&nbsp;<span id="proposedWordText"></span>...</p>
                         <input type="text" class="addContribution optionsInputText" class="optionsInputText" placeholder="Ecrivez le mot qui vous vient à l'esprit" />
+                        <p class="error"></p>
                     </div>
                 </div>
             </div>
 
             <!-- Options de Filtrage -->
-            <div class="optioncontainer">
+            <div class="optioncontainer filterBox">
                 <div class="left-nav" id="filterBox">
                     <i class="flaticons icon-filter"></i> 
                 </div>
@@ -120,10 +122,11 @@
         <section id="nodeData">
             <header>
                 <div class="close"><i class="flaticon-cross97"></i></div>
-                <h1 class="theme">Theme : <span class="nodeName"></span></h1>
+                <h1 class="theme">Mot : <span class="nodeName"></span></h1>
                 <div class="contribution">
                     <p>Contribuer</p>
-                    <input class="addContribution" data-activeWord="activeWord" type="text" placeholder="ton mot" />
+                    <input class="addContribution" data-activeWord="activeWord" type="text" placeholder="Votre mot" />
+                    <p class="error"></p>
                 </div>
             </header>
             <div class="stats">
@@ -183,6 +186,73 @@
             </div>
         </section>
 
+        <footer id="menufooter">
+            <nav>
+                <ul>
+                    <li><a href="http://facebook.com"><i class="icon-facebook"></i></a></li>
+                    <li><a href="http://twitter.com"><i class="icon-twitter"></i></a></li>
+                    <li><button class="footerbuttons" id="soundOption"><i class="icon-volume-down"></i></button></li>
+                    <li><button class="footerbuttons" id="aproposButton">A propos</button></li>
+                </ul>
+            </nav>
+            <aside class="overlay" id="aproposOverlay">
+                <div id="overlay-container">
+                    <div class="contenu">
+                        <h3>Des mots naissent les idées...</h3>
+                        <p>Eclosion est une expérience au cours de laquelle les utilisateurs sont invités à créer des associations de mots.</p>
+                        <p>Culture et personnalité étant propre à chaque individu, nous n'associerons pas toujours les mots de la même façon. Eclosion permet ainsi de représenter les liens qui connectent les mots les uns avec les autres.</p>
+                    </div>
+                    <div class="contenu team">
+                        <h3>L'équipe derrière ce projet</h3>
+                        <section class="flex col2">
+                            <div class="credits">
+                                <h4>Louis Charachon</h4>
+                                <p class="posteOccupe">UX/UI Designer</p>
+                                <ul class="links">
+                                    <li><a href="http://www.louischarachon.com/" title="Portfolio"><i class="icon-link"></i></a></li>
+                                    <li><a href="https://twitter.com/TheWadzy" title="Twitter"><i class="icon-twitter"></i></a></li>
+                                </ul>
+                            </div>
+                            <div class="credits">
+                                <h4>Justine Pascal</h4>
+                                <p class="posteOccupe">UX/UI Designer</p>
+                                <ul class="links">
+                                    <li><a href="" title="Portfolio"><i class="icon-link"></i></a></li>
+                                    <li><a href="https://twitter.com/justinepascal" title="Twitter"><i class="icon-twitter"></i></a></li>
+                                </ul>
+                            </div>
+                        </section>
+                        <section class="flex col3">
+                            <div class="credits">
+                                <h4>Valentin Soyer</h4>
+                                <p class="posteOccupe">Front developper</p>
+                                <ul class="links">
+                                    <li><a href="http://www.valentin-soyer.fr/" title="Portfolio"><i class="icon-link"></i></a></li>
+                                    <li><a href="https://twitter.com/valentsoyer" title="Twitter"><i class="icon-twitter"></i></a></li>
+                                </ul>
+                            </div>
+                            <div class="credits">
+                                <h4>Florian Tiar</h4>
+                                <p class="posteOccupe">Front developper</p>
+                                <ul class="links">
+                                    <li><a href="http://tiar-florian.fr" title="Portfolio"><i class="icon-link"></i></a></li>
+                                    <li><a href="https://twitter.com/floriantiar" title="Twitter"><i class="icon-twitter"></i></a></li>
+                                </ul>
+                            </div>
+                            <div class="credits">
+                                <h4>Gabriel Vergnaud</h4>
+                                <p class="posteOccupe">Front developper</p>
+                                <ul class="links">
+                                    <li><a href="http://gabrielvergnaud.com/" title="Portfolio"><i class="icon-link"></i></a></li>
+                                    <li><a href="" title="Twitter"><i class="icon-twitter"></i></a></li>
+                                </ul>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            </aside>
+        </footer>
+
         <script src="js/libs/d3.v3.min.js"></script>
         <script src="js/libs/firebase.js"></script>
         <script src="js/libs/velocity.min.js"></script>
@@ -193,6 +263,5 @@
         <script src="js/model.js"></script>
         <script src="js/ui.js"></script>
         <script src="js/app.js"></script>
-
     </body>
 </html>

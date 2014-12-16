@@ -95,6 +95,15 @@ var app = {
         	UI.menu.addClickStyle(this);
         	app.blurWord();
         }, false);
+
+        /* Gestion du footer */
+        document.getElementById('aproposButton').addEventListener("click", function() {
+        	UI.about.openOverlay();
+        }, false);
+
+        document.getElementById('aproposOverlay').addEventListener("click", function() {
+        	UI.about.closeOverlay();
+        }, false);
 	},
 
 	getRouteParams: function(){
@@ -163,10 +172,16 @@ var app = {
 	},
 
 	onUserContribution: function (e) {
+		setTimeout(function(){
+			app.focusWord(app.lastUserContribution);
+		}, 1500);
+
 		app.proposeRandomWord();
 		if(UI.menu.opened){
 			UI.menu.closeModal();
 		}
+
+		UI.removeAllNotifications();
 	},
 
 	watchData: function(){
@@ -291,20 +306,29 @@ var app = {
 		if(e.keyCode == 13){
 			if(this.value){
 
+				var contribution = this.value.toLowerCase();
+
 				var proposedWord;
 
+				// si la contribution vien de la fenetre nodeData
 				if(e.target.getAttribute('data-activeWord') === 'activeWord'){
 					proposedWord = app.activeWord;
 				}else{
 					proposedWord = app.proposedWord;
 				}
 
-				model.addContribution(this.value.toLowerCase(), proposedWord, 
+				model.addContribution(contribution, proposedWord, 
 					function(){ //success
+						app.lastUserContribution = contribution;
 						document.dispatchEvent(app.event.userContribution);
 					},
 					function(error){
-						UI.notification('error', error);
+						// si la contribution vien de la fenetre nodeData
+						if(e.target.getAttribute('data-activeWord') === 'activeWord'){
+							UI.notification(document.querySelector('#nodeData .error'), error);
+						}else{
+							UI.notification(document.querySelector('.addWordBox .error'), error);
+						}
 					}
 				);
 				
@@ -368,14 +392,41 @@ var app = {
 
 		//envoi de la recherche
 		if(e.keyCode === 13){
+			//si il y a une valeur
+			if(value){
+				var node = model.getNodeFromWord(value);
 
-			var node = model.getNodeFromWord(value);
-			if(node){
-				app.focusWord(value);
-				this.value = '';
-			}else{
-				if(model.isAFrenchWord(value)){
+				if(node){
+
+					app.focusWord(value);
+					this.value = '';
+
+				}else{
 					
+					if(model.isAFrenchWord(value)){
+
+						UI.notification(
+							document.querySelector('.searchBox p.error'),
+							'Le mot que vous recherchez n\'est pas dans la carte. voulez vous le rajouter ?', 
+							function(){
+								model.addUnlinkedNode(value, function(){
+									app.lastUserContribution = value.toLowerCase();
+									document.dispatchEvent(app.event.userContribution);
+								});
+							},
+							function(){
+								e.target.value = '';
+								e.target.focus();
+							}
+						);
+
+					}else{
+
+						UI.notification(
+							document.querySelector('.searchBox p.error'),
+							'Le mot que vous avez tapé n\'est pas français'
+						);
+					}
 				}
 			}
 

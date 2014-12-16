@@ -14,64 +14,6 @@ var UI = {
 			UI.menu.style();
 		}, false);
 	},
-
-	notification: function(type, msg){
-        //Si le message n'est pas déjà dans la liste d'attente
-        if(UI.currentNotifications.indexOf(msg) === -1){
-
-            //si il n'y a rien dans la liste d'attente, on affiche la notif
-            if(UI.currentNotifications.length === 0){
-                //on met le messsage en liste d'attente
-                UI.currentNotifications.push(msg);
-
-
-                var notifContainer = document.querySelector('aside#notifications');
-                var newNotif = document.createElement('p');
-
-                newNotif.innerHTML = msg;
-
-                newNotif.classList.add('notification');
-                if(type){
-                    newNotif.classList.add(type);
-                }
-
-                notifContainer.innerHTML = '';
-                notifContainer.style.display = 'block';
-                notifContainer.appendChild(newNotif);
-
-                setTimeout(function(){	
-                    newNotif.classList.add('show');
-                }, 100);
-
-                setTimeout(function(){
-                    //on cache la notif 
-                    newNotif.classList.remove('show');
-
-                    setTimeout(function(){
-
-                        notifContainer.style.display = 'none';
-                    	newNotif.parentNode.removeChild(newNotif);
-                        //on retire le message de la liste d'attente
-                        UI.currentNotifications.splice(UI.currentNotifications.indexOf(msg), 1);
-                    }, 650);
-
-
-                }, 3000);
-
-                newNotif.addEventListener('click', function(){
-                    notifContainer.style.display = 'none';
-                    newNotif.parentNode.removeChild(newNotif);
-                    //on retire le message de la liste d'attente
-                    UI.currentNotifications.splice(UI.currentNotifications.indexOf(msg), 1);
-                });
-
-            }else{
-                setTimeout(function(){
-                    UI.notification(type, msg);
-                }, 1000);
-            }
-        }
-    },
 	
 	printWord: function(word){
 		document.querySelector('#proposedWordText').innerText = word;
@@ -106,9 +48,6 @@ var UI = {
 		        
 				this.element.style.display = 'block';
 
-			    // var addContribution = document.querySelectorAll('.addContribution');
-			    // addContribution[1].focus();
-
 				Velocity.RunSequence(openAnim);
 
 				this.opened = true;
@@ -138,6 +77,7 @@ var UI = {
 			
 
 			this.element.querySelector('.nodeName').innerText = nodeData.name;
+			this.element.querySelector('.addContribution').setAttribute('placeholder', 'Si je vous dit ' + nodeData.name + '...');
 
 			//affiche le nombre d'utilisation du mot
 			var occurrence = new countUp(this.element.querySelector('div.occurrence>p.data'), 1, nodeData.occurrence, 0, 1, {useEasing : false});
@@ -477,7 +417,7 @@ var UI = {
 			    UI.d3.highlightOn(selected);
 			    
 			}else{
-				UI.notification('error', "Pas de mots trouvés");
+				console.log('UI le mot ne epeut pas être selectionné');
 			}
 			
 			self.defineCursor();
@@ -582,6 +522,39 @@ var UI = {
 		}
 	},
 
+	about: {
+		overlayApropos: document.querySelector('#aproposOverlay'),
+		overlayContainer: document.querySelector('#overlay-container'),
+
+		openOverlay: function() {
+			// var nav = document.getElementById('lateral-navigation');
+			this.overlayApropos.classList.add('active');
+	    	var openAnim = [
+	        	{
+	        		elements: UI.about.overlayContainer, 
+	        		properties: { marginTop: '0', opacity: 1},
+	        		options: {duration: 500, easing: 'easeInOutBack'}
+	        	}
+
+	        ];
+				Velocity.RunSequence(openAnim);
+
+		},
+		closeOverlay: function() {
+			var overlayContainer = document.querySelector('#overlay-container');
+
+			UI.about.overlayApropos.classList.remove('active');
+	    	var closeAnim = [
+	        	{
+	        		elements: UI.about.overlayContainer, 
+	        		properties: { marginTop: '100px', opacity: 0},
+	        		options: {duration: 500, easing: 'easeInOutBack'}
+	        	}
+	        ];
+			Velocity.RunSequence(closeAnim);
+		}
+	},
+
 	menu: {
 
 		allModals: document.querySelectorAll('.modal'),
@@ -599,6 +572,7 @@ var UI = {
 	    style: function() {
 	    	if(UI.menu.opened){
 	    		UI.menu.menuElement.style.width = window.innerWidth + "px";
+	    		UI.menu.menuElement.querySelector('.activeTab').style.width = window.innerWidth -70 + "px";
 	    	}
 	    },
 
@@ -730,5 +704,40 @@ var UI = {
 				filter.classList.remove('active');
 			});
 		}
+	},
+
+	notification: function(element, msg, checkCallback, cancelCallback){
+
+		element.innerHTML = msg;
+
+		if(checkCallback){
+			var checkIcon = document.createElement('i');
+			checkIcon.classList.add('icon-check');
+			checkIcon.addEventListener('click', function(){
+				checkCallback.call(this);
+				element.innerHTML = '';
+			}, false);
+			element.appendChild(checkIcon);
+		}
+		
+		var cancelIcon = document.createElement('i');
+		cancelIcon.classList.add('icon-cancel');
+		
+		cancelIcon.addEventListener('click', function(){
+
+			if(cancelCallback){
+				cancelCallback.call(this);
+			}
+			element.innerHTML = '';
+
+		}, false);
+
+		element.appendChild(cancelIcon);
+	},
+
+	removeAllNotifications: function(){
+		document.querySelector('.searchBox p.error').innerHTML = '';
+		document.querySelector('#nodeData .error').innerHTML = '';
+		document.querySelector('.addWordBox .error').innerHTML = '';
 	}
 };
