@@ -549,11 +549,14 @@ var UI = {
 		}
 	},
 
-	footer: {
+	about: {
 		overlayApropos: document.querySelector('#aproposOverlay'),
 
 		openOverlay: function() {
 			this.overlayApropos.classList.add('active');
+		},
+		closeOverlay: function() {
+			UI.about.overlayApropos.classList.remove('active');
 		}
 	},
 

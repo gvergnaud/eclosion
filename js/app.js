@@ -70,7 +70,7 @@ var app = {
 
         /* Gestion du footer */
         document.getElementById('aproposButton').addEventListener("click", function() {
-        	UI.footer.openOverlay();
+        	UI.about.openOverlay();
         }, false);
 	},
 
