@@ -184,7 +184,7 @@ var UI = {
 		wordGraph: document.querySelector('#wordGraph'),
 		previousWords : false,
 		nodeSizeCoefficient : 4,
-		collision : 3,
+		collision : 10,
 		zoomMin : 0.25,
 		zoomMax : 3,
 		translate : [0, 0],
@@ -295,7 +295,7 @@ var UI = {
 					.attr("transform", function(d) {
 			            return "translate(" + d.x + "," + d.y + ")";
 			        }); 
-			    node.each(self.collide(0.5));
+			    node.each(self.collide(5));
 			});
 			
 			this.previousWords = words;
