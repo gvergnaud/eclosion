@@ -546,28 +546,6 @@ p.notification.show{
 	background-color:#3177df;
 }
 
-/* OVERLAY Footer */
-.overlay {
-	width: 100%;
-	height: 100%;
-	position: fixed;
-	top: 0;
-	right: 0;
-	bottom: 0;
-	left: 0;
-	background: #0083dd;
-	opacity: 0;
-	-webkit-transition: opacity 0.75s ease 0s,z-index 0s ease 1s;
-	transition: opacity 0.75s ease 0s,z-index 0s ease 1s;
-	z-index: -1;
-}
-.overlay.active {
-	opacity: 0.95;
-	z-index: 999;
-	-webkit-transition: opacity 0.5s ease 0s;
-	transition: opacity 0.5s ease 0s;
-}
-
 /* FOOTER */
 #menufooter {
 	position: absolute;
@@ -588,7 +566,7 @@ p.notification.show{
 	padding: 0 8px;
 }
 
-#menufooter ul li a{
+#menufooter ul li a, #menufooter ul li button{
 	text-decoration: none;
 	text-transform: uppercase;
 	font-family: 'Open Sans', sans-serif;
@@ -597,4 +575,90 @@ p.notification.show{
 }
 .icon-volume-up:before {
 	color: #888888;
+}
+
+/* OVERLAY Footer */
+.overlay {
+	width: 100%;
+	height: 100%;
+	position: fixed;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	background: #3177df;
+	opacity: 0;
+	-webkit-transition: opacity 0.75s ease 0s,z-index 0s ease 1s;
+	transition: opacity 0.75s ease 0s,z-index 0s ease 1s;
+	z-index: -1;
+}
+.overlay.active {
+	opacity: 1;
+	z-index: 999;
+	-webkit-transition: opacity 0.5s ease 0s;
+	transition: opacity 0.5s ease 0s;
+}
+
+.overlay div.container {
+	width: 50%;
+	margin: 0 auto;
+	padding: 50px 0;
+	font-family: "Open Sans", sans-serif;
+	color: #fff;
+}
+.overlay .contenu {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	margin: 10px auto;
+}
+.overlay h3 {
+	margin: 30px 0 10px 0;
+	font-size: 30px;
+	text-transform: uppercase;
+}
+.overlay h4 { /* Nom des étudiants */
+	margin: 10px 0 5px 0;
+	font-size: 20px;
+}
+.overlay p {
+	margin: 10px 0;
+	width: 80%;
+	font-size: 14px;
+	line-height: 20px;
+	text-align: center;
+}
+.overlay p.posteOccupe {
+	width: auto;
+	margin: 0 auto 10px auto;
+	font-size: 14px;
+	color: #194e9f;
+}
+.overlay section.flex { /* Container pour faire des colonnes en mode flexbox */
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	width: 100%;
+}
+.overlay section.flex div.credits{ /* Container pour faire des colonnes en mode flexbox */
+	box-sizing: border-box;
+	margin: 5px 0;
+	text-align: center;
+}
+.overlay section.col2 div.credits {
+	width: 50%;
+}
+.overlay section.col3 div.credits {
+	width: 33.3333333%;
+}
+#menufooter .overlay ul.links {
+	width: 55px;
+	margin: 0 auto;
+}
+#menufooter .overlay ul.links [class^="icon-"]:before, #menufooter .overlay ul.links [class*=" icon-"]:before {
+	opacity: .25;
+	color: #194e9f;
+}
+#menufooter .overlay ul.links a:hover [class^="icon-"]:before, #menufooter .overlay ul.links [class*=" icon-"]:before {
+	color: #fff;
 }
