@@ -72,6 +72,10 @@ var app = {
         document.getElementById('aproposButton').addEventListener("click", function() {
         	UI.about.openOverlay();
         }, false);
+
+        document.getElementById('aproposOverlay').addEventListener("click", function() {
+        	UI.about.closeOverlay();
+        }, false);
 	},
 
 	getRouteParams: function(){

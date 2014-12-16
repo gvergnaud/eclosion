@@ -554,27 +554,42 @@ var UI = {
 		overlayContainer: document.querySelector('#overlay-container'),
 
 		openOverlay: function() {
+			// var nav = document.getElementById('lateral-navigation');
 			this.overlayApropos.classList.add('active');
 	    	var openAnim = [
 	        	{
 	        		elements: UI.about.overlayContainer, 
-	        		properties: { marginTop: '0'},
-	        		options: {duration: 250, easing: 'easeInOutBack'}
-	        	}
+	        		properties: { marginTop: '0', opacity: 1},
+	        		options: {duration: 500, easing: 'easeInOutBack'}
+	        	},
+
 	        ];
-			Velocity.RunSequence(openAnim);
+	        setTimeout(function(){
+				Velocity.RunSequence(openAnim);
+			}, 150);
 
 		},
 		closeOverlay: function() {
+			var overlayContainer = document.querySelector('#overlay-container');
+
+   //      	overlayContainer.onclick = function (e) {
+			//   e = e || window.event;
+			//   e.cancelBubble = true;
+			//   if (e.stopPropagation)
+			//     e.stopPropagation();
+			// }
+
 			UI.about.overlayApropos.classList.remove('active');
 	    	var closeAnim = [
 	        	{
 	        		elements: UI.about.overlayContainer, 
-	        		properties: { marginTop: '450px'},
+	        		properties: { marginTop: '100px', opacity: 0},
 	        		options: {duration: 500, easing: 'easeInOutBack'}
 	        	}
 	        ];
-			Velocity.RunSequence(closeAnim);
+	        setTimeout(function(){
+				Velocity.RunSequence(closeAnim);
+			}, 150);
 		}
 	},
 
