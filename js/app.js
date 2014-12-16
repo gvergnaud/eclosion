@@ -80,16 +80,19 @@ var app = {
 		/* Gestion des fenêtres du menu */
         document.getElementById('searchBox').addEventListener("click", function(){
         	UI.menu.searchBoxView();
+        	UI.menu.addClickStyle(this);
         	app.blurWord();
         }, false);
 
         document.getElementById('addWordBox').addEventListener("click", function(){
         	UI.menu.addWordBoxView();
+        	UI.menu.addClickStyle(this);
         	app.blurWord();
         }, false);
 
         document.getElementById('filterBox').addEventListener("click", function(){
         	UI.menu.filterWordBoxView();
+        	UI.menu.addClickStyle(this);
         	app.blurWord();
         }, false);
 

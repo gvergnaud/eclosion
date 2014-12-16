@@ -292,19 +292,24 @@ svg{
 	height: 70px;
 	margin-bottom: 2px;
 	background: #E0E0E0;
+	position: relative;
+	z-index:43;
+	
+	-moz-transition: background .5s ease;
+	-webkit-transition: background .5s ease;
+	transition: background .5s ease;
 }
 
-#lateral-navigation .left-nav:hover {
-	background: #fff;
+#lateral-navigation .left-nav:hover, #lateral-navigation .optionClick .left-nav{
+	background: rgba(255, 255, 255, .9);
 	cursor: pointer;
 }
 
-#lateral-navigation .left-nav:hover + .optionName {
-	display: block;
+.optionName{
 	position: absolute;
 	box-sizing: border-box;
-	left: 67px;
-	z-index: 12;
+	left: -200px;
+	z-index: 41;
 	padding: 0 15px;
 	height: 70px;
 	line-height: 70px;
@@ -313,26 +318,35 @@ svg{
 	font-size: 22px;
 	text-transform: uppercase;
 	color: #3277df;
+	
+	-moz-transition: left .2s cubic-bezier(.13,.9,.09,.98);
+	-webkit-transition: left .2s cubic-bezier(.13,.9,.09,.98);
+	transition: left .2s cubic-bezier(.13,.9,.09,.98);
 }
 
-.left-nav:hover + #optionName1{
+#lateral-navigation .modal {
+	display: none;
+}
+
+#lateral-navigation .left-nav:hover + .optionName {
+	left:67px;
+}
+
+.left-nav + #optionName1{
 	top: 0;
 }
 
-.left-nav:hover + #optionName2{
+.left-nav + #optionName2{
 	top: 72px;
 }
 
-.left-nav:hover + #optionName3{
+.left-nav + #optionName3{
 	top: 144px;
-}
-
-#lateral-navigation .modal, #lateral-navigation .optionName {
-	display: none;
 }
 
 #lateral-navigation .optioncontainer {
 	width: 70px;
+	z-index:42;
 }
 #lateral-navigation .activeTab {
 	display: block;
@@ -341,9 +355,8 @@ svg{
 	z-index: -1;
 	top: 0;
 	height: 214px;
-	background-color: #fff;
+	background-color: rgba(255, 255, 255, .9);
 	color: #000;
-	opacity: 0.7;
 }
 
 /* Icônes du menu */
@@ -351,13 +364,21 @@ svg{
 	height: 70px;
 	line-height: 70px;
 	color: #AFAFAF;
+	
+	-moz-transition: color 10s ease;
+	-webkit-transition: color .5s ease;
+	transition: color 10s ease;
 }
 
 #lateral-navigation .flaticons:before {
    font-size: 24px;
+   
+   -moz-transition: color .5s ease;
+	-webkit-transition: color .5s ease;
+	transition: color .5s ease;
 }
 
-#lateral-navigation .left-nav:hover .flaticons:before {
+#lateral-navigation .left-nav:hover .flaticons:before, #lateral-navigation .optionClick .flaticons:before {
 	color: #3277df;
 }
 
@@ -390,6 +411,7 @@ svg{
 }
 
 #lateral-navigation .optionsInputText {
+	background:none;
 	display: inline-block;
 	padding: 15px 50px;
 	border: none;
@@ -495,6 +517,7 @@ svg{
 }
 
 
+
 /* Barre de Zoom */
 #zoom{
 	height:60%;
@@ -532,6 +555,10 @@ svg{
 	left:-7px;
 	border-radius: 50%;
 	background-color:#3177df;
+}
+
+circle{
+	cursor: pointer;
 }
 
 /* FOOTER */
