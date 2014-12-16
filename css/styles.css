@@ -19,6 +19,14 @@ input:-ms-input-placeholder {
 }
 
 
+input::-webkit-input-placeholder{
+	color:#1e60c2;
+}
+
+input:-moz-placeholder{
+	color:#1e60c2;
+}
+
 ::-webkit-scrollbar {  
     width: 8px;  
 }  
@@ -55,6 +63,7 @@ input{
 }
 
 p.error{
+	text-transform: lowercase;
 	font-family: 'Open Sans';
 	font-style: italic;
 	color: #3177df;
@@ -178,9 +187,9 @@ svg{
 }
 
 #nodeData header .contribution input{
-	color:white;
+	color: white;
 	font-family: 'Open Sans';
-	font-size: 2rem;
+	font-size: 1.5rem;
 	padding: 5px;
 	margin-top: 5px;
 	color: #fff;
@@ -188,16 +197,17 @@ svg{
 	border: none;
 }
 
-input::-webkit-input-placeholder{
-	color:#1e60c2;
-}
-
-input:-moz-placeholder{
-	color:#1e60c2;
-}
-
 #nodeData header .contribution input:focus{
 	outline: none;
+}
+
+#nodeData header p.error{
+	color: #fff;
+}
+
+#nodeData header p.error i:hover{
+	color: #fff;
+	border-color: #fff;
 }
 
 #nodeData div.stats{

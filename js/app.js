@@ -292,21 +292,29 @@ var app = {
 		if(e.keyCode == 13){
 			if(this.value){
 
+				var contribution = this.value;
+
 				var proposedWord;
 
+				// si la contribution vien de la fenetre nodeData
 				if(e.target.getAttribute('data-activeWord') === 'activeWord'){
 					proposedWord = app.activeWord;
 				}else{
 					proposedWord = app.proposedWord;
 				}
 
-				model.addContribution(this.value.toLowerCase(), proposedWord, 
+				model.addContribution(contribution.toLowerCase(), proposedWord, 
 					function(){ //success
-						app.lastUserContribution = this.value.toLowerCase();
+						app.lastUserContribution = contribution.toLowerCase();
 						document.dispatchEvent(app.event.userContribution);
 					},
 					function(error){
-						UI.notification('error', error);
+						// si la contribution vien de la fenetre nodeData
+						if(e.target.getAttribute('data-activeWord') === 'activeWord'){
+							UI.notification(document.querySelector('#nodeData .error'), error);
+						}else{
+							UI.notification(document.querySelector('.addWordBox .error'), error);
+						}
 					}
 				);
 				
@@ -370,35 +378,41 @@ var app = {
 
 		//envoi de la recherche
 		if(e.keyCode === 13){
+			//si il y a une valeur
+			if(value){
+				var node = model.getNodeFromWord(value);
 
-			var node = model.getNodeFromWord(value);
-			if(node){
-				app.focusWord(value);
-				this.value = '';
-			}else{
-				if(model.isAFrenchWord(value)){
+				if(node){
 
-					UI.menu.notification(
-						document.querySelector('#searchError'),
-						'Le mot que vous recherchez n\'est pas dans la carte. voulez vous le rajouter ?', 
-						function(){
-							model.addUnlinkedNode(value, function(){
-								app.lastUserContribution = value.toLowerCase();
-								document.dispatchEvent(app.event.userContribution);
-							});
-						},
-						function(){
-							e.target.value = '';
-							e.target.focus();
-						}
-					);
+					app.focusWord(value);
+					this.value = '';
 
 				}else{
+					
+					if(model.isAFrenchWord(value)){
 
-					UI.menu.notification(
-						document.querySelector('#searchError'),
-						'Le mot que vous avez tapé n\'est pas français'
-					);
+						UI.notification(
+							document.querySelector('.searchBox p.error'),
+							'Le mot que vous recherchez n\'est pas dans la carte. voulez vous le rajouter ?', 
+							function(){
+								model.addUnlinkedNode(value, function(){
+									app.lastUserContribution = value.toLowerCase();
+									document.dispatchEvent(app.event.userContribution);
+								});
+							},
+							function(){
+								e.target.value = '';
+								e.target.focus();
+							}
+						);
+
+					}else{
+
+						UI.notification(
+							document.querySelector('.searchBox p.error'),
+							'Le mot que vous avez tapé n\'est pas français'
+						);
+					}
 				}
 			}
 

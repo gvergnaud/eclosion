@@ -48,9 +48,6 @@ var UI = {
 		        
 				this.element.style.display = 'block';
 
-			    // var addContribution = document.querySelectorAll('.addContribution');
-			    // addContribution[1].focus();
-
 				Velocity.RunSequence(openAnim);
 
 				this.opened = true;
@@ -80,6 +77,7 @@ var UI = {
 			
 
 			this.element.querySelector('.nodeName').innerText = nodeData.name;
+			this.element.querySelector('.addContribution').setAttribute('placeholder', 'Si je vous dit ' + nodeData.name + '...');
 
 			//affiche le nombre d'utilisation du mot
 			var occurrence = new countUp(this.element.querySelector('div.occurrence>p.data'), 1, nodeData.occurrence, 0, 1, {useEasing : false});
@@ -518,6 +516,7 @@ var UI = {
 	    style: function() {
 	    	if(UI.menu.opened){
 	    		UI.menu.menuElement.style.width = window.innerWidth + "px";
+	    		UI.menu.menuElement.querySelector('.activeTab').style.width = window.innerWidth -70 + "px";
 	    	}
 	    },
 
@@ -634,35 +633,35 @@ var UI = {
 			[].forEach.call(filters, function(filter){
 				filter.classList.remove('active');
 			});
-		},
+		}
+	},
 
-		notification: function(element, msg, checkCallback, cancelCallback){
+	notification: function(element, msg, checkCallback, cancelCallback){
 
-			element.innerHTML = msg;
+		element.innerHTML = msg;
 
-			if(checkCallback){
-				var checkIcon = document.createElement('i');
-				checkIcon.classList.add('icon-check');
-				checkIcon.addEventListener('click', function(){
-					checkCallback.call(this);
-					element.innerHTML = '';
-				}, false);
-				element.appendChild(checkIcon);
-			}
-			
-			var cancelIcon = document.createElement('i');
-			cancelIcon.classList.add('icon-cancel');
-			
-			cancelIcon.addEventListener('click', function(){
-
-				if(cancelCallback){
-					cancelCallback.call(this);
-				}
+		if(checkCallback){
+			var checkIcon = document.createElement('i');
+			checkIcon.classList.add('icon-check');
+			checkIcon.addEventListener('click', function(){
+				checkCallback.call(this);
 				element.innerHTML = '';
-
 			}, false);
-			
-			element.appendChild(cancelIcon);
-		} 
+			element.appendChild(checkIcon);
+		}
+		
+		var cancelIcon = document.createElement('i');
+		cancelIcon.classList.add('icon-cancel');
+		
+		cancelIcon.addEventListener('click', function(){
+
+			if(cancelCallback){
+				cancelCallback.call(this);
+			}
+			element.innerHTML = '';
+
+		}, false);
+
+		element.appendChild(cancelIcon);
 	}
 };
