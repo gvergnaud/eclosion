@@ -92,6 +92,15 @@ var app = {
         	UI.menu.filterWordBoxView();
         	app.blurWord();
         }, false);
+
+        /* Gestion du footer */
+        document.getElementById('aproposButton').addEventListener("click", function() {
+        	UI.about.openOverlay();
+        }, false);
+
+        document.getElementById('aproposOverlay').addEventListener("click", function() {
+        	UI.about.closeOverlay();
+        }, false);
 	},
 
 	getRouteParams: function(){

@@ -559,6 +559,39 @@ var UI = {
 		}
 	},
 
+	about: {
+		overlayApropos: document.querySelector('#aproposOverlay'),
+		overlayContainer: document.querySelector('#overlay-container'),
+
+		openOverlay: function() {
+			// var nav = document.getElementById('lateral-navigation');
+			this.overlayApropos.classList.add('active');
+	    	var openAnim = [
+	        	{
+	        		elements: UI.about.overlayContainer, 
+	        		properties: { marginTop: '0', opacity: 1},
+	        		options: {duration: 500, easing: 'easeInOutBack'}
+	        	}
+
+	        ];
+				Velocity.RunSequence(openAnim);
+
+		},
+		closeOverlay: function() {
+			var overlayContainer = document.querySelector('#overlay-container');
+
+			UI.about.overlayApropos.classList.remove('active');
+	    	var closeAnim = [
+	        	{
+	        		elements: UI.about.overlayContainer, 
+	        		properties: { marginTop: '100px', opacity: 0},
+	        		options: {duration: 500, easing: 'easeInOutBack'}
+	        	}
+	        ];
+			Velocity.RunSequence(closeAnim);
+		}
+	},
+
 	menu: {
 
 		allModals: document.querySelectorAll('.modal'),

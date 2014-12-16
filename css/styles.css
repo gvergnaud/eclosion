@@ -42,7 +42,12 @@ body{
 input, button {
 	outline: none;
 }
-
+button {
+	padding: 0;
+	border: 0;
+	background: none;
+	cursor: pointer;
+}
 .node {
 	padding:0;
 	margin:0;
@@ -72,6 +77,7 @@ svg{
 	position: absolute;
 	top:0;
 	left:0;
+	z-index: 1;
 }
 
 /*GLOBALDATA*/
@@ -211,7 +217,7 @@ input:-moz-placeholder{
 #nodeData div.stats .stat.fat{
 	font-size: 3rem;
 	font-family: 'Fjalla One';
-	text-shadow: 1px 1px 0px #194e9f;
+	text-shadow: 2px 1px 0px #194e9f;
 }
 
 #nodeData div.stats .data{
@@ -341,6 +347,9 @@ p.notification.show{
 #lateral-navigation .optioncontainer {
 	width: 70px;
 }
+#lateral-navigation .optioncontainer .activeButton{
+	background-color: #fff;
+}
 #lateral-navigation .activeTab {
 	display: block;
 	box-sizing: border-box;
@@ -398,7 +407,7 @@ p.notification.show{
 
 #lateral-navigation .optionsInputText {
 	display: inline-block;
-	padding: 15px 50px;
+	padding: 0;
 	border: none;
 	font-family: 'Open Sans', sans-serif;
 	color: #434343;
@@ -484,9 +493,6 @@ p.notification.show{
 
 .filterbuttons {
 	margin: 6px;
-	padding: 0;
-	border: 0;
-	background: none;
 	font-family: 'Open Sans', sans-serif;
 	font-size: 16px;
 	color: #888888;
@@ -539,4 +545,132 @@ p.notification.show{
 	left:-7px;
 	border-radius: 50%;
 	background-color:#3177df;
+}
+
+/* FOOTER */
+#menufooter {
+	position: absolute;
+	bottom: 5px;
+	right: 20px;
+	border-top: 1px solid #888888;
+	color: #888888;
+	z-index: 999;
+}
+#menufooter ul {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	margin: 8px 15px;
+}
+
+#menufooter ul li {
+	padding: 0 8px;
+}
+
+#menufooter ul li a, #menufooter ul li button{
+	text-decoration: none;
+	text-transform: uppercase;
+	font-family: 'Open Sans', sans-serif;
+	font-size: 14px;
+	color: #888888;
+}
+.icon-volume-up:before {
+	color: #888888;
+}
+
+/* OVERLAY Footer */
+.overlay {
+	display: none;
+	width: 100%;
+	height: 100%;
+	position: fixed;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	background: #3177df;
+	opacity: 0;
+	-webkit-transition: opacity 0.75s ease 0s,z-index 0s ease 1s;
+	transition: opacity 0.75s ease 0s,z-index 0s ease 1s;
+	z-index: -1;
+}
+.overlay.active {
+	display: block;
+	opacity: 1;
+	background-color: rgba(49,119,223,.9);
+	z-index: 999;
+	-webkit-transition: opacity 0.5s ease 0s;
+	transition: opacity 0.5s ease 0s;
+}
+
+.overlay div#overlay-container {
+	width: 50%;
+	margin: 0 auto;
+	margin-top: 100px;
+	padding: 50px 0;
+	font-family: "Open Sans", sans-serif;
+	color: #fff;
+	opacity: 0;
+}
+.overlay .contenu {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	margin: 10px auto;
+	clear: both; /* Corriger le float de la croix */
+}
+.overlay h3 {
+	margin: 30px 0 10px 0;
+	font-size: 30px;
+	text-transform: uppercase;
+}
+.overlay h4 { /* Nom des étudiants */
+	margin: 10px 0 5px 0;
+	font-size: 20px;
+}
+.overlay p {
+	margin: 10px 0;
+	width: 80%;
+	font-size: 14px;
+	line-height: 20px;
+	text-align: center;
+}
+.overlay p.posteOccupe {
+	width: auto;
+	margin: 0 auto 10px auto;
+	font-size: 14px;
+	color: #194e9f;
+}
+.overlay section.flex { /* Container pour faire des colonnes en mode flexbox */
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	width: 100%;
+}
+.overlay section.flex div.credits{ /* Container pour faire des colonnes en mode flexbox */
+	box-sizing: border-box;
+	margin: 5px 0;
+	text-align: center;
+}
+.overlay section.col2 div.credits {
+	width: 50%;
+}
+.overlay section.col3 div.credits {
+	width: 33.3333333%;
+}
+.overlay .closeMenu {
+	cursor: pointer;
+}
+#menufooter .overlay ul.links {
+	width: 55px;
+	margin: 0 auto;
+}
+#menufooter ul.links [class^="icon-"]:before, #menufooter ul.links [class*=" icon-"]:before {
+	/*opacity: .25;*/
+	color: #194e9f;
+}
+#menufooter a:hover [class^="icon-"]:before, #menufooter a:hover [class*=" icon-"]:before {
+	color: #fff;	
+	-webkit-transition: color 0.25s ease 0s;
+	transition: color 0.25s ease 0s;
 }
