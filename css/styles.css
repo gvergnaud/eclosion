@@ -602,6 +602,7 @@ p.notification.show{
 .overlay div#overlay-container {
 	width: 50%;
 	margin: 0 auto;
+	margin-top: 450px;
 	padding: 50px 0;
 	font-family: "Open Sans", sans-serif;
 	color: #fff;

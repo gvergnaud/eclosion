@@ -551,12 +551,30 @@ var UI = {
 
 	about: {
 		overlayApropos: document.querySelector('#aproposOverlay'),
+		overlayContainer: document.querySelector('#overlay-container'),
 
 		openOverlay: function() {
 			this.overlayApropos.classList.add('active');
+	    	var openAnim = [
+	        	{
+	        		elements: UI.about.overlayContainer, 
+	        		properties: { marginTop: '0'},
+	        		options: {duration: 250, easing: 'easeInOutBack'}
+	        	}
+	        ];
+			Velocity.RunSequence(openAnim);
+
 		},
 		closeOverlay: function() {
 			UI.about.overlayApropos.classList.remove('active');
+	    	var closeAnim = [
+	        	{
+	        		elements: UI.about.overlayContainer, 
+	        		properties: { marginTop: '450px'},
+	        		options: {duration: 500, easing: 'easeInOutBack'}
+	        	}
+	        ];
+			Velocity.RunSequence(closeAnim);
 		}
 	},
 
