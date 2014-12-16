@@ -180,7 +180,10 @@ input:-moz-placeholder{
 #nodeData header .contribution input:focus{
 	outline: none;
 }
-
+#nodeData header .share{
+	margin: 10px;
+	text-align: center;
+}
 #nodeData div.stats{
 	padding: 20px;
 	overflow: auto;

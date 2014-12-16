@@ -101,6 +101,7 @@ var app = {
         document.getElementById('aproposOverlay').addEventListener("click", function() {
         	UI.about.closeOverlay();
         }, false);
+
 	},
 
 	getRouteParams: function(){
@@ -278,6 +279,7 @@ var app = {
 			UI.nodeData.openSection();
 			UI.nodeData.printData(nodeData);
 			app.activeWord = nodeData.name;
+			app.twitterShareWord(nodeData.name);
 		});
 
 		UI.menu.closeModal();
@@ -386,6 +388,13 @@ var app = {
 			}
 
 		}
+	},
+
+	twitterShareWord: function(nodeName) {
+		/* Twitter button */
+		var twitterButton = document.querySelector(".twitter-share-button");
+		twitterButton.setAttribute('data-hashtags',nodeName);
+        window.twttr=(function(d,s,id){var t,js,fjs=d.getElementsByTagName(s)[0];if(d.getElementById(id)){return}js=d.createElement(s);js.id=id;js.src="https://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);return window.twttr||(t={_e:[],ready:function(f){t._e.push(f)}})}(document,"script","twitter-wjs"));
 	}
 };
 
