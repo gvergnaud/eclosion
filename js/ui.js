@@ -255,7 +255,7 @@ var UI = {
 			node.append("circle")
 	         	.attr("class", "node")
 	         	.attr("pointer-events", "drag")
-	         	.style('fill', "#72a1e9")
+	         	.style('fill', "#83adec")
 	         	.style("cursor", "pointer")
 	         	.attr("r", function(d){
 	         		var nbLinks = Math.sqrt(d.nbLinks);
@@ -554,7 +554,7 @@ var UI = {
 		
 		highlightOff : function(){
 			this.svg.selectAll("text").transition().duration(1000).style("fill", "#4b4b4b").style("font-weight", "400");
-			this.svg.selectAll("circle").transition().duration(1000).style("fill", "#72a1e9");
+			this.svg.selectAll("circle").transition().duration(1000).style("fill", "#83adec");
 			this.svg.selectAll("line").transition().duration(1000).style("stroke", "#b8b8b8");
 		}
 	},
