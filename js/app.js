@@ -38,17 +38,28 @@ var app = {
 		}, false);
 		
 		// Gestion du drag du zoom
-		var zoomCursor = document.querySelector('#cursor');
-		var draggie = new Draggabilly( zoomCursor, {
+		var draggie = new Draggabilly( document.querySelector('#cursor'), {
 		  axis: 'y',
 		  containment: '#zoomBar'
 		});
 		
+		
 		draggie.on( 'dragMove', function(instance, event, pointer){
 			var zoombarHeight = document.getElementById("zoom").offsetHeight;
-			var scale = 1;
-			//console.log(scale);
-			UI.d3.svg.select("g").select("g").attr("transform"," scale(" + scale + ")");
+			if(instance.position.y < 0)
+				instance.position.y = 0;
+				
+			app.scale =  - (((Math.floor(instance.position.y) * 100 / (zoombarHeight - 15) + ((100 * 7.5) / zoombarHeight) - 100) 
+				* (UI.d3.zoomMax - UI.d3.zoomMin) / 100 + UI.d3.zoomMin)) + 0.56;
+				
+			UI.d3.defineZoom(app.scale);
+		});
+		
+		draggie.on("dragEnd", function(){
+			UI.d3.svg.call(d3.behavior.zoom().scale(app.scale).translate(UI.d3.translate).scaleExtent([UI.d3.zoomMin, UI.d3.zoomMax]).on("zoom", function(){
+				UI.d3.redrawGraph();
+				UI.d3.defineCursor();
+			}));
 		});
 		
 		// Fermeture de la fenetre droite au clic sur la croix
@@ -89,9 +100,9 @@ var app = {
 
 		app.proposeRandomWord();
 
-		UI.d3.svg.call(d3.behavior.zoom().scaleExtent([0.5, 3]).on("zoom", function(){
+		UI.d3.svg.call(d3.behavior.zoom().scaleExtent([UI.d3.zoomMin, UI.d3.zoomMax]).on("zoom", function(){
 			UI.d3.redrawGraph();
-			UI.d3.defineZoom();
+			UI.d3.defineCursor();
 		}));
 
 		//remove l'event listener
@@ -169,8 +180,9 @@ var app = {
 					UI.d3.createGraph( filteredWords );
 
 					//redraw pour eviter les problèmes de zoom
-					UI.d3.svg.call(d3.behavior.zoom().scaleExtent([0.25, 3]).on("zoom", function(){
+					UI.d3.svg.call(d3.behavior.zoom().scaleExtent([UI.d3.zoomMin, UI.d3.zoomMax]).on("zoom", function(){
 						UI.d3.redrawGraph();
+						UI.d3.defineCursor();
 					}));
 				});
 
@@ -178,8 +190,9 @@ var app = {
 				UI.d3.createGraph( words );
 				
 				//redraw pour eviter les problèmes de zoom
-				UI.d3.svg.call(d3.behavior.zoom().scaleExtent([0.25, 3]).on("zoom", function(){
+				UI.d3.svg.call(d3.behavior.zoom().scaleExtent([UI.d3.zoomMin, UI.d3.zoomMax]).on("zoom", function(){
 					UI.d3.redrawGraph();
+					UI.d3.defineCursor();
 				}));
 			}
 
