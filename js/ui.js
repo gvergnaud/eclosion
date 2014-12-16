@@ -14,64 +14,6 @@ var UI = {
 			UI.menu.style();
 		}, false);
 	},
-
-	notification: function(type, msg){
-        //Si le message n'est pas déjà dans la liste d'attente
-        if(UI.currentNotifications.indexOf(msg) === -1){
-
-            //si il n'y a rien dans la liste d'attente, on affiche la notif
-            if(UI.currentNotifications.length === 0){
-                //on met le messsage en liste d'attente
-                UI.currentNotifications.push(msg);
-
-
-                var notifContainer = document.querySelector('aside#notifications');
-                var newNotif = document.createElement('p');
-
-                newNotif.innerHTML = msg;
-
-                newNotif.classList.add('notification');
-                if(type){
-                    newNotif.classList.add(type);
-                }
-
-                notifContainer.innerHTML = '';
-                notifContainer.style.display = 'block';
-                notifContainer.appendChild(newNotif);
-
-                setTimeout(function(){	
-                    newNotif.classList.add('show');
-                }, 100);
-
-                setTimeout(function(){
-                    //on cache la notif 
-                    newNotif.classList.remove('show');
-
-                    setTimeout(function(){
-
-                        notifContainer.style.display = 'none';
-                    	newNotif.parentNode.removeChild(newNotif);
-                        //on retire le message de la liste d'attente
-                        UI.currentNotifications.splice(UI.currentNotifications.indexOf(msg), 1);
-                    }, 650);
-
-
-                }, 3000);
-
-                newNotif.addEventListener('click', function(){
-                    notifContainer.style.display = 'none';
-                    newNotif.parentNode.removeChild(newNotif);
-                    //on retire le message de la liste d'attente
-                    UI.currentNotifications.splice(UI.currentNotifications.indexOf(msg), 1);
-                });
-
-            }else{
-                setTimeout(function(){
-                    UI.notification(type, msg);
-                }, 1000);
-            }
-        }
-    },
 	
 	printWord: function(word){
 		document.querySelector('#proposedWordText').innerText = word;
@@ -449,7 +391,7 @@ var UI = {
 			    UI.d3.highlightOn(selected);
 			    
 			}else{
-				UI.notification('error', "Pas de mots trouvés");
+				console.log('UI le mot ne epeut pas être selectionné');
 			}
 			
 			self.defineCursor();
@@ -692,6 +634,35 @@ var UI = {
 			[].forEach.call(filters, function(filter){
 				filter.classList.remove('active');
 			});
-		}
+		},
+
+		notification: function(element, msg, checkCallback, cancelCallback){
+
+			element.innerHTML = msg;
+
+			if(checkCallback){
+				var checkIcon = document.createElement('i');
+				checkIcon.classList.add('icon-check');
+				checkIcon.addEventListener('click', function(){
+					checkCallback.call(this);
+					element.innerHTML = '';
+				}, false);
+				element.appendChild(checkIcon);
+			}
+			
+			var cancelIcon = document.createElement('i');
+			cancelIcon.classList.add('icon-cancel');
+			
+			cancelIcon.addEventListener('click', function(){
+
+				if(cancelCallback){
+					cancelCallback.call(this);
+				}
+				element.innerHTML = '';
+
+			}, false);
+			
+			element.appendChild(cancelIcon);
+		} 
 	}
 };

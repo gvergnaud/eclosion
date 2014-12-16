@@ -65,6 +65,10 @@ var model = {
 		this.user = user;
 	},
 
+	saveData: function(){
+		this.firebase.set(model.words);
+	},
+
 	// GET
 	getDico: function(){
 		model.toolbox.ajax("res/liste.de.mots.francais.frgut.txt", function(data){
@@ -257,7 +261,7 @@ var model = {
 	},
 
 	// CREATE
-	createNode: function(newWord){
+	createNode: function(newWord, beforePush){
 		var newNode = {
 			name: newWord,
 			index: model.words.nodes.length,
@@ -275,6 +279,10 @@ var model = {
 				'above45': 0
 			}
 		};
+
+		if(beforePush){
+			beforePush.call(this, newNode);
+		}
 
 		model.words.nodes.push(newNode);
 
@@ -301,8 +309,6 @@ var model = {
 		model.words.nodes[targetNode.index].sexe[model.user.sexe] += 1;
 
 		model.words.links.push(newLink);
-
-		this.firebase.set(model.words);
 	},
 
 	updateLink: function(link){
@@ -315,8 +321,6 @@ var model = {
 		model.words.nodes[link.element.target].sexe[model.user.sexe] += 1;
 
 		model.words.links[link.index] = link.element;
-
-		this.firebase.set(model.words);
 	},
 
 	// ADD
@@ -348,6 +352,7 @@ var model = {
 
 					//on ajoute 1 à la value de la liaison link
 					model.updateLink(link);
+					model.saveData();
 
 					successCallback.call(this);
 
@@ -357,8 +362,10 @@ var model = {
 
 					if(node.index > proposedNode.index){
 						model.createLink(node, proposedNode);
+						model.saveData();
 					}else{
 						model.createLink(proposedNode, node);
+						model.saveData();
 					}
 
 					successCallback.call(this);
@@ -369,15 +376,29 @@ var model = {
 				var newNode = model.createNode(newWord);
 
 				model.createLink(newNode, proposedNode);
+				model.saveData();
 
 				successCallback.call(this);
 			}
 		}else{ //le mot n'est pas français
 
-			//TODO message d'erreur
 			var error = 'le mot n\'est pas français';
 			console.log(error);
 			errorCallback.call(this, error);
+		}
+	},
+
+	addUnlinkedNode: function(word, callback){
+		
+		model.createNode(word, function(newNode){
+			newNode.age[model.getUserAgeRange(model.user.age)] += 1;
+			newNode.sexe[model.user.sexe] += 1;
+		});
+
+		model.saveData();
+
+		if(callback){
+			callback.call(this);
 		}
 	},
 

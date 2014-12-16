@@ -160,6 +160,10 @@ var app = {
 	},
 
 	onUserContribution: function (e) {
+		setTimeout(function(){
+			app.focusWord(app.lastUserContribution);
+		}, 1500);
+
 		app.proposeRandomWord();
 		if(UI.menu.opened){
 			UI.menu.closeModal();
@@ -298,6 +302,7 @@ var app = {
 
 				model.addContribution(this.value.toLowerCase(), proposedWord, 
 					function(){ //success
+						app.lastUserContribution = this.value.toLowerCase();
 						document.dispatchEvent(app.event.userContribution);
 					},
 					function(error){
@@ -372,7 +377,28 @@ var app = {
 				this.value = '';
 			}else{
 				if(model.isAFrenchWord(value)){
-					
+
+					UI.menu.notification(
+						document.querySelector('#searchError'),
+						'Le mot que vous recherchez n\'est pas dans la carte. voulez vous le rajouter ?', 
+						function(){
+							model.addUnlinkedNode(value, function(){
+								app.lastUserContribution = value.toLowerCase();
+								document.dispatchEvent(app.event.userContribution);
+							});
+						},
+						function(){
+							e.target.value = '';
+							e.target.focus();
+						}
+					);
+
+				}else{
+
+					UI.menu.notification(
+						document.querySelector('#searchError'),
+						'Le mot que vous avez tapé n\'est pas français'
+					);
 				}
 			}
 
