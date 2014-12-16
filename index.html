@@ -9,6 +9,13 @@
         <title>Les mots</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <!-- Facebook Open Graph -->
+        <meta property="og:url" content="http://samples.ogp.me/136756249803614" /> 
+        <meta property="og:title" content="Chocolate Pecan Pie" />
+        <meta property="og:description" content="This pie is delicious!" /> 
+        <meta property="og:image" content="https://fbcdn-dragon-a.akamaihd.net/hphotos-ak-prn1/851565_496755187057665_544240989_n.jpg" /> 
+
         
         <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
 
@@ -126,10 +133,11 @@
                     <input class="addContribution" data-activeWord="activeWord" type="text" placeholder="Votre mot" />
                 </div>
                 <div class="share">
+                    <div class="fb-share-button" data-href="https://developers.facebook.com/docs/plugins/" data-layout="button"></div>
                     <a class="twitter-share-button"
                       href="https://twitter.com/share"
                       data-text="Vous aussi contribuez en poursuivant cette liste de mot"
-                      data-count="vertical"
+                      data-count="none"
                       data-via="twitterdev">
                     Tweeter
                     </a>
@@ -259,13 +267,15 @@
             </aside>
         </footer>
 
+        <!-- SDK Facebook pour le partage -->
+        <div id="fb-root"></div>
+
         <script src="js/libs/d3.v3.min.js"></script>
         <script src="js/libs/firebase.js"></script>
         <script src="js/libs/velocity.min.js"></script>
         <script src="js/libs/velocity.ui.min.js"></script>
         <script src="js/libs/draggabily.js"></script>
         <script src="js/libs/countup.min.js"></script>
-        
         <script src="js/model.js"></script>
         <script src="js/ui.js"></script>
         <script src="js/app.js"></script>

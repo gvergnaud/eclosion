@@ -280,6 +280,7 @@ var app = {
 			UI.nodeData.printData(nodeData);
 			app.activeWord = nodeData.name;
 			app.twitterShareWord(nodeData.name);
+			app.facebookShareWord(nodeData.name);
 		});
 
 		UI.menu.closeModal();
@@ -395,6 +396,19 @@ var app = {
 		var twitterButton = document.querySelector(".twitter-share-button");
 		twitterButton.setAttribute('data-hashtags',nodeName);
         window.twttr=(function(d,s,id){var t,js,fjs=d.getElementsByTagName(s)[0];if(d.getElementById(id)){return}js=d.createElement(s);js.id=id;js.src="https://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);return window.twttr||(t={_e:[],ready:function(f){t._e.push(f)}})}(document,"script","twitter-wjs"));
+	},
+
+	facebookShareWord: function(wordName) {
+		var facebookButton = document.querySelector(".fb-share-button");
+		facebookButton.setAttribute('data-href',window.location);
+
+        (function(d, s, id) {
+          var js, fjs = d.getElementsByTagName(s)[0];
+          if (d.getElementById(id)) return;
+          js = d.createElement(s); js.id = id;
+          js.src = "//connect.facebook.net/fr_FR/sdk.js#xfbml=1&version=v2.0";
+          fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));
 	}
 };
 
