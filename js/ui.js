@@ -48,7 +48,7 @@ var UI = {
 		        	{
 		        		elements: this.element, 
 		        		properties: {right: 0},
-		        		options: {duration: 250, easing: 'easeInOutBack'}
+		        		options: {duration: 250, easing : "easeIn"}
 		        	}
 		        ];
 		        
@@ -69,7 +69,7 @@ var UI = {
 		        	{
 		        		elements: this.element, 
 		        		properties: {right: '-350px'},
-		        		options: {duration: 250, easing: 'easeInOutBack'}
+		        		options: {duration: 250, easing: 'easeOut'}
 		        	}
 		        ];
 
@@ -259,6 +259,9 @@ var UI = {
 	         	.style("cursor", "pointer")
 	         	.attr("r", function(d){
 	         		var nbLinks = Math.sqrt(d.nbLinks);
+	         		if(nbLinks <= 0)
+	         			nbLinks = 1;
+	         			
 	         		if(nbLinks * (nbLinks * self.nodeSizeCoefficient) <= 60)
 	         			return nbLinks * (nbLinks * self.nodeSizeCoefficient); 
 	         		else
@@ -270,10 +273,18 @@ var UI = {
 			// Ajout d'un texte pour chaque noeud
 			node.append("text")
 			     .attr("text-anchor", "middle")
-			     .style("font-size", function(d) {return Math.sqrt(d.nbLinks) * 10 + "px"; })
+			     .style("font-size", function(d) {
+			     	var nbLinks = Math.sqrt(d.nbLinks);
+			     	if(nbLinks <= 0)
+			     		nbLinks = 1;
+			     	return nbLinks * 10 + "px"; 
+			     })
 			     .style("fill", "#4b4b4b")
 			     .attr("transform",function(d) {
-			           return "translate(0," + -(Math.sqrt(d.nbLinks) * (Math.sqrt(d.nbLinks) * self.nodeSizeCoefficient + 2)) + ")";
+				     	var nbLinks = Math.sqrt(d.nbLinks);
+				     	if(nbLinks <= 0)
+				     		nbLinks = 1;
+			           return "translate(0," + -(nbLinks * (nbLinks * self.nodeSizeCoefficient + 2)) + ")";
 			        })
 			     .text(function(d) {
 			       	return d.name.charAt(0).toUpperCase() + d.name.substring(1).toLowerCase();
@@ -313,7 +324,7 @@ var UI = {
 				var self = this;
 				
 				// Si il y a eu ajout d'un nouveau noeud
-				if(this.previousWords.nodes.length < words.nodes.length){
+				if(this.previousWords.nodes.length < words.nodes.length && this.previousWords.links.length < words.links.length){
 				
 					// Ajout du dernier Node et du dernier links
 					this.previousWords.nodes.push(words.nodes[words.nodes.length - 1]);
@@ -325,6 +336,11 @@ var UI = {
 				
 					// Ajout du dernier links
 					this.previousWords.links.push(words.links[words.links.length - 1]);
+				}
+				
+				else if(this.previousWords.nodes.length < words.nodes.length){
+					// Ajout du dernier Node
+					this.previousWords.nodes.push(words.nodes[words.nodes.length - 1]);
 				}
 				
 				var link = this.svg.select(".links").selectAll(".link")
@@ -354,6 +370,10 @@ var UI = {
 		            .style('fill', "#3177df")
 					.attr("r", function(d) {
 						var nbLinks = Math.sqrt(d.nbLinks);
+						
+						if(nbLinks <= 0)
+							nbLinks = 1;
+							
 						if(nbLinks * (nbLinks * self.nodeSizeCoefficient) <= 60)
 		         			return nbLinks * (nbLinks * self.nodeSizeCoefficient); 
 		         		else
@@ -363,10 +383,21 @@ var UI = {
 		
 		        nodeEnter.append("text")
 		            .attr("text-anchor", "middle")
-				    .style("font-size", function(d) {return Math.sqrt(d.nbLinks) * 10 + "px";})
+				    .style("font-size", function(d) {
+				    	var nbLinks = Math.sqrt(d.nbLinks);
+				    	
+				    	if(nbLinks <= 0)
+				    		nbLinks = 1;
+				    		
+				    	return nbLinks * 10 + "px";
+				    })
 				    .style("fill", "#3177df")
 				    .attr("transform",function(d) {
-			            return "translate(0," + -(Math.sqrt(d.nbLinks) * (Math.sqrt(d.nbLinks) * self.nodeSizeCoefficient + 2)) + ")";
+				    	var nbLinks = Math.sqrt(d.nbLinks);
+				     	if(nbLinks <= 0)
+				     		nbLinks = 1;
+				     		
+			            return "translate(0," + -(nbLinks * (nbLinks * self.nodeSizeCoefficient + 2)) + ")";
 			        })
 				    .text(function(d) {
 					    return d.name.charAt(0).toUpperCase() + d.name.substring(1).toLowerCase();
@@ -589,11 +620,13 @@ var UI = {
 		        	}
 		        ];
 				Velocity.RunSequence(closeAnim);
+				
 
 				setTimeout(function(){
 					[].forEach.call(UI.menu.allModals, function(element){
 		        		element.classList.remove('activeTab');
 		        	});
+		        	UI.menu.removeAllClickStyle();
 
 		        	UI.menu.menuElement.style.width = '70px';
 		       		UI.menu.opened = false;
@@ -616,7 +649,7 @@ var UI = {
 	        	},
 	        	{
 	        		elements: modal,
-	        		properties: {left: "70px", opacity: "0.9", width: window.innerWidth -70 + 'px'},
+	        		properties: {left: "70px", width: window.innerWidth -70 + 'px'},
 	        		options: {duration: 250, easing: 'easeInOutBack'}
 	        	}
 	        ];
@@ -661,6 +694,18 @@ var UI = {
 		        UI.menu.closeModal();
 	        }
 
+		},
+		
+		addClickStyle : function(element){
+			UI.menu.removeAllClickStyle();
+			element.parentNode.classList.add("optionClick");
+		},
+		
+		removeAllClickStyle : function(element){
+			var elements = document.getElementsByClassName("optioncontainer");
+			[].forEach.call(elements, function(element){
+				element.classList.remove('optionClick');
+			});
 		},
 
 		addActiveFilter: function(element){
