@@ -335,7 +335,7 @@ p.notification.show{
 	display: none;
 }
 
-#lateral-navigation .left-nav:hover + .optionName, #lateral-navigation .optionClick .optionName {
+#lateral-navigation .left-nav:hover + .optionName {
 	left:67px;
 }
 
@@ -562,4 +562,8 @@ p.notification.show{
 	left:-7px;
 	border-radius: 50%;
 	background-color:#3177df;
+}
+
+circle{
+	cursor: pointer;
 }

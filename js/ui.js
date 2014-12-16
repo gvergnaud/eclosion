@@ -256,7 +256,6 @@ var UI = {
 	         	.attr("class", "node")
 	         	.attr("pointer-events", "drag")
 	         	.style('fill', "#83adec")
-	         	.style("cursor", "pointer")
 	         	.attr("r", function(d){
 	         		var nbLinks = Math.sqrt(d.nbLinks);
 	         		if(nbLinks <= 0)
