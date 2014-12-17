@@ -439,7 +439,8 @@ var app = {
 	twitterShareWord: function(nodeName) {
 		/* Twitter button */
 		var twitterButton = document.querySelector(".twitter-share-button");
-		twitterButton.setAttribute('data-hashtags',nodeName);
+		twitterButton.setAttribute('data-hashtags',"eclosion");
+		twitterButton.setAttribute('data-text',"Vous aussi contribuez en poursuivant cette liste de mot à l'aide du mot suivant : #"+nodeName);
         window.twttr=(function(d,s,id){var t,js,fjs=d.getElementsByTagName(s)[0];if(d.getElementById(id)){return}js=d.createElement(s);js.id=id;js.src="https://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);return window.twttr||(t={_e:[],ready:function(f){t._e.push(f)}})}(document,"script","twitter-wjs"));
 	},
 
