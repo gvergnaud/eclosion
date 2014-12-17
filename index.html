@@ -9,15 +9,9 @@
         <title>Eclosion</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        
+
         <!-- Favicon -->
         <link rel="icon" type="image/png" href="favicon.png" />
-
-        <!-- Facebook Open Graph -->
-        <meta property="og:url" content="http://samples.ogp.me/136756249803614" /> 
-        <meta property="og:title" content="Chocolate Pecan Pie" />
-        <meta property="og:description" content="This pie is delicious!" /> 
-        <meta property="og:image" content="https://fbcdn-dragon-a.akamaihd.net/hphotos-ak-prn1/851565_496755187057665_544240989_n.jpg" /> 
 
         <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
         <link rel="stylesheet" href="css/reset.css">
@@ -30,29 +24,6 @@
         <link href='http://fonts.googleapis.com/css?family=Fjalla+One' rel='stylesheet' type='text/css'>
     </head>
     <body>
-        <script>
-          // window.fbAsyncInit = function() {
-          //   FB.init({
-          //     appId      : '381386785356869',
-          //     xfbml      : true,
-          //     version    : 'v2.2'
-          //   });
-          // };
-
-          //     FB.ui({
-          //         method: 'share',
-          //         href: 'https://developers.facebook.com/docs/',
-          //      }, function(response){});
-
-          // (function(d, s, id){
-          //    var js, fjs = d.getElementsByTagName(s)[0];
-          //    if (d.getElementById(id)) {return;}
-          //    js = d.createElement(s); js.id = id;
-          //    js.src = "//connect.facebook.net/en_US/sdk.js";
-          //    fjs.parentNode.insertBefore(js, fjs);
-          //  }(document, 'script', 'facebook-jssdk'));
-
-        </script>
         <!--[if lt IE 7]>
             <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
@@ -160,12 +131,7 @@
                     <p class="error"></p>
                 </div>
                 <div class="share">
-                    <div class="fb-share-button" data-href="https://developers.facebook.com/docs/plugins/" data-layout="button"></div>
-                    <a class="twitter-share-button"
-                      href="https://twitter.com/share"
-                      data-count="none">
-                    Tweeter
-                    </a>
+                    <div id="twitterButton"></div>
                 </div>
             </header>
             <div class="stats">
@@ -323,6 +289,17 @@
         <script src="js/libs/velocity.ui.min.js"></script>
         <script src="js/libs/draggabily.js"></script>
         <script src="js/libs/countup.min.js"></script>
+        <!-- Twitter -->
+        <script>window.twttr = (function (d, s, id) {
+          var t, js, fjs = d.getElementsByTagName(s)[0];
+          if (d.getElementById(id)) return;
+          js = d.createElement(s); js.id = id;
+          js.src= "https://platform.twitter.com/widgets.js";
+          fjs.parentNode.insertBefore(js, fjs);
+          return window.twttr || (t = { _e: [], ready: function (f) { t._e.push(f) } });
+        }(document, "script", "twitter-wjs"));
+        </script>
+
         <script src="js/model.js"></script>
         <script src="js/ui.js"></script>
         <script src="js/app.js"></script>
