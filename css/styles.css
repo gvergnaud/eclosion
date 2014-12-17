@@ -683,7 +683,7 @@ circle{
 	/*opacity: .25;*/
 	color: #194e9f;
 }
-#menufooter a:hover [class^="icon-"]:before, #menufooter a:hover [class*=" icon-"]:before {
+#menufooter a:hover [class^="icon-"]:before, #menufooter a:hover [class*=" icon-"]:before, #menufooter button:hover {
 	color: #fff;	
 	-webkit-transition: color 0.25s ease 0s;
 	transition: color 0.25s ease 0s;
