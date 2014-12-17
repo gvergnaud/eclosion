@@ -573,7 +573,8 @@ var app = {
 
 		if (parent.hasChildNodes() != false){
 			console.log("Parent possède un enfant");
-			parent.parentNode.removeChild(document.querySelector("#twitterButton iframe"));
+			parent.removeChild(parent.childNodes[0]);
+
 		}
 
 		parent.appendChild(link);
