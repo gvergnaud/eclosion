@@ -12,8 +12,6 @@ var app = {
 		sexe: false
 	},
 
-	nbTwitterButton: 0,
-
 	event: {},
 
 	init: function(){
@@ -543,26 +541,6 @@ var app = {
 
 	twitterShareWord: function(nodeName) {
 		/* Twitter button */
-		// console.log(app.nbTwitterButton-1);
-		// /* Si il y a déjà un bouton tweet de créer, supprimer l'iframe */
-		// // alert(document.getElementById("twitter-widget-"+app.nbTwitterButton-1));
-		// if(document.getElementById("twitter-widget-"+app.nbTwitterButton-1)) {
-		// 	console.log("iframe supprimé");
-		// 	var shareParent = document.querySelector("#twitterButton");
-		// 	shareParent.removeChild(document.getElementById("twitter-widget-"+app.nbTwitterButton-1));
-		// }
-
-		// twttr.widgets.createShareButton(
-		//   window.location,
-		//   document.getElementById('twitterButton'),
-		//   {
-		//     count: 'none',
-		//     text: 'Venez contribuer en poursuivant cette liste de mot à l\'aide du mot suivant : #'+nodeName,
-		//     hashtags: 'eclosion'
-		//   }).then(function (el) {
-		//     console.log("Button created.")
-		// });
-
 		var parent = document.getElementById("twitterButton");
 		var link = document.createElement('a');
 		link.setAttribute('href', 'https://twitter.com/share');
@@ -579,9 +557,6 @@ var app = {
 
 		parent.appendChild(link);
 		twttr.widgets.load();  //very important
-		// parent.parentNode.removeChild(link);
-		app.nbTwitterButton++; // Compteur du nombre de bouton créer
-
 	}
 
 };
