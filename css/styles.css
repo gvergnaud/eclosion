@@ -639,6 +639,7 @@ circle{
 .overlay h3 {
 	margin: 30px 0 10px 0;
 	font-size: 30px;
+	font-weight: bold;
 	text-transform: uppercase;
 }
 .overlay h4 { /* Nom des étudiants */
