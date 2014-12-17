@@ -618,10 +618,13 @@ circle{
 }
 
 .overlay div#overlay-container {
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%,-50%);
 	width: 50%;
 	margin: 0 auto;
 	margin-top: 100px;
-	padding: 50px 0;
 	font-family: "Open Sans", sans-serif;
 	color: #fff;
 	opacity: 0;
@@ -659,18 +662,20 @@ circle{
 	display: flex;
 	flex-direction: row;
 	align-items: center;
+	justify-content: center;
 	width: 100%;
 }
 .overlay section.flex div.credits{ /* Container pour faire des colonnes en mode flexbox */
 	box-sizing: border-box;
 	margin: 5px 0;
+	width: 200px;
 	text-align: center;
 }
-.overlay section.col2 div.credits {
-	width: 50%;
+.overlay section.col2 div.credits:first-child {
+	margin-left: 120px;
 }
-.overlay section.col3 div.credits {
-	width: 33.3333333%;
+.overlay section.col2 div.credits:last-child {
+	margin-right: 120px;
 }
 .overlay .closeMenu {
 	cursor: pointer;
