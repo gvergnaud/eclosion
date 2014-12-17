@@ -1,3 +1,4 @@
+'use strict';
 var model = {
 
 	words: false,
@@ -57,12 +58,16 @@ var model = {
 				sexe: 'unknown'
 			};
 
-			localStorage.setItem('EchoUser', JSON.stringify(user));
-
 			model.newUser = true;
 		}
 
 		this.user = user;
+	},
+
+	updateUserInfos: function(sexe, age){
+		this.user.sexe = sexe;
+		this.user.age = age;
+		localStorage.setItem('EchoUser', JSON.stringify(model.user));
 	},
 
 	saveData: function(){
@@ -302,8 +307,8 @@ var model = {
 		model.words.nodes[targetNode.index].nbLinks += 1;
 
 		//ajoute les states sur l'age et le sex au node
-		model.words.nodes[sourceNode.index].age[model.getUserAgeRange(model.user.age)] += 1;
-		model.words.nodes[targetNode.index].age[model.getUserAgeRange(model.user.age)] += 1;
+		model.words.nodes[sourceNode.index].age[model.user.age] += 1;
+		model.words.nodes[targetNode.index].age[model.user.age] += 1;
 
 		model.words.nodes[sourceNode.index].sexe[model.user.sexe] += 1;
 		model.words.nodes[targetNode.index].sexe[model.user.sexe] += 1;
@@ -314,8 +319,8 @@ var model = {
 	updateLink: function(link){
 		link.element.value += 1;
 
-		model.words.nodes[link.element.source].age[model.getUserAgeRange(model.user.age)] += 1;
-		model.words.nodes[link.element.target].age[model.getUserAgeRange(model.user.age)] += 1;
+		model.words.nodes[link.element.source].age[model.user.age] += 1;
+		model.words.nodes[link.element.target].age[model.user.age] += 1;
 
 		model.words.nodes[link.element.source].sexe[model.user.sexe] += 1;
 		model.words.nodes[link.element.target].sexe[model.user.sexe] += 1;
@@ -391,7 +396,7 @@ var model = {
 	addUnlinkedNode: function(word, callback){
 		
 		model.createNode(word, function(newNode){
-			newNode.age[model.getUserAgeRange(model.user.age)] += 1;
+			newNode.age[model.user.age] += 1;
 			newNode.sexe[model.user.sexe] += 1;
 		});
 

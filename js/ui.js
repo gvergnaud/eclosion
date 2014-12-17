@@ -1,7 +1,6 @@
+'use strict';
 var UI = {
-    
-    currentNotifications: [], //tableau qui contient toutes les notifications en cours
-	
+    	
 	init: function(){
 
 		this.d3.style();
@@ -77,7 +76,7 @@ var UI = {
 			
 
 			this.element.querySelector('.nodeName').innerText = nodeData.name;
-			this.element.querySelector('.addContribution').setAttribute('placeholder', 'Si je vous dit ' + nodeData.name + '...');
+			this.element.querySelector('.addContribution').setAttribute('placeholder', 'Si je vous dis ' + nodeData.name + '...');
 
 			//affiche le nombre d'utilisation du mot
 			var occurrence = new countUp(this.element.querySelector('div.occurrence>p.data'), 1, nodeData.occurrence, 0, 1, {useEasing : false});
@@ -90,14 +89,12 @@ var UI = {
 			//affiche le nombre dutilisation par sexe
 			this.element.querySelector('div.sexeOccurrence>div.male .data').innerText = nodeData.sexeOccurrence.male;
 			this.element.querySelector('div.sexeOccurrence>div.female .data').innerText = nodeData.sexeOccurrence.female;
-			this.element.querySelector('div.sexeOccurrence>div.unknown .data').innerText = nodeData.sexeOccurrence.unknown;
 
 			//affiche le nombre dutilisation par age
 			this.element.querySelector('div.ageOccurrence>div.under25 .data').innerText = nodeData.ageOccurrence['under25'];
 			this.element.querySelector('div.ageOccurrence>div.from25to35 .data').innerText = nodeData.ageOccurrence['25to35'];
 			this.element.querySelector('div.ageOccurrence>div.from35to45 .data').innerText = nodeData.ageOccurrence['35to45'];
 			this.element.querySelector('div.ageOccurrence>div.above45 .data').innerText = nodeData.ageOccurrence['above45'];
-			this.element.querySelector('div.ageOccurrence>div.unknown .data').innerText = nodeData.ageOccurrence.unknown;
 
 			//affiche les mots les plus associés à celui la
 			var associatedDataElm = this.element.querySelector('div.mostAssociatedWords>div.associatedWordsContainer');
@@ -141,7 +138,7 @@ var UI = {
 	
 			this.force = d3.layout.force()
 				.gravity(.05)
-			    .charge(-5000)
+			    .charge(-3000)
 			    .linkDistance(30)
 			    .size([width, height]);
 			
@@ -482,7 +479,7 @@ var UI = {
 			var links = d3.selectAll(".links>line");
         		
 			var linkedByIndex = {};
-			for (i = 0; i < self.previousWords.length; i++) {
+			for (var i = 0; i < self.previousWords.length; i++) {
 			    linkedByIndex[i + "," + i] = 1;
 			};
 			
@@ -490,7 +487,7 @@ var UI = {
 			    linkedByIndex[d.source.index + "," + d.target.index] = 1;
 			});
 			
-	        d = node.node().__data__;
+	        var d = node.node().__data__;
 	        
 	        // Changement de couleur des cercles des noeuds
 	        nodes.select("circle").transition().duration(1000).style("fill", function (o) {
@@ -527,16 +524,15 @@ var UI = {
 		overlayContainer: document.querySelector('#overlay-container'),
 
 		openOverlay: function() {
-			// var nav = document.getElementById('lateral-navigation');
-			this.overlayApropos.style.cursor = "url(./res/close_cursor.png) 18 18, auto";
+
 			this.overlayApropos.classList.add('active');
+
 	    	var openAnim = [
 	        	{
 	        		elements: UI.about.overlayContainer, 
 	        		properties: { marginTop: '0', opacity: 1},
 	        		options: {duration: 500, easing: 'easeInOutBack'}
 	        	}
-
 	        ];
 			Velocity.RunSequence(openAnim);
 
@@ -545,6 +541,7 @@ var UI = {
 			var overlayContainer = document.querySelector('#overlay-container');
 
 			UI.about.overlayApropos.classList.remove('active');
+
 	    	var closeAnim = [
 	        	{
 	        		elements: UI.about.overlayContainer, 
@@ -552,6 +549,7 @@ var UI = {
 	        		options: {duration: 500, easing: 'easeInOutBack'}
 	        	}
 	        ];
+
 			Velocity.RunSequence(closeAnim);
 		}
 	},
@@ -604,9 +602,11 @@ var UI = {
 
 		openModal: function(modal){
 
-        	[].forEach.call(UI.menu.allModals, function(element){
-        		element.classList.remove('activeTab');
-        	});
+        	var openTab = document.querySelector('.activeTab');
+        	
+        	if(openTab){
+        		openTab.classList.remove('activeTab');
+        	}
 
 			var openAnim = [
 	        	{
@@ -616,7 +616,7 @@ var UI = {
 	        	},
 	        	{
 	        		elements: modal,
-	        		properties: {left: "70px", width: window.innerWidth -70 + 'px'},
+	        		properties: {left: "0", width: window.innerWidth + 'px'},
 	        		options: {duration: 250, easing: 'easeInOutBack'}
 	        	}
 	        ];
@@ -707,6 +707,23 @@ var UI = {
 		}
 	},
 
+	userInfo: {
+
+		element: document.getElementById('userInfoOverlay'),
+
+		openOverlay: function() {
+			
+			Velocity(this.element, 'fadeIn');
+
+		},
+
+		closeOverlay: function() {
+
+			Velocity(this.element, 'fadeOut');
+			
+		}
+	},
+
 	notification: function(element, msg, checkCallback, cancelCallback){
 
 		element.innerHTML = msg;
@@ -714,10 +731,12 @@ var UI = {
 		if(checkCallback){
 			var checkIcon = document.createElement('i');
 			checkIcon.classList.add('icon-check');
+
 			checkIcon.addEventListener('click', function(){
-				checkCallback.call(this);
 				element.innerHTML = '';
+				checkCallback.call(this);
 			}, false);
+
 			element.appendChild(checkIcon);
 		}
 		

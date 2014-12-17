@@ -2,13 +2,16 @@
 <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
 <!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+<!--[if gt IE 8]><html class="no-js"><![endif]-->
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title>Les mots</title>
+        <title>Eclosion</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        
+        <!-- Favicon -->
+        <link rel="icon" type="image/png" href="favicon.png" />
 
         <!-- Facebook Open Graph -->
         <meta property="og:url" content="http://samples.ogp.me/136756249803614" /> 
@@ -192,9 +195,9 @@
                         <p>Femme <span class="right"><span class="data"></span> %</span></p>
                     </div>
                     
-                    <div class="stat unknown">
+                    <!-- <div class="stat unknown">
                         <p>Non renseigné <span class="right"><span class="data"></span> %</span></p>
-                    </div>
+                    </div> -->
                 </div>
 
                 <div class="statSection ageOccurrence">
@@ -215,11 +218,32 @@
                         <p>+ 45 ans <span class="right"><span class="data"></span> %</span></p>
                     </div>
                     
-                    <div class="stat unknown">
+                    <!-- <div class="stat unknown">
                         <p>Non renseigné <span class="right"><span class="data"></span> %</span></p>
-                    </div>
+                    </div> -->
                 </div>
             </div>
+        </section>
+
+        <section id="userInfoOverlay" class="active">
+            <form class="userInfoForm">
+                <div>
+                    <h1>Vous êtes</h1>
+                    <p><input type="radio" class="userSexe female" name="userSexe" value="female" /> une femme <input type="radio" class="userSexe male" name="userSexe" value="male" /> un homme</p>
+                    <p class="error"></p>
+                </div>
+                <div>
+                    <h1>Vous avez</h1>
+                    <p><select class="userAge">
+                        <option value="under25">- 25 ans</option>
+                        <option value="25to35">25 - 35 ans</option>
+                        <option value="35to45">35 - 45 ans</option>
+                        <option value="above45">+ 45 ans</option>
+                    </select></p>
+                </div>
+
+                <input type="submit" value="Valider" />
+            </form>
         </section>
 
         <footer id="menufooter">
