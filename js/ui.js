@@ -528,6 +528,7 @@ var UI = {
 
 		openOverlay: function() {
 			// var nav = document.getElementById('lateral-navigation');
+			this.overlayApropos.style.cursor = "url(./res/close_cursor.png) 18 18, auto";
 			this.overlayApropos.classList.add('active');
 	    	var openAnim = [
 	        	{
@@ -537,7 +538,7 @@ var UI = {
 	        	}
 
 	        ];
-				Velocity.RunSequence(openAnim);
+			Velocity.RunSequence(openAnim);
 
 		},
 		closeOverlay: function() {

@@ -604,17 +604,17 @@ circle{
 	left: 0;
 	background: #3177df;
 	opacity: 0;
-	-webkit-transition: opacity 0.75s ease 0s,z-index 0s ease 1s;
-	transition: opacity 0.75s ease 0s,z-index 0s ease 1s;
-	z-index: -1;
+	-webkit-transition: opacity 0.75s ease;
+	transition: opacity 0.75s ease;
+	z-index: 0;
 }
 .overlay.active {
 	display: block;
 	opacity: 1;
 	background-color: rgba(49,119,223,.9);
-	z-index: 999;
-	-webkit-transition: opacity 0.5s ease 0s;
-	transition: opacity 0.5s ease 0s;
+	z-index: 45;
+	-webkit-transition: opacity 0.75s ease;
+	transition: opacity 0.75s ease;
 }
 
 .overlay div#overlay-container {
