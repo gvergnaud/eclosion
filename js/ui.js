@@ -14,64 +14,6 @@ var UI = {
 			UI.menu.style();
 		}, false);
 	},
-
-	notification: function(type, msg){
-        //Si le message n'est pas déjà dans la liste d'attente
-        if(UI.currentNotifications.indexOf(msg) === -1){
-
-            //si il n'y a rien dans la liste d'attente, on affiche la notif
-            if(UI.currentNotifications.length === 0){
-                //on met le messsage en liste d'attente
-                UI.currentNotifications.push(msg);
-
-
-                var notifContainer = document.querySelector('aside#notifications');
-                var newNotif = document.createElement('p');
-
-                newNotif.innerHTML = msg;
-
-                newNotif.classList.add('notification');
-                if(type){
-                    newNotif.classList.add(type);
-                }
-
-                notifContainer.innerHTML = '';
-                notifContainer.style.display = 'block';
-                notifContainer.appendChild(newNotif);
-
-                setTimeout(function(){	
-                    newNotif.classList.add('show');
-                }, 100);
-
-                setTimeout(function(){
-                    //on cache la notif 
-                    newNotif.classList.remove('show');
-
-                    setTimeout(function(){
-
-                        notifContainer.style.display = 'none';
-                    	newNotif.parentNode.removeChild(newNotif);
-                        //on retire le message de la liste d'attente
-                        UI.currentNotifications.splice(UI.currentNotifications.indexOf(msg), 1);
-                    }, 650);
-
-
-                }, 3000);
-
-                newNotif.addEventListener('click', function(){
-                    notifContainer.style.display = 'none';
-                    newNotif.parentNode.removeChild(newNotif);
-                    //on retire le message de la liste d'attente
-                    UI.currentNotifications.splice(UI.currentNotifications.indexOf(msg), 1);
-                });
-
-            }else{
-                setTimeout(function(){
-                    UI.notification(type, msg);
-                }, 1000);
-            }
-        }
-    },
 	
 	printWord: function(word){
 		document.querySelector('#proposedWordText').innerText = word;
@@ -100,14 +42,11 @@ var UI = {
 		        	{
 		        		elements: this.element, 
 		        		properties: {right: 0},
-		        		options: {duration: 250, easing: 'easeInOutBack'}
+		        		options: {duration: 250, easing : "easeIn"}
 		        	}
 		        ];
 		        
 				this.element.style.display = 'block';
-
-			    // var addContribution = document.querySelectorAll('.addContribution');
-			    // addContribution[1].focus();
 
 				Velocity.RunSequence(openAnim);
 
@@ -121,7 +60,7 @@ var UI = {
 		        	{
 		        		elements: this.element, 
 		        		properties: {right: '-350px'},
-		        		options: {duration: 250, easing: 'easeInOutBack'}
+		        		options: {duration: 250, easing: 'easeOut'}
 		        	}
 		        ];
 
@@ -138,6 +77,7 @@ var UI = {
 			
 
 			this.element.querySelector('.nodeName').innerText = nodeData.name;
+			this.element.querySelector('.addContribution').setAttribute('placeholder', 'Si je vous dit ' + nodeData.name + '...');
 
 			//affiche le nombre d'utilisation du mot
 			var occurrence = new countUp(this.element.querySelector('div.occurrence>p.data'), 1, nodeData.occurrence, 0, 1, {useEasing : false});
@@ -184,7 +124,7 @@ var UI = {
 		wordGraph: document.querySelector('#wordGraph'),
 		previousWords : false,
 		nodeSizeCoefficient : 4,
-		collision : 3,
+		collision : 10,
 		zoomMin : 0.25,
 		zoomMax : 3,
 		translate : [0, 0],
@@ -251,9 +191,11 @@ var UI = {
 	         	.attr("class", "node")
 	         	.attr("pointer-events", "drag")
 	         	.style('fill', "#83adec")
-	         	.style("cursor", "pointer")
 	         	.attr("r", function(d){
 	         		var nbLinks = Math.sqrt(d.nbLinks);
+	         		if(nbLinks <= 0)
+	         			nbLinks = 1;
+	         			
 	         		if(nbLinks * (nbLinks * self.nodeSizeCoefficient) <= 60)
 	         			return nbLinks * (nbLinks * self.nodeSizeCoefficient); 
 	         		else
@@ -265,10 +207,18 @@ var UI = {
 			// Ajout d'un texte pour chaque noeud
 			node.append("text")
 			     .attr("text-anchor", "middle")
-			     .style("font-size", function(d) {return Math.sqrt(d.nbLinks) * 10 + "px"; })
+			     .style("font-size", function(d) {
+			     	var nbLinks = Math.sqrt(d.nbLinks);
+			     	if(nbLinks <= 0)
+			     		nbLinks = 1;
+			     	return nbLinks * 10 + "px"; 
+			     })
 			     .style("fill", "#4b4b4b")
 			     .attr("transform",function(d) {
-			           return "translate(0," + -(Math.sqrt(d.nbLinks) * (Math.sqrt(d.nbLinks) * self.nodeSizeCoefficient + 2)) + ")";
+				     	var nbLinks = Math.sqrt(d.nbLinks);
+				     	if(nbLinks <= 0)
+				     		nbLinks = 1;
+			           return "translate(0," + -(nbLinks * (nbLinks * self.nodeSizeCoefficient + 2)) + ")";
 			        })
 			     .text(function(d) {
 			       	return d.name.charAt(0).toUpperCase() + d.name.substring(1).toLowerCase();
@@ -279,13 +229,12 @@ var UI = {
 					.attr("y1", function(d) { return d.source.y; })
 					.attr("x2", function(d) { return d.target.x; })
 					.attr("y2", function(d) { return d.target.y; });
-	
-				node.attr("cx", function(d) { return d.x; })
+
+				 node.attr("cx", function(d) { return d.x; })
 					.attr("cy", function(d) { return d.y; })
 					.attr("transform", function(d) {
 			            return "translate(" + d.x + "," + d.y + ")";
 			        }); 
-			    node.each(self.collide(0.5));
 			});
 			
 			this.previousWords = words;
@@ -308,7 +257,7 @@ var UI = {
 				var self = this;
 				
 				// Si il y a eu ajout d'un nouveau noeud
-				if(this.previousWords.nodes.length < words.nodes.length){
+				if(this.previousWords.nodes.length < words.nodes.length && this.previousWords.links.length < words.links.length){
 				
 					// Ajout du dernier Node et du dernier links
 					this.previousWords.nodes.push(words.nodes[words.nodes.length - 1]);
@@ -320,6 +269,11 @@ var UI = {
 				
 					// Ajout du dernier links
 					this.previousWords.links.push(words.links[words.links.length - 1]);
+				}
+				
+				else if(this.previousWords.nodes.length < words.nodes.length){
+					// Ajout du dernier Node
+					this.previousWords.nodes.push(words.nodes[words.nodes.length - 1]);
 				}
 				
 				var link = this.svg.select(".links").selectAll(".link")
@@ -349,6 +303,10 @@ var UI = {
 		            .style('fill', "#3177df")
 					.attr("r", function(d) {
 						var nbLinks = Math.sqrt(d.nbLinks);
+						
+						if(nbLinks <= 0)
+							nbLinks = 1;
+							
 						if(nbLinks * (nbLinks * self.nodeSizeCoefficient) <= 60)
 		         			return nbLinks * (nbLinks * self.nodeSizeCoefficient); 
 		         		else
@@ -358,10 +316,21 @@ var UI = {
 		
 		        nodeEnter.append("text")
 		            .attr("text-anchor", "middle")
-				    .style("font-size", function(d) {return Math.sqrt(d.nbLinks) * 10 + "px";})
+				    .style("font-size", function(d) {
+				    	var nbLinks = Math.sqrt(d.nbLinks);
+				    	
+				    	if(nbLinks <= 0)
+				    		nbLinks = 1;
+				    		
+				    	return nbLinks * 10 + "px";
+				    })
 				    .style("fill", "#3177df")
 				    .attr("transform",function(d) {
-			            return "translate(0," + -(Math.sqrt(d.nbLinks) * (Math.sqrt(d.nbLinks) * self.nodeSizeCoefficient + 2)) + ")";
+				    	var nbLinks = Math.sqrt(d.nbLinks);
+				     	if(nbLinks <= 0)
+				     		nbLinks = 1;
+				     		
+			            return "translate(0," + -(nbLinks * (nbLinks * self.nodeSizeCoefficient + 2)) + ")";
 			        })
 				    .text(function(d) {
 					    return d.name.charAt(0).toUpperCase() + d.name.substring(1).toLowerCase();
@@ -381,7 +350,6 @@ var UI = {
 		            node.attr("cx", function(d) { return d.x; })
 						.attr("cy", function(d) { return d.y; })
 						.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
-					node.each(self.collide(0.5));
 		        });
 			
 			    this.force.start();
@@ -449,7 +417,7 @@ var UI = {
 			    UI.d3.highlightOn(selected);
 			    
 			}else{
-				UI.notification('error', "Pas de mots trouvés");
+				console.log('UI le mot ne epeut pas être selectionné');
 			}
 			
 			self.defineCursor();
@@ -484,34 +452,29 @@ var UI = {
         	self.force.resume();
 		},
 		
-		collide : function(alpha) {
-			var self = this;
-			var	radius = 8; 
-			var quadtree = d3.geom.quadtree(self.previousWords.nodes);
-			return function(d) {
-			    var rb = 2 * radius + self.collision,
-			        nx1 = d.x - rb,
-			        nx2 = d.x + rb,
-			        ny1 = d.y - rb,
-			        ny2 = d.y + rb;
-			        
-			    quadtree.visit(function(quad, x1, y1, x2, y2) {
-					if (quad.point && (quad.point !== d)) {
-						var x = d.x - quad.point.x,
-							y = d.y - quad.point.y,
-							l = Math.sqrt(x * x + y * y);
-						if (l < rb) {
-							l = (l - rb) / l * alpha;
-							d.x -= x *= l;
-							d.y -= y *= l;
-							quad.point.x += x;
-							quad.point.y += y;
-						}
+		collide : function(node) {
+			var r = node.radius + 16,
+				nx1 = node.x - r,
+				nx2 = node.x + r,
+				ny1 = node.y - r,
+				ny2 = node.y + r;
+			return function(quad, x1, y1, x2, y2) {
+				if (quad.point && (quad.point !== node)) {
+					var x = node.x - quad.point.x,
+					  	y = node.y - quad.point.y,
+					  	l = Math.sqrt(x * x + y * y),
+					  	r = node.radius + quad.point.radius;
+					if (l < r) {
+						l = (l - r) / l * .5;
+						node.x -= x *= l;
+						node.y -= y *= l;
+						quad.point.x += x;
+						quad.point.y += y;
 					}
-					return x1 > nx2 || x2 < nx1 || y1 > ny2 || y2 < ny1;
-			    });
-			};
-		},
+				}
+				return x1 > nx2 || x2 < nx1 || y1 > ny2 || y2 < ny1;
+			};		
+    	},
 		
 		highlightOn : function(node){
 			var self = this;
@@ -565,6 +528,7 @@ var UI = {
 
 		openOverlay: function() {
 			// var nav = document.getElementById('lateral-navigation');
+			this.overlayApropos.style.cursor = "url(./res/close_cursor.png) 18 18, auto";
 			this.overlayApropos.classList.add('active');
 	    	var openAnim = [
 	        	{
@@ -574,7 +538,7 @@ var UI = {
 	        	}
 
 	        ];
-				Velocity.RunSequence(openAnim);
+			Velocity.RunSequence(openAnim);
 
 		},
 		closeOverlay: function() {
@@ -609,6 +573,7 @@ var UI = {
 	    style: function() {
 	    	if(UI.menu.opened){
 	    		UI.menu.menuElement.style.width = window.innerWidth + "px";
+	    		UI.menu.menuElement.querySelector('.activeTab').style.width = window.innerWidth -70 + "px";
 	    	}
 	    },
 
@@ -622,11 +587,13 @@ var UI = {
 		        	}
 		        ];
 				Velocity.RunSequence(closeAnim);
+				
 
 				setTimeout(function(){
 					[].forEach.call(UI.menu.allModals, function(element){
 		        		element.classList.remove('activeTab');
 		        	});
+		        	UI.menu.removeAllClickStyle();
 
 		        	UI.menu.menuElement.style.width = '70px';
 		       		UI.menu.opened = false;
@@ -649,7 +616,7 @@ var UI = {
 	        	},
 	        	{
 	        		elements: modal,
-	        		properties: {left: "70px", opacity: "0.9", width: window.innerWidth -70 + 'px'},
+	        		properties: {left: "70px", width: window.innerWidth -70 + 'px'},
 	        		options: {duration: 250, easing: 'easeInOutBack'}
 	        	}
 	        ];
@@ -695,6 +662,18 @@ var UI = {
 	        }
 
 		},
+		
+		addClickStyle : function(element){
+			UI.menu.removeAllClickStyle();
+			element.parentNode.classList.add("optionClick");
+		},
+		
+		removeAllClickStyle : function(element){
+			var elements = document.getElementsByClassName("optioncontainer");
+			[].forEach.call(elements, function(element){
+				element.classList.remove('optionClick');
+			});
+		},
 
 		addActiveFilter: function(element){
 
@@ -726,5 +705,40 @@ var UI = {
 				filter.classList.remove('active');
 			});
 		}
+	},
+
+	notification: function(element, msg, checkCallback, cancelCallback){
+
+		element.innerHTML = msg;
+
+		if(checkCallback){
+			var checkIcon = document.createElement('i');
+			checkIcon.classList.add('icon-check');
+			checkIcon.addEventListener('click', function(){
+				checkCallback.call(this);
+				element.innerHTML = '';
+			}, false);
+			element.appendChild(checkIcon);
+		}
+		
+		var cancelIcon = document.createElement('i');
+		cancelIcon.classList.add('icon-cancel');
+		
+		cancelIcon.addEventListener('click', function(){
+
+			if(cancelCallback){
+				cancelCallback.call(this);
+			}
+			element.innerHTML = '';
+
+		}, false);
+
+		element.appendChild(cancelIcon);
+	},
+
+	removeAllNotifications: function(){
+		document.querySelector('.searchBox p.error').innerHTML = '';
+		document.querySelector('#nodeData .error').innerHTML = '';
+		document.querySelector('.addWordBox .error').innerHTML = '';
 	}
 };

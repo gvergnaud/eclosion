@@ -16,9 +16,7 @@
         <meta property="og:description" content="This pie is delicious!" /> 
         <meta property="og:image" content="https://fbcdn-dragon-a.akamaihd.net/hphotos-ak-prn1/851565_496755187057665_544240989_n.jpg" /> 
 
-        
         <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
-
         <link rel="stylesheet" href="css/reset.css">
         <link rel="stylesheet" href="css/styles.css">
 
@@ -37,7 +35,7 @@
         <!-- Menu de navigation gauche -->
         <nav role="navigation" id="lateral-navigation">
             <!-- Recherche d'un mot -->
-            <div class="optioncontainer">
+            <div class="optioncontainer searchBox">
                 <div class="left-nav" id="searchBox">
                     <i class="flaticons icon-search"></i> 
                 </div>
@@ -47,13 +45,14 @@
                     <i class="closeMenu flaticon-cross97" onclick="UI.menu.closeModal()"></i>
                     <div id="searchWordForm" class="optionsForm">
                         <input type="text" id="searchInput" class="optionsInputText" list="searchAutoComplete" placeholder="Rechercher un mot"/>
+                        <p class="error"></p>
                         <div id="searchAutoComplete"></div>
                     </div>
                 </div>
             </div>
 
             <!-- Ajout d'un mot -->
-            <div class="optioncontainer">
+            <div class="optioncontainer addWordBox">
                 <div class="left-nav" id="addWordBox">
                     <i class="flaticons icon-edit"></i> 
                 </div>
@@ -64,12 +63,13 @@
                     <div id="writehWordForm" class="optionsForm">
                         <p id="proposedWord">Si je vous dit :&nbsp;<span id="proposedWordText"></span>...</p>
                         <input type="text" class="addContribution optionsInputText" class="optionsInputText" placeholder="Ecrivez le mot qui vous vient à l'esprit" />
+                        <p class="error"></p>
                     </div>
                 </div>
             </div>
 
             <!-- Options de Filtrage -->
-            <div class="optioncontainer">
+            <div class="optioncontainer filterBox">
                 <div class="left-nav" id="filterBox">
                     <i class="flaticons icon-filter"></i> 
                 </div>
@@ -131,6 +131,7 @@
                 <div class="contribution">
                     <p>Contribuer</p>
                     <input class="addContribution" data-activeWord="activeWord" type="text" placeholder="Votre mot" />
+                    <p class="error"></p>
                 </div>
                 <div class="share">
                     <div class="fb-share-button" data-href="https://developers.facebook.com/docs/plugins/" data-layout="button"></div>
@@ -266,6 +267,7 @@
                 </div>
             </aside>
         </footer>
+        <audio src="" id="player"></audio>
 
         <!-- SDK Facebook pour le partage -->
         <div id="fb-root"></div>
