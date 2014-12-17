@@ -616,7 +616,7 @@ var UI = {
 	        	},
 	        	{
 	        		elements: modal,
-	        		properties: {left: "70px", width: window.innerWidth -70 + 'px'},
+	        		properties: {left: "0", width: window.innerWidth + 'px'},
 	        		options: {duration: 250, easing: 'easeInOutBack'}
 	        	}
 	        ];
