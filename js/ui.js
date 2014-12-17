@@ -524,6 +524,7 @@ var UI = {
 		overlayContainer: document.querySelector('#overlay-container'),
 
 		openOverlay: function() {
+
 			this.overlayApropos.classList.add('active');
 
 	    	var openAnim = [
@@ -532,9 +533,8 @@ var UI = {
 	        		properties: { marginTop: '0', opacity: 1},
 	        		options: {duration: 500, easing: 'easeInOutBack'}
 	        	}
-
 	        ];
-				Velocity.RunSequence(openAnim);
+			Velocity.RunSequence(openAnim);
 
 		},
 		closeOverlay: function() {

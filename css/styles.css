@@ -644,7 +644,7 @@ circle{
 	position: absolute;
 	bottom: 5px;
 	right: 20px;
-	border-top: 1px solid #888888;
+	border-top: 1px solid rgba(136, 136, 136, .5);
 	color: #888888;
 	z-index: 35;
 }
@@ -661,7 +661,6 @@ circle{
 
 #menufooter ul li a, #menufooter ul li button{
 	text-decoration: none;
-	text-transform: uppercase;
 	font-family: 'Open Sans', sans-serif;
 	font-size: 14px;
 	color: #888888;
@@ -682,24 +681,24 @@ circle{
 	left: 0;
 	background: #3177df;
 	opacity: 0;
-	-webkit-transition: opacity 0.75s ease 0s,z-index 0s ease 1s;
-	transition: opacity 0.75s ease 0s,z-index 0s ease 1s;
-	z-index: -1;
+	z-index: 0;
+	cursor: url(./res/close_cursor.png) 18 18, auto;
 }
 .overlay.active {
 	display: block;
 	opacity: 1;
 	background-color: rgba(49,119,223,.9);
-	z-index: 999;
-	-webkit-transition: opacity 0.5s ease 0s;
-	transition: opacity 0.5s ease 0s;
+	z-index: 45;
 }
 
 .overlay div#overlay-container {
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%,-50%);
 	width: 50%;
 	margin: 0 auto;
 	margin-top: 100px;
-	padding: 50px 0;
 	font-family: "Open Sans", sans-serif;
 	color: #fff;
 	opacity: 0;
@@ -714,6 +713,7 @@ circle{
 .overlay h3 {
 	margin: 30px 0 10px 0;
 	font-size: 30px;
+	font-weight: bold;
 	text-transform: uppercase;
 }
 .overlay h4 { /* Nom des étudiants */
@@ -737,18 +737,20 @@ circle{
 	display: flex;
 	flex-direction: row;
 	align-items: center;
+	justify-content: center;
 	width: 100%;
 }
 .overlay section.flex div.credits{ /* Container pour faire des colonnes en mode flexbox */
 	box-sizing: border-box;
 	margin: 5px 0;
+	width: 200px;
 	text-align: center;
 }
-.overlay section.col2 div.credits {
-	width: 50%;
+.overlay section.col2 div.credits:first-child {
+	margin-left: 120px;
 }
-.overlay section.col3 div.credits {
-	width: 33.3333333%;
+.overlay section.col2 div.credits:last-child {
+	margin-right: 120px;
 }
 .overlay .closeMenu {
 	cursor: pointer;
@@ -761,7 +763,7 @@ circle{
 	/*opacity: .25;*/
 	color: #194e9f;
 }
-#menufooter a:hover [class^="icon-"]:before, #menufooter a:hover [class*=" icon-"]:before {
+#menufooter a:hover [class^="icon-"]:before, #menufooter a:hover [class*=" icon-"]:before, #menufooter button:hover {
 	color: #fff;	
 	-webkit-transition: color 0.25s ease 0s;
 	transition: color 0.25s ease 0s;
