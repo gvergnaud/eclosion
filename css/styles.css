@@ -682,7 +682,7 @@ circle{
 	background: #3177df;
 	opacity: 0;
 	z-index: 0;
-	cursor: url(./res/close_cursor.png) 18 18, auto;
+	cursor: url(../res/close_cursor.png) 18 18, auto;
 }
 .overlay.active {
 	display: block;
