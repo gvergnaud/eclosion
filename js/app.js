@@ -277,20 +277,20 @@ var app = {
 		UI.printWord(app.proposedWord);
 	},
 
-
 	//User interaction
 	focusWord: function(word){
 		UI.d3.searchNode(word);
-
 		var selectedNode = model.getNodeFromWord(word);
 
 		app.getNodeData(selectedNode, function(nodeData){
 			UI.nodeData.openSection();
 			UI.nodeData.printData(nodeData);
 			app.activeWord = nodeData.name;
-			app.twitterShareWord(nodeData.name);
-			app.facebookShareWord(nodeData.name);
 		});
+
+		/* Social share */
+		app.twitterShareWord(word);
+		app.facebookShareWord(word);
 
 		UI.menu.closeModal();
 
@@ -438,15 +438,35 @@ var app = {
 
 	twitterShareWord: function(nodeName) {
 		/* Twitter button */
-		var twitterButton = document.querySelector(".twitter-share-button");
-		twitterButton.setAttribute('data-hashtags',"eclosion");
-		twitterButton.setAttribute('data-text',"Vous aussi contribuez en poursuivant cette liste de mot à l'aide du mot suivant : #"+nodeName);
+
+		/* On prend le lien a de base pour lui ajouter des attributs */
+		/* Mais soudain l'iframe prend place et supprime notre lien de base pour l'englober dans cette horrible iframe */
+		/* Or c'est désormais l'iframe qui a la main sur la requête avec son attribut src qui est très long */
+
+
+		var shareParent = document.querySelector(".share");
+		var twitterButton = document.querySelector('.twitter-share-button');
+		twitterButton.setAttribute('data-hashtags', "eclosion");
+		twitterButton.setAttribute('data-text', "Vous aussi contribuez en poursuivant cette liste de mot à l'aide du mot suivant : #"+nodeName);
+        console.log(twitterButton);
+        if(document.getElementById('twitter-widget-0')) {
+        	shareParent.removeChild(document.getElementById('twitter-widget-0'));
+        	console.log("Suppression du iframe");
+        	alert(document.querySelector(".btn"));
+
+        	shareParent.appendChild(twitterButton);
+        }
+
         window.twttr=(function(d,s,id){var t,js,fjs=d.getElementsByTagName(s)[0];if(d.getElementById(id)){return}js=d.createElement(s);js.id=id;js.src="https://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);return window.twttr||(t={_e:[],ready:function(f){t._e.push(f)}})}(document,"script","twitter-wjs"));
 	},
 
 	facebookShareWord: function(wordName) {
 		var facebookButton = document.querySelector(".fb-share-button");
-		facebookButton.setAttribute('data-href',window.location);
+
+		urlWithoutHashBang = encodeURI(window.location);
+		// urlWithoutHashBang = urlWithoutHashBang.replace("#","%23")
+		// alert(encodeURI(urlWithoutHashBang));
+		facebookButton.setAttribute('data-href', urlWithoutHashBang);
 
         (function(d, s, id) {
           var js, fjs = d.getElementsByTagName(s)[0];
