@@ -561,6 +561,84 @@ circle{
 	cursor: pointer;
 }
 
+/*USERINFO OVERLAY*/
+#userInfoOverlay{
+	display: none;
+	position: absolute;
+	height: 100%;
+	width: 100%;
+	top: 0;
+	top: 0;
+	background: rgba(255, 255, 255, .95);
+	z-index: 1000;
+}
+
+#userInfoOverlay form{
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%);
+	-moz-transform: translate(-50%, -50%);
+	-webkit-transform: translate(-50%, -50%);
+	text-align: center;
+}
+
+#userInfoOverlay div{
+	margin-bottom: 70px;
+}
+
+#userInfoOverlay h1{
+	text-transform: uppercase;
+	font-family: 'Open Sans';
+	font-size: 30px;
+	color: #484848;
+}
+
+#userInfoOverlay p{
+	color:#3177df;
+	font-family: 'Open Sans';
+	font-size: 30px;
+	margin-top: 30px;
+}
+
+#userInfoOverlay p.error{
+	font-size: 16px;
+}
+
+#userInfoOverlay select{
+	padding-left: 10px;
+	background: transparent;
+	width: 225px;
+	height: 45px;
+
+	font-family: 'Open Sans';
+	font-size: 23px;
+	color:#3177df;
+	line-height: 1;
+	border: 1px solid black;
+	outline: none;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
+	cursor: pointer;
+}
+
+#userInfoOverlay input[type="submit"]{
+	padding-left: 10px;
+	background: transparent;
+	width: 135px;
+	height: 45px;
+
+	font-family: 'Open Sans';
+	font-size: 23px;
+	font-weight: bold;
+	color:#3177df;
+	line-height: 1;
+	border: 1px solid #3177df;
+	outline: none;
+	cursor: pointer;
+}  
+
 /* FOOTER */
 #menufooter {
 	position: absolute;
