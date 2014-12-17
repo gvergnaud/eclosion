@@ -326,13 +326,12 @@ var app = {
 			UI.nodeData.printData(nodeData);
 			app.activeWord = nodeData.name;
 		});
-
-		/* Social share */
-		app.twitterShareWord(word);
-
 		UI.menu.closeModal();
 
 		history.pushState({}, word, '#/' + encodeURI(word));
+		
+		/* Social share */
+		app.twitterShareWord(word);
 	},
 
 	blurWord: function(){
@@ -546,8 +545,9 @@ var app = {
 		link.setAttribute('href', 'https://twitter.com/share');
 		link.setAttribute('class', 'twitter-share-button');
 		link.setAttribute('data-hashtags', 'eclosion');
-		link.setAttribute("data-text" , 'Venez contribuer en poursuivant cette liste de mot à l\'aide du mot suivant : #'+nodeName);
+		link.setAttribute("data-text" , 'Poursuivez cette liste de mot avec le mot suivant : #'+nodeName);
 		link.setAttribute("data-count" ,"none");
+		link.setAttribute("data-url" ,window.location);
 
 		if (parent.hasChildNodes() != false){
 			console.log("Parent possède un enfant");
