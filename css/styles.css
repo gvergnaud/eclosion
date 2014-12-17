@@ -583,7 +583,6 @@ circle{
 
 #menufooter ul li a, #menufooter ul li button{
 	text-decoration: none;
-	text-transform: uppercase;
 	font-family: 'Open Sans', sans-serif;
 	font-size: 14px;
 	color: #888888;
