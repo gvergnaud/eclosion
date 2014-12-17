@@ -7,6 +7,8 @@ var UI = {
 		this.nodeData.style();
 		UI.menu.style();
 
+		UI.activateZoomCursor();
+
 		window.addEventListener('resize', function(){
 			UI.d3.style();
 			UI.nodeData.style();
@@ -722,6 +724,33 @@ var UI = {
 			Velocity(this.element, 'fadeOut');
 			
 		}
+	},
+
+	// Gestion du drag du zoom
+	activateZoomCursor: function(){
+		var draggie = new Draggabilly( document.querySelector('#cursor'), {
+		  axis: 'y',
+		  containment: '#zoomBar'
+		});
+		
+		
+		draggie.on( 'dragMove', function(instance, event, pointer){
+			var zoombarHeight = document.getElementById("zoom").offsetHeight;
+			if(instance.position.y < 0)
+				instance.position.y = 0;
+				
+			app.scale =  - (((Math.floor(instance.position.y) * 100 / (zoombarHeight - 15) + ((100 * 7.5) / zoombarHeight) - 100) 
+				* (UI.d3.zoomMax - UI.d3.zoomMin) / 100 + UI.d3.zoomMin)) + 0.56;
+				
+			UI.d3.defineZoom(app.scale);
+		});
+		
+		draggie.on("dragEnd", function(){
+			UI.d3.svg.call(d3.behavior.zoom().scale(app.scale).translate(UI.d3.translate).scaleExtent([UI.d3.zoomMin, UI.d3.zoomMax]).on("zoom", function(){
+				UI.d3.redrawGraph();
+				UI.d3.defineCursor();
+			}));
+		});
 	},
 
 	notification: function(element, msg, checkCallback, cancelCallback){

@@ -82,32 +82,7 @@ var app = {
         }, false);
 
         // Overlay d'unfo utilisateur
-        document.querySelector('#userInfoOverlay .userInfoForm').addEventListener('submit', app.onUserInfoSubmit, false);
-		
-		// Gestion du drag du zoom
-		var draggie = new Draggabilly( document.querySelector('#cursor'), {
-		  axis: 'y',
-		  containment: '#zoomBar'
-		});
-		
-		
-		draggie.on( 'dragMove', function(instance, event, pointer){
-			var zoombarHeight = document.getElementById("zoom").offsetHeight;
-			if(instance.position.y < 0)
-				instance.position.y = 0;
-				
-			app.scale =  - (((Math.floor(instance.position.y) * 100 / (zoombarHeight - 15) + ((100 * 7.5) / zoombarHeight) - 100) 
-				* (UI.d3.zoomMax - UI.d3.zoomMin) / 100 + UI.d3.zoomMin)) + 0.56;
-				
-			UI.d3.defineZoom(app.scale);
-		});
-		
-		draggie.on("dragEnd", function(){
-			UI.d3.svg.call(d3.behavior.zoom().scale(app.scale).translate(UI.d3.translate).scaleExtent([UI.d3.zoomMin, UI.d3.zoomMax]).on("zoom", function(){
-				UI.d3.redrawGraph();
-				UI.d3.defineCursor();
-			}));
-		});
+        document.querySelector('#userInfoOverlay .userInfoForm').addEventListener('submit', app.onUserInfoSubmit, false);		
 	},
 
 	getRouteParams: function(){
@@ -367,14 +342,7 @@ var app = {
 								app.lastUserContribution = contribution;
 								document.dispatchEvent(app.event.userContribution);
 							},
-							function(error){
-								// si la contribution vien de la fenetre nodeData
-								if(e.target.getAttribute('data-activeWord') === 'activeWord'){
-									UI.notification(document.querySelector('#nodeData .error'), error);
-								}else{
-									UI.notification(document.querySelector('.addWordBox .error'), error);
-								}
-							}
+							function(error){}
 						);
 
 					}else{
@@ -389,14 +357,7 @@ var app = {
 									app.lastUserContribution = contribution;
 									document.dispatchEvent(app.event.userContribution);
 								},
-								function(error){
-									// si la contribution vien de la fenetre nodeData
-									if(e.target.getAttribute('data-activeWord') === 'activeWord'){
-										UI.notification(document.querySelector('#nodeData .error'), error);
-									}else{
-										UI.notification(document.querySelector('.addWordBox .error'), error);
-									}
-								}
+								function(error){}
 							);
 
 							//remove l'event listener
