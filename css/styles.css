@@ -566,7 +566,7 @@ circle{
 	position: absolute;
 	bottom: 5px;
 	right: 20px;
-	border-top: 1px solid #888888;
+	border-top: 1px solid rgba(136, 136, 136, .5);
 	color: #888888;
 	z-index: 35;
 }
