@@ -77,7 +77,7 @@ var UI = {
 			
 
 			this.element.querySelector('.nodeName').innerText = nodeData.name;
-			this.element.querySelector('.addContribution').setAttribute('placeholder', 'Si je vous dit ' + nodeData.name + '...');
+			this.element.querySelector('.addContribution').setAttribute('placeholder', 'Si je vous dis ' + nodeData.name + '...');
 
 			//affiche le nombre d'utilisation du mot
 			var occurrence = new countUp(this.element.querySelector('div.occurrence>p.data'), 1, nodeData.occurrence, 0, 1, {useEasing : false});
