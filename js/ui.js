@@ -536,7 +536,6 @@ var UI = {
 	        		properties: { marginTop: '0', opacity: 1},
 	        		options: {duration: 500, easing: 'easeInOutBack'}
 	        	}
-
 	        ];
 			Velocity.RunSequence(openAnim);
 

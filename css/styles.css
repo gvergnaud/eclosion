@@ -603,8 +603,6 @@ circle{
 	left: 0;
 	background: #3177df;
 	opacity: 0;
-	-webkit-transition: opacity 0.75s ease;
-	transition: opacity 0.75s ease;
 	z-index: 0;
 }
 .overlay.active {
@@ -612,8 +610,6 @@ circle{
 	opacity: 1;
 	background-color: rgba(49,119,223,.9);
 	z-index: 45;
-	-webkit-transition: opacity 0.75s ease;
-	transition: opacity 0.75s ease;
 }
 
 .overlay div#overlay-container {
