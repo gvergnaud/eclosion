@@ -80,6 +80,7 @@ p.error{
 p.error i{
 	color: #AFAFAF;
 	font-size: 1.2rem;
+	padding: 0 4px;
 	border: 1px solid #AFAFAF;
 	border-radius: 1.2rem;
 	margin-left: 10px;
@@ -175,8 +176,8 @@ svg{
 }
 
 #nodeData header h1.theme{
-	margin: 30px 30px 0 30px;
-	height: 75px;
+	margin: 15px 15px 0 15px;
+	line-height: 50px;
 	border-bottom: 1px solid #194e9f;
 	color: #194e9f;
 	font-size: 2rem;
@@ -187,18 +188,43 @@ svg{
 	color: #fff;
 }
 
-#nodeData header .contribution{
+#nodeData header .contribution, #nodeData header .share{
+	margin: 15px 30px;
+
+}
+#nodeData header .contribution p, #nodeData header .share p{
 	font-size: 1.2rem;
-	margin: 20px 30px;
 	color: #194e9f;
 }
+#nodeData header .share {
+	box-sizing: border-box;
+	position: absolute;
+	bottom: 0;
+	right: 0;
+	width: 350px;
+	padding: 20px 30px;
+	margin: 0;
+	background-color: #fff;
+}
+#nodeData header .share p {
+	display: inline-block;
+	margin: 0 15px 0 0;
+}
+div#twitterButton {
+	display: inline-block;
+}
+#custom-twitter-button {
+/*	display: inline-block;
+	margin: 10px; */
+}
+#nodeData header .share{
 
+}
 #nodeData header .contribution input{
 	color: white;
 	font-family: 'Open Sans';
 	font-size: 1.5rem;
 	padding: 5px;
-	margin-top: 5px;
 	color: #fff;
 	background: transparent;
 	border: none;
@@ -216,7 +242,6 @@ svg{
 	color: #fff;
 	border-color: #fff;
 }
-
 #nodeData div.stats{
 	padding: 20px;
 	overflow: auto;
@@ -459,7 +484,6 @@ svg{
 }
 
 .addContribution { /* Input text pour ajouter un mot */
-	margin: 10px 0;
 	padding: 8px 30px;
 	width: 490px;
 	height: 50px;
@@ -842,11 +866,15 @@ svg{
 #home{
 	width:100%;
 	display: none;
+	position:absolute;
+	transform: translate(-50%, -50%);
+	-webkit-transform: translate(-50%, -50%);
+	-moz-transform: translate(-50%, -50%);
+	top: 50%;
+	left:50%;
 	text-align: center;
-	padding-top:17%;
 	z-index: 50;
 	opacity: 0;
-	position:relative;
 }
 
 #home>div, #logo>div{
@@ -862,9 +890,9 @@ svg{
 
 #home img, #logo img{
 	position: absolute;
-	top:0;
-	left:15%;
-	width:70%;
+	top: -140px;
+	left: -175px;
+	width:600px;
 }
 
 #home img:first-child, #logo img:first-child{
@@ -940,5 +968,3 @@ svg{
 #cursor.grab{
 	cursor: -webkit-grabbing;
 }
-
-

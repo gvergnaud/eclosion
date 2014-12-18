@@ -17,16 +17,17 @@ var app = {
 		UI.animation.start();
 		
 		/* Gestion du Story Telling */
-        document.getElementById('startExperience').addEventListener("click", launchApp, false);
-        document.getElementById('skip').addEventListener("click", launchApp, false);
-        
-        function launchApp(e){
-	        e.preventDefault();
+        document.getElementById('startExperience').addEventListener("click", function(e){
+        	e.preventDefault();
         	UI.animation.skip();
-        	setTimeout(function(){
-	        	app.init();
-        	}, 900);
-        }
+	        app.init();
+        }, false);
+        document.getElementById('skip').addEventListener("click", function(e){
+        	e.preventDefault();
+        	UI.animation.skip();
+	        app.init();
+        }, false);
+        
 	},
 	
 	init: function(){
@@ -340,11 +341,9 @@ var app = {
 		UI.printWord(app.proposedWord);
 	},
 
-
 	//User interaction
 	focusWord: function(word){
 		UI.d3.searchNode(word);
-
 		var selectedNode = model.getNodeFromWord(word);
 
 		app.getNodeData(selectedNode, function(nodeData){
@@ -352,10 +351,12 @@ var app = {
 			UI.nodeData.printData(nodeData);
 			app.activeWord = nodeData.name;
 		});
-
 		UI.menu.closeModal();
 
 		history.pushState({}, word, '#/' + encodeURI(word));
+
+		/* Social share */
+		app.twitterShareWord(word);
 	},
 
 	blurWord: function(){
@@ -383,24 +384,11 @@ var app = {
 						proposedWord = app.proposedWord;
 					}
 
-					// si les infos d'utilisateur sont remplies
-					if(!(model.user.sexe === 'unknown') && !(model.user.age === 'unknown')){
-										
-						model.addContribution(contribution, proposedWord, 
-							function(){ //success
-								app.lastUserContribution = contribution;
-								document.dispatchEvent(app.event.userContribution);
-							},
-							function(error){}
-						);
-
-					}else{
-
-						UI.userInfo.openOverlay();
-						UI.menu.closeModal();
-
-						document.addEventListener('userinfosubmit', function(e){
-							
+					//si le mot tapé par l'utilisateur n'est pas le mot proposé
+					if(contribution !== proposedWord){
+						// si les infos d'utilisateur sont remplies
+						if(!(model.user.sexe === 'unknown') && !(model.user.age === 'unknown')){
+											
 							model.addContribution(contribution, proposedWord, 
 								function(){ //success
 									app.lastUserContribution = contribution;
@@ -409,13 +397,36 @@ var app = {
 								function(error){}
 							);
 
-							//remove l'event listener
-							e.target.removeEventListener(e.type, arguments.callee);
-						});
+						}else{
 
+							UI.userInfo.openOverlay();
+							UI.menu.closeModal();
+
+							document.addEventListener('userinfosubmit', function(e){
+								
+								model.addContribution(contribution, proposedWord, 
+									function(){ //success
+										app.lastUserContribution = contribution;
+										document.dispatchEvent(app.event.userContribution);
+									},
+									function(error){}
+								);
+
+								//remove l'event listener
+								e.target.removeEventListener(e.type, arguments.callee);
+							});
+
+						}
+
+						this.value = '';
+					
+					}else{
+						if(e.target.getAttribute('data-activeWord') === 'activeWord'){
+							UI.notification(document.querySelector('#nodeData .error'), 'Choisissez un mot différent !');
+						}else{
+							UI.notification(document.querySelector('.addWordBox .error'), 'Choisissez un mot différent !');
+						}
 					}
-
-					this.value = '';
 
 				}else{
 					if(e.target.getAttribute('data-activeWord') === 'activeWord'){
@@ -557,7 +568,29 @@ var app = {
 				}
 			}
 		}
+	},
+
+	twitterShareWord: function(nodeName) {
+		/* Twitter button */
+		var parent = document.getElementById("twitterButton");
+		var link = document.createElement('a');
+		link.setAttribute('href', 'https://twitter.com/share');
+		link.setAttribute('class', 'twitter-share-button');
+		link.setAttribute('id', 'custom-twitter-button');
+		link.setAttribute('data-hashtags', 'eclosion');
+		link.setAttribute("data-text" , 'Si je vous dit '+nodeName+'... Faites naitre les associations autour de ce mot');
+		link.setAttribute("data-count" ,"none");
+		link.setAttribute("data-via", "eclosionLeSite");
+		link.setAttribute("data-url" ,window.location);
+
+		if (parent.hasChildNodes() != false){
+			parent.removeChild(parent.childNodes[0]);
+		}
+
+		parent.appendChild(link);
+		twttr.widgets.load();  //very important
 	}
+
 };
 
 window.addEventListener("load", function(){
