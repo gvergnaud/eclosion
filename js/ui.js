@@ -440,6 +440,10 @@ var UI = {
 					//Lancement de la phase 2
 				 	Velocity.RunSequence(phase2);
 				 	
+				 	setTimeout(function(){
+					 	Velocity(document.querySelector("#skip"), "fadeOut", 800);
+				 	}, 5500);
+				 	
 				}, 2500);
 				
 			}, 6400);
