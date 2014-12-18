@@ -458,7 +458,7 @@ var app = {
 
 	searchNode: function(e){
 		
-		var value = this.value;
+		var value = this.value.toLowerCase();
 
 		//auto completion avec les mots qui matches avec la recherche
 		if(value){
