@@ -119,6 +119,10 @@ var app = {
         document.getElementById('aproposButton').addEventListener("click", function() {
         	UI.about.openOverlay();
         }, false);
+        
+        document.getElementById('soundOption').addEventListener("click", function() {
+        	UI.about.soundMute();
+        }, false);
 
         document.getElementById('aproposOverlay').addEventListener("click", function() {
         	UI.about.closeOverlay();
@@ -151,10 +155,13 @@ var app = {
 	onGraphReady: function (e) {
 
 		app.graphCreated = true;
+		
+		// Lancement du son
+		document.querySelector("#player").play();
 
 		app.proposeRandomWord();
 
-		UI.d3.svg.call(d3.behavior.zoom().scale(0.5).scaleExtent([UI.d3.zoomMin, UI.d3.zoomMax]).on("zoom", function(){
+		UI.d3.svg.call(d3.behavior.zoom().scaleExtent([UI.d3.zoomMin, UI.d3.zoomMax]).on("zoom", function(){
 			UI.d3.redrawGraph();
 			UI.d3.defineCursor();
 		}));

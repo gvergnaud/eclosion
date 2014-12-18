@@ -158,7 +158,6 @@ var UI = {
 		    this.g = this.svg.append('svg:g')
 			   	.style("background-color", "transparent")
 			    .append('svg:g')
-			    .attr("transform", "scale(0.5)")
 			    .style("background-color", "transparent");
 			    
 			this.force
@@ -556,6 +555,18 @@ var UI = {
 	        ];
 
 			Velocity.RunSequence(closeAnim);
+		},
+		
+		soundMute : function(){
+			if(document.querySelector("#soundOption>i").classList.contains("icon-volume-down")){
+				document.querySelector("#player").muted = true;
+				document.querySelector("#soundOption>i").classList.add("icon-volume-off");
+				document.querySelector("#soundOption>i").classList.remove("icon-volume-down");
+			}else{
+				document.querySelector("#player").muted = false;
+				document.querySelector("#soundOption>i").classList.remove("icon-volume-off");
+				document.querySelector("#soundOption>i").classList.add("icon-volume-down");
+			}
 		}
 	},
 
@@ -682,52 +693,17 @@ var UI = {
 
 		addActiveFilter: function(element){
 
+			UI.menu.removeActiveFilter(element);
 
-			var filterSign = document.createElement('div');
-			filterSign.innerText = element.innerText;
-			filterSign.classList.add('filterSign');
-
-			var closeIcon = document.createElement('i');
-			closeIcon.classList.add('icon-cancel');
-			filterSign.appendChild(closeIcon);
-
-			if(element.classList.contains('sexe')){
-				
-				UI.menu.removeActiveFilter('sexe');
-
-				filterSign.addEventListener('click', function(){
-					app.resetFilters('sexe');
-				}, false);
-
-				document.querySelector('.activeFilter.sexe').innerHTML = '';
-				document.querySelector('.activeFilter.sexe').appendChild(filterSign);
-
-			}else{
-
-				UI.menu.removeActiveFilter('age');
-
-				filterSign.addEventListener('click', function(){
-					app.resetFilters('age');
-				}, false);
-
-				document.querySelector('.activeFilter.age').innerHTML = '';
-				document.querySelector('.activeFilter.age').appendChild(filterSign);
-			}
-			
 			element.classList.add('active');
 		},
 
-		removeActiveFilter: function(filter){
+		removeActiveFilter: function(element){
 			var filters;
 
-			if(filter === 'sexe'){
-
-				document.querySelector('.activeFilter.sexe').innerHTML = '';
+			if(element.classList.contains('sexe')){
 				filters = document.querySelectorAll('#lateral-navigation .filterbuttons.sexe');
-
 			}else{
-
-				document.querySelector('.activeFilter.age').innerHTML = '';
 				filters = document.querySelectorAll('#lateral-navigation .filterbuttons.age');
 			}
 
@@ -901,13 +877,13 @@ var UI = {
 	        	{
 	        		elements: document.querySelectorAll("#phrase1"), 
 	        		properties: { opacity: 0},
-	        		options: {duration: 800, easing: 'easeInOutBack', delay : 1500}
+	        		options: {duration: 800, easing: 'easeInOutBack', delay : 700}
 	        	},
 	        	
 	        	{
 	        		elements: document.querySelectorAll("#storyTelling>g:first-child>g>circle:first-child"), 
 	        		properties: { opacity: 0},
-	        		options: {duration: 500, easing: 'easeInOutBack'}
+	        		options: {duration: 500, easing: 'easeInOutBack', sequenceQueue : false}
 	        	},
 	        	
 	        	{
@@ -1130,7 +1106,7 @@ var UI = {
 	        	
 	        	{
 	        		elements: document.querySelector("#storyTelling>g:first-child>line"), 
-	        		properties: { y1:  - (window.innerHeight), y2 : 0},
+	        		properties: { y1:  -(window.innerHeight), y2 : 0},
 	        		options: {duration: 800, easing: 'easeInOutBack'}
 	        	}
 	        ];
@@ -1227,25 +1203,7 @@ var UI = {
 	        // Apparition du skip après 2s d'animation
 	        setTimeout(function(){
 		        Velocity(document.querySelector("#skip"), "fadeIn", 500);
-	        }, 2000);
-	        
-	        setTimeout(function(){
-	        	
-	        	// Lancement de la phase 1 à l'envers
-				Velocity.RunSequence(phase1Reverse);
-				
-				setTimeout(function(){
-					
-					//Lancement de la phase 2
-				 	Velocity.RunSequence(phase2);
-				 	
-				 	setTimeout(function(){
-					 	Velocity(document.querySelector("#skip"), "fadeOut", 800);
-				 	}, 5500);
-				 	
-				}, 2500);
-				
-			}, 6400);
+	        }, 1000);
 				
 	        setTimeout(function(){
 	        	
@@ -1273,7 +1231,25 @@ var UI = {
 					    strokeDasharray: dash
 					}
 				, 1000);
-		    }, 5200);
+				
+				setTimeout(function(){
+	        	
+		        	// Lancement de la phase 1 à l'envers
+					Velocity.RunSequence(phase1Reverse);
+					
+					setTimeout(function(){
+						document.querySelector("#home").style.display = "block";
+						//Lancement de la phase 2
+					 	Velocity.RunSequence(phase2);
+					 	
+					 	setTimeout(function(){
+						 	Velocity(document.querySelector("#skip"), "fadeOut", 800);
+					 	}, 5500);
+					 	
+					}, 2500);
+					
+				}, 1200);
+		    }, 3200);
 		},
 		
 		skip : function(){
