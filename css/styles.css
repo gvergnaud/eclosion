@@ -516,6 +516,32 @@ svg{
 	cursor: pointer;
 }
 
+#filterSignContainer{
+	position: absolute;
+	left: 72px;
+	top: 146px;
+}
+
+#filterSignContainer .filterSign{
+	background: #e0e0e0;
+	padding: 8px;
+	width: 100px;
+	font-family: 'Open Sans';
+	font-size: 1rem;
+	color: #A4A4A4;
+	margin-bottom: 2px;
+	cursor: pointer;
+}
+
+#filterSignContainer .filterSign i{
+	float:right;
+}
+
+#filterSignContainer .filterSign:hover{
+	background: #3177df;
+	color: #fff;
+}
+
 
 
 /* Barre de Zoom */

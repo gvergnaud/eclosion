@@ -1,4 +1,3 @@
-'use strict';
 var app = {
 
 	routeParams: {},
@@ -94,7 +93,7 @@ var app = {
 		document.querySelector('#searchInput').addEventListener('keyup', app.searchNode, false);
 
 		// lorsque l'utilisateur tape un caractère dans l'espace recherche
-		document.querySelector('div.filters button.resetFilters').addEventListener('click', app.resetFilters, false);
+		//document.querySelector('div.filters button.resetFilters').addEventListener('click', app.resetFilters, false);
 	
 		/* Gestion des fenêtres du menu */
         document.getElementById('searchBox').addEventListener("click", function(){
@@ -167,7 +166,7 @@ var app = {
 		}
 
 		//remove l'event listener
-		e.target.removeEventListener(e.type);
+		e.target.removeEventListener(e.type, arguments.callee);
 	},
 
 	onDataUpdate: function(){
@@ -404,7 +403,7 @@ var app = {
 							);
 
 							//remove l'event listener
-							e.target.removeEventListener(e.type);
+							e.target.removeEventListener(e.type, arguments.callee);
 						});
 
 					}
@@ -432,24 +431,35 @@ var app = {
 
 	addFilter: function(e, filter, value){
 
+		var filterType;
+
+		if(e.target.classList.contains('sexe')){
+			filterType = 'sexe';
+		}else{
+			filterType = 'age';
+		}
+
 		if(!e.target.classList.contains('active')){
 			UI.menu.addActiveFilter(e.target);
 			app.filters[filter] = value;
 
 		}else{
-			UI.menu.removeActiveFilter(e.target);
+			UI.menu.removeActiveFilter(filterType);
 			app.filters[filter] = false;
 		}
 
 		app.reloadData();		
 	},
 
-	resetFilters: function(){
-		
-		app.filters.sexe = false;
-		app.filters.age = false;
-		
-		UI.menu.removeAllActiveFilter();
+	resetFilters: function(filter){
+		if(!filter){
+			app.filters.sexe = false;
+			app.filters.age = false;
+			UI.menu.removeAllActiveFilter();
+		}else{
+			app.filters[filter] = false;
+			UI.menu.removeActiveFilter(filter);
+		}
 		
 		app.reloadData();		
 		

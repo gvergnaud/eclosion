@@ -71,13 +71,14 @@
                     <i class="flaticons icon-filter"></i> 
                 </div>
                 <div class="optionName" id="optionName3">Filtrer</div>
+                <div id="filterSignContainer">
+                    <div class="activeFilter sexe"></div>
+                    <div class="activeFilter age"></div>
+                </div>
                 <div class="modal" id="filterWord">
                     <!-- Menu caché pour filtrer la vue -->
                     <i class="closeMenu flaticon-cross97" onclick="UI.menu.closeModal()"></i>
                     <div class="filter-container">
-                        <div class="filters">
-                            <p><button class="resetFilters">AUCUN</button></p>
-                        </div>
                         <div class="filters">
                             <p>AGE</p>
                             <div class="agefilter">
@@ -92,7 +93,6 @@
                             <div class="sexfilter">
                                 <button class="filterbuttons sexe" onclick="app.addFilter(event, 'sexe', 'male')">Homme</button>
                                 <button class="filterbuttons sexe" onclick="app.addFilter(event, 'sexe', 'female')">Femme</button>
-                                <button class="filterbuttons sexe" onclick="app.addFilter(event, 'sexe', 'unknown')">Inconnu</button>
                             </div>
                         </div>
                     </div>
