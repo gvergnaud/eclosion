@@ -176,6 +176,7 @@ svg{
 }
 
 #nodeData header h1.theme{
+	padding-bottom: 10px;
 	margin: 15px 15px 0 15px;
 	line-height: 50px;
 	border-bottom: 1px solid #194e9f;
@@ -188,38 +189,15 @@ svg{
 	color: #fff;
 }
 
-#nodeData header .contribution, #nodeData header .share{
+#nodeData header .contribution{
 	margin: 15px 30px;
 
 }
-#nodeData header .contribution p, #nodeData header .share p{
+#nodeData header .contribution p{
 	font-size: 1.2rem;
 	color: #194e9f;
 }
-#nodeData header .share {
-	box-sizing: border-box;
-	position: absolute;
-	bottom: 0;
-	right: 0;
-	width: 350px;
-	padding: 20px 30px;
-	margin: 0;
-	background-color: #fff;
-}
-#nodeData header .share p {
-	display: inline-block;
-	margin: 0 15px 0 0;
-}
-div#twitterButton {
-	display: inline-block;
-}
-#custom-twitter-button {
-/*	display: inline-block;
-	margin: 10px; */
-}
-#nodeData header .share{
 
-}
 #nodeData header .contribution input{
 	color: white;
 	font-family: 'Open Sans';
@@ -289,6 +267,38 @@ div#twitterButton {
 
 #nodeData div.stats span.right{
 	float: right;
+}
+
+#nodeData footer .share {
+	box-sizing: border-box;
+	position: absolute;
+	bottom: 0;
+	right: 0;
+	width: 350px;
+	padding: 20px 30px;
+	margin: 0;
+	background: #3177df;
+}
+
+#nodeData footer .share p {
+	display: inline-block;
+	margin: 0 15px 0 0;
+	font-size: 1.2rem;
+	color: #194e9f;
+	text-transform: uppercase;
+}
+
+div#twitterButton {
+	display: inline-block;
+}
+
+#custom-twitter-button {
+/*	display: inline-block;
+	margin: 10px; */
+}
+
+#nodeData footer .share{
+
 }
 
 
@@ -479,7 +489,7 @@ div#twitterButton {
 	color: #3277df; /* bleu primaire */
 }
 
-#writehWordForm { /* Pour gommer les 82px de droite que prend le bouton close */
+#writeWordForm { /* Pour gommer les 82px de droite que prend le bouton close */
 	margin-left: 82px;
 }
 
@@ -886,7 +896,7 @@ div#twitterButton {
 	font-family: "Share";
 }
 
-#home img, #logo img{
+#home img{
 	position: absolute;
 	top: -140px;
 	left: -175px;
@@ -946,13 +956,14 @@ div#twitterButton {
 	width:200px;
 	height:200px;
 	position: absolute;
-	top:0;
-	left:0;
+	top: 15px;
+	left: -30px;
 	z-index:30;
 	text-align: center;
 }
 
 #logo img{
+	position: absolute;
 	width:80%;
 	left:10%;
 }
@@ -960,7 +971,7 @@ div#twitterButton {
 #logo p{
 	font-size: 20px;
 	position: relative;
-	top:40px;
+	top: 35px;
 }
 
 #cursor.grab{

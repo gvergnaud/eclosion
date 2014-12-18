@@ -24,16 +24,6 @@
         <!--[if lt IE 7]>
             <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
-        <div id="fb-root"></div>
-        <script>
-            (function(d, s, id) {
-              var js, fjs = d.getElementsByTagName(s)[0];
-              if (d.getElementById(id)) return;
-              js = d.createElement(s); js.id = id;
-              js.src = "//connect.facebook.net/fr_FR/sdk.js#xfbml=1&appId=381386785356869&version=v2.0";
-              fjs.parentNode.insertBefore(js, fjs);
-            }(document, 'script', 'facebook-jssdk'));
-        </script>
 
         <!-- Menu de navigation gauche -->
         <nav role="navigation" id="lateral-navigation">
@@ -63,7 +53,7 @@
                 <div class="modal" id="writeWord">
                     <!-- Menu caché pour l'ajout de mot -->
                     <i class="closeMenu flaticon-cross97" onclick="UI.menu.closeModal()"></i>
-                    <div id="writehWordForm" class="optionsForm">
+                    <div id="writeWordForm" class="optionsForm">
                         <p id="proposedWord">Si je vous dit :&nbsp;<span id="proposedWordText"></span>...</p>
                         <input type="text" class="addContribution optionsInputText" class="optionsInputText" placeholder="Ecrivez le mot qui vous vient à l'esprit" />
                         <p class="error"></p>
@@ -247,10 +237,6 @@
                     <input class="addContribution" data-activeWord="activeWord" type="text" placeholder="Votre mot" />
                     <p class="error"></p>
                 </div>
-                <div class="share">
-                    <p>Partager</p>
-                    <div id="twitterButton"></div>
-                </div>
             </header>
             <div class="stats">
                 <div class="statSection occurrence">
@@ -307,6 +293,12 @@
                     </div> -->
                 </div>
             </div>
+            <footer>
+                <div class="share">
+                    <p>Partager</p>
+                    <div id="twitterButton"></div>
+                </div>
+            </footer>
         </section>
 
         <section id="userInfoOverlay" class="active">
@@ -333,13 +325,7 @@
         <footer id="menufooter">
             <nav>
                 <ul>
-                    <li><div class="fb-share-button" data-href="http://eclosion.gabrielvergnaud.com/" data-layout="button"></div></li>
-                    <li><a href="https://twitter.com/share" class="twitter-share-button"
-                      data-dnt="true"
-                      data-count="none"
-                      data-via="eclosionLeSite" height="17px">
-                    Tweet
-                    </a></li>
+                    <li><a href="https://twitter.com/EclosionLeSite"><i class="icon-twitter"></i></a></li>
                     <li><button class="footerbuttons" id="soundOption"><i class="icon-volume-down"></i></button></li>
                     <li><button class="footerbuttons" id="aproposButton">A propos</button></li>
                 </ul>
@@ -408,6 +394,7 @@
         <script src="js/libs/velocity.ui.min.js"></script>
         <script src="js/libs/draggabily.js"></script>
         <script src="js/libs/countup.min.js"></script>
+        
         <!-- Twitter -->
         <script>window.twttr = (function (d, s, id) {
           var t, js, fjs = d.getElementsByTagName(s)[0];
@@ -417,6 +404,17 @@
           fjs.parentNode.insertBefore(js, fjs);
           return window.twttr || (t = { _e: [], ready: function (f) { t._e.push(f) } });
         }(document, "script", "twitter-wjs"));
+        </script>
+
+        <!-- GOOGLE ANALYTICS -->
+        <script>
+            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+            })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+            ga('create', 'UA-50091718-1');
+            ga('send', 'pageview');
         </script>
 
         <script src="js/model.js"></script>
