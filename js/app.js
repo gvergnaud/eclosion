@@ -329,7 +329,7 @@ var app = {
 		UI.menu.closeModal();
 
 		history.pushState({}, word, '#/' + encodeURI(word));
-		
+
 		/* Social share */
 		app.twitterShareWord(word);
 	},
@@ -544,15 +544,14 @@ var app = {
 		var link = document.createElement('a');
 		link.setAttribute('href', 'https://twitter.com/share');
 		link.setAttribute('class', 'twitter-share-button');
+		link.setAttribute('id', 'custom-twitter-button');
 		link.setAttribute('data-hashtags', 'eclosion');
 		link.setAttribute("data-text" , 'Poursuivez cette liste de mot avec le mot suivant : #'+nodeName);
 		link.setAttribute("data-count" ,"none");
 		link.setAttribute("data-url" ,window.location);
 
 		if (parent.hasChildNodes() != false){
-			console.log("Parent possède un enfant");
 			parent.removeChild(parent.childNodes[0]);
-
 		}
 
 		parent.appendChild(link);

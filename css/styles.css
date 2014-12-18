@@ -187,12 +187,28 @@ svg{
 	color: #fff;
 }
 
-#nodeData header .contribution{
-	font-size: 1.2rem;
+#nodeData header .contribution, #nodeData header .share{
 	margin: 20px 30px;
+
+}
+#nodeData header .contribution p, #nodeData header .share p{
+	font-size: 1.2rem;
 	color: #194e9f;
 }
+#nodeData header .share p {
+	display: inline-block;
+	margin: 0 15px 0 0;
+}
+div#twitterButton {
+	display: inline-block;
+}
+#custom-twitter-button {
+/*	display: inline-block;
+	margin: 10px; */
+}
+#nodeData header .share{
 
+}
 #nodeData header .contribution input{
 	color: white;
 	font-family: 'Open Sans';
@@ -215,9 +231,6 @@ svg{
 #nodeData header p.error i:hover{
 	color: #fff;
 	border-color: #fff;
-}
-#nodeData header .share{
-	text-align: center;
 }
 #nodeData div.stats{
 	padding: 20px;
@@ -461,7 +474,6 @@ svg{
 }
 
 .addContribution { /* Input text pour ajouter un mot */
-	margin: 10px 0;
 	padding: 8px 30px;
 	width: 490px;
 	height: 50px;
@@ -772,14 +784,15 @@ circle{
 }
 
 /* Twitter Share */
-#twitterButton .btn {
+/*#twitterButton .btn {
     display: block;
     padding: 2px 5px 2px 20px;
     background: url('https://twitter.com/favicons/favicon.ico') 1px center no-repeat;
     border: 1px solid #ccc;
 }
-
-.twitter-share-button {
+*/
+/*
+.twitter-share-button .btn {
   display: inline-block;
   padding: 1px 3px 0 19px;
   border: #ccc solid 1px;
@@ -790,17 +803,16 @@ circle{
   background: url(//platform.twitter.com/images/bird.png) 2px 3px no-repeat,
               linear-gradient(#fff, #dedede);
   background-size: 16px 13px, auto auto;
- 
-  /* Text */
-    font: bold 11px/17px Helvetica, Arial, sans-serif;
+  font: bold 11px/17px Helvetica, Arial, sans-serif;
   text-decoration: none;
   color: #333;
   text-shadow: 0 1px 0 rgba(255, 255, 255, .5);
   white-space: nowrap;
 }
- 
+*/ 
+
 /* Color Highlight for keyboard navigation */
-.twitter-share-button:focus {
+/*.twitter-share-button:focus .btn{
   outline: none;
   border-color: #0089cb;
-}
+}*/
