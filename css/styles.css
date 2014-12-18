@@ -864,7 +864,6 @@ div#twitterButton {
 }
 
 #home{
-	width:100%;
 	position:absolute;
 	transform: translate(-50%, -50%);
 	-webkit-transform: translate(-50%, -50%);
