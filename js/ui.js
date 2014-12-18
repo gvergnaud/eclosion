@@ -152,11 +152,13 @@ var UI = {
 				    self.svg.style("cursor", "-webkit-grabbing");
 			    }).on("dragend", function(){
 				    self.svg.style("cursor", "default");
-			    }));
+			    })
+			    );
 		    	
 		    this.g = this.svg.append('svg:g')
 			   	.style("background-color", "transparent")
 			    .append('svg:g')
+			    .attr("transform", "scale(0.5)")
 			    .style("background-color", "transparent");
 			    
 			this.force
@@ -526,8 +528,8 @@ var UI = {
 		overlayContainer: document.querySelector('#overlay-container'),
 
 		openOverlay: function() {
-
-			this.overlayApropos.classList.add('active');
+			var self = this;
+			Velocity(self.overlayApropos, "fadeIn", 800);
 
 	    	var openAnim = [
 	        	{
@@ -541,8 +543,9 @@ var UI = {
 		},
 		closeOverlay: function() {
 			var overlayContainer = document.querySelector('#overlay-container');
-
-			UI.about.overlayApropos.classList.remove('active');
+			
+			var self = this;
+			Velocity(self.overlayApropos, "fadeOut", 800);
 
 	    	var closeAnim = [
 	        	{
@@ -909,7 +912,7 @@ var UI = {
 	        	
 	        	{
 	        		elements: document.querySelector("#storyTelling line"), 
-	        		properties: { y1:  0, y2 : 900},
+	        		properties: { y1:  0, y2 : window.innerHeight},
 	        		options: {duration: 800, easing: 'easeInOutBack', sequenceQueue : false}
 	        	}, 
 	        	
@@ -1127,7 +1130,7 @@ var UI = {
 	        	
 	        	{
 	        		elements: document.querySelector("#storyTelling>g:first-child>line"), 
-	        		properties: { y1:  -900, y2 : 0},
+	        		properties: { y1:  - (window.innerHeight), y2 : 0},
 	        		options: {duration: 800, easing: 'easeInOutBack'}
 	        	}
 	        ];
@@ -1170,7 +1173,7 @@ var UI = {
 						cx : function() { return Math.floor(Math.random() * window.innerWidth)},
 						cy : function() { return Math.floor(Math.random() * window.innerHeight)}
 					},
-					options: {duration: 4000, easing: 'easeInOutBack', sequenceQueue : false}
+					options: {duration: 4000, easing: 'easeInOutBack', sequenceQueue : false, queueName : "test"}
 				},
 				
 				{
@@ -1218,7 +1221,6 @@ var UI = {
 			];
 	        
 	        /* Gestion de Lancement des Animations */
-	        
 	        // Lancement de la phase 1
 	        Velocity.RunSequence(phase1);
 	        
@@ -1275,9 +1277,10 @@ var UI = {
 		},
 		
 		skip : function(){
-			Velocity(document.querySelector("#storyTelling"), "fadeOut", 800);
 			Velocity(document.querySelector("#skip"), "fadeOut", 800);
 			Velocity(document.querySelector("#home"), "fadeOut", 800);
+			Velocity(document.querySelector("#storyTelling"), {opacity:0}, 800);
+			Velocity(document.querySelector("#storyTelling"), "fadeOut", 900);
 		}
 	}
 };
