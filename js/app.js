@@ -1,4 +1,3 @@
-'use strict';
 var app = {
 
 	routeParams: {},
@@ -14,6 +13,23 @@ var app = {
 
 	event: {},
 
+	startStoryTelling : function(){
+		UI.animation.start();
+		
+		/* Gestion du Story Telling */
+        document.getElementById('startExperience').addEventListener("click", function(e){
+        	e.preventDefault();
+        	UI.animation.skip();
+	        app.init();
+        }, false);
+        document.getElementById('skip').addEventListener("click", function(e){
+        	e.preventDefault();
+        	UI.animation.skip();
+	        app.init();
+        }, false);
+        
+	},
+	
 	init: function(){
 
 		app.getRouteParams();
@@ -39,6 +55,33 @@ var app = {
 		//lorsque l'utilisateur ajoute un mot
 		document.addEventListener('usercontribution', app.onUserContribution, false);
 		
+		// Gestion du drag du zoom
+		var draggie = new Draggabilly( document.querySelector('#cursor'), {
+		  axis: 'y',
+		  containment: '#zoomBar'
+		});
+		
+		
+		draggie.on( 'dragMove', function(instance, event, pointer){
+			var zoombarHeight = document.getElementById("zoom").offsetHeight;
+			if(instance.position.y < 0)
+				instance.position.y = 0;
+				
+			app.scale =  - (((Math.floor(instance.position.y) * 100 / (zoombarHeight - 15) + ((100 * 7.5) / zoombarHeight) - 100) 
+				* (UI.d3.zoomMax - UI.d3.zoomMin) / 100 + UI.d3.zoomMin)) + 0.56;
+			document.querySelector("#cursor").classList.add("grab");
+				
+			UI.d3.defineZoom(app.scale);
+		});
+		
+		draggie.on("dragEnd", function(){
+			UI.d3.svg.call(d3.behavior.zoom().scale(app.scale).translate(UI.d3.translate).scaleExtent([UI.d3.zoomMin, UI.d3.zoomMax]).on("zoom", function(){
+				UI.d3.redrawGraph();
+				UI.d3.defineCursor();
+			}));
+			document.querySelector("#cursor").classList.remove("grab");
+		});
+		
 		// Fermeture de la fenetre droite au clic sur la croix
 		document.querySelector("#nodeData .close").addEventListener("click", app.blurWord, false);
 
@@ -51,7 +94,7 @@ var app = {
 		document.querySelector('#searchInput').addEventListener('keyup', app.searchNode, false);
 
 		// lorsque l'utilisateur tape un caractère dans l'espace recherche
-		document.querySelector('div.filters button.resetFilters').addEventListener('click', app.resetFilters, false);
+		//document.querySelector('div.filters button.resetFilters').addEventListener('click', app.resetFilters, false);
 	
 		/* Gestion des fenêtres du menu */
         document.getElementById('searchBox').addEventListener("click", function(){
@@ -82,32 +125,7 @@ var app = {
         }, false);
 
         // Overlay d'unfo utilisateur
-        document.querySelector('#userInfoOverlay .userInfoForm').addEventListener('submit', app.onUserInfoSubmit, false);
-		
-		// Gestion du drag du zoom
-		var draggie = new Draggabilly( document.querySelector('#cursor'), {
-		  axis: 'y',
-		  containment: '#zoomBar'
-		});
-		
-		
-		draggie.on( 'dragMove', function(instance, event, pointer){
-			var zoombarHeight = document.getElementById("zoom").offsetHeight;
-			if(instance.position.y < 0)
-				instance.position.y = 0;
-				
-			app.scale =  - (((Math.floor(instance.position.y) * 100 / (zoombarHeight - 15) + ((100 * 7.5) / zoombarHeight) - 100) 
-				* (UI.d3.zoomMax - UI.d3.zoomMin) / 100 + UI.d3.zoomMin)) + 0.56;
-				
-			UI.d3.defineZoom(app.scale);
-		});
-		
-		draggie.on("dragEnd", function(){
-			UI.d3.svg.call(d3.behavior.zoom().scale(app.scale).translate(UI.d3.translate).scaleExtent([UI.d3.zoomMin, UI.d3.zoomMax]).on("zoom", function(){
-				UI.d3.redrawGraph();
-				UI.d3.defineCursor();
-			}));
-		});
+        document.querySelector('#userInfoOverlay .userInfoForm').addEventListener('submit', app.onUserInfoSubmit, false);		
 	},
 
 	getRouteParams: function(){
@@ -136,7 +154,7 @@ var app = {
 
 		app.proposeRandomWord();
 
-		UI.d3.svg.call(d3.behavior.zoom().scaleExtent([UI.d3.zoomMin, UI.d3.zoomMax]).on("zoom", function(){
+		UI.d3.svg.call(d3.behavior.zoom().scale(0.5).scaleExtent([UI.d3.zoomMin, UI.d3.zoomMax]).on("zoom", function(){
 			UI.d3.redrawGraph();
 			UI.d3.defineCursor();
 		}));
@@ -144,12 +162,12 @@ var app = {
 		//si un mot est passé en parametre, on le focus
 		if(app.routeParams.word){
 			setTimeout(function(){
-				app.focusWord( decodeURI(app.routeParams.word) );
+				app.focusWord( decodeURI(app.routeParams.word));
 			}, 1500);
 		}
 
 		//remove l'event listener
-		e.target.removeEventListener(e.type);
+		e.target.removeEventListener(e.type, arguments.callee);
 	},
 
 	onDataUpdate: function(){
@@ -359,53 +377,49 @@ var app = {
 						proposedWord = app.proposedWord;
 					}
 
-					// si les infos d'utilisateur sont remplies
-					if(!(model.user.sexe === 'unknown') && !(model.user.age === 'unknown')){
-										
-						model.addContribution(contribution, proposedWord, 
-							function(){ //success
-								app.lastUserContribution = contribution;
-								document.dispatchEvent(app.event.userContribution);
-							},
-							function(error){
-								// si la contribution vien de la fenetre nodeData
-								if(e.target.getAttribute('data-activeWord') === 'activeWord'){
-									UI.notification(document.querySelector('#nodeData .error'), error);
-								}else{
-									UI.notification(document.querySelector('.addWordBox .error'), error);
-								}
-							}
-						);
-
-					}else{
-
-						UI.userInfo.openOverlay();
-						UI.menu.closeModal();
-
-						document.addEventListener('userinfosubmit', function(e){
-							
+					//si le mot tapé par l'utilisateur n'est pas le mot proposé
+					if(contribution !== proposedWord){
+						// si les infos d'utilisateur sont remplies
+						if(!(model.user.sexe === 'unknown') && !(model.user.age === 'unknown')){
+											
 							model.addContribution(contribution, proposedWord, 
 								function(){ //success
 									app.lastUserContribution = contribution;
 									document.dispatchEvent(app.event.userContribution);
 								},
-								function(error){
-									// si la contribution vien de la fenetre nodeData
-									if(e.target.getAttribute('data-activeWord') === 'activeWord'){
-										UI.notification(document.querySelector('#nodeData .error'), error);
-									}else{
-										UI.notification(document.querySelector('.addWordBox .error'), error);
-									}
-								}
+								function(error){}
 							);
 
-							//remove l'event listener
-							e.target.removeEventListener(e.type);
-						});
+						}else{
 
+							UI.userInfo.openOverlay();
+							UI.menu.closeModal();
+
+							document.addEventListener('userinfosubmit', function(e){
+								
+								model.addContribution(contribution, proposedWord, 
+									function(){ //success
+										app.lastUserContribution = contribution;
+										document.dispatchEvent(app.event.userContribution);
+									},
+									function(error){}
+								);
+
+								//remove l'event listener
+								e.target.removeEventListener(e.type, arguments.callee);
+							});
+
+						}
+
+						this.value = '';
+					
+					}else{
+						if(e.target.getAttribute('data-activeWord') === 'activeWord'){
+							UI.notification(document.querySelector('#nodeData .error'), 'Choisissez un mot différent !');
+						}else{
+							UI.notification(document.querySelector('.addWordBox .error'), 'Choisissez un mot différent !');
+						}
 					}
-
-					this.value = '';
 
 				}else{
 					if(e.target.getAttribute('data-activeWord') === 'activeWord'){
@@ -428,24 +442,35 @@ var app = {
 
 	addFilter: function(e, filter, value){
 
+		var filterType;
+
+		if(e.target.classList.contains('sexe')){
+			filterType = 'sexe';
+		}else{
+			filterType = 'age';
+		}
+
 		if(!e.target.classList.contains('active')){
 			UI.menu.addActiveFilter(e.target);
 			app.filters[filter] = value;
 
 		}else{
-			UI.menu.removeActiveFilter(e.target);
+			UI.menu.removeActiveFilter(filterType);
 			app.filters[filter] = false;
 		}
 
 		app.reloadData();		
 	},
 
-	resetFilters: function(){
-		
-		app.filters.sexe = false;
-		app.filters.age = false;
-		
-		UI.menu.removeAllActiveFilter();
+	resetFilters: function(filter){
+		if(!filter){
+			app.filters.sexe = false;
+			app.filters.age = false;
+			UI.menu.removeAllActiveFilter();
+		}else{
+			app.filters[filter] = false;
+			UI.menu.removeActiveFilter(filter);
+		}
 		
 		app.reloadData();		
 		
@@ -560,4 +585,6 @@ var app = {
 
 };
 
-app.init();
+window.addEventListener("load", function(){
+	app.startStoryTelling();
+});

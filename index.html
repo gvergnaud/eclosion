@@ -17,13 +17,13 @@
         <link rel="stylesheet" href="css/flaticon.css" media="all">
 
         <link href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,400,700' rel='stylesheet' type='text/css'>
-        <link href='http://fonts.googleapis.com/css?family=Fjalla+One' rel='stylesheet' type='text/css'>
+        <link href='http://fonts.googleapis.com/css?family=Fjalla+One' rel='stylesheet' type='text/css'>`
+        <link href='http://fonts.googleapis.com/css?family=Share' rel='stylesheet' type='text/css'>
     </head>
     <body>
         <!--[if lt IE 7]>
             <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
-        <aside id="notifications"></aside>
 
         <!-- Menu de navigation gauche -->
         <nav role="navigation" id="lateral-navigation">
@@ -67,13 +67,14 @@
                     <i class="flaticons icon-filter"></i> 
                 </div>
                 <div class="optionName" id="optionName3">Filtrer</div>
+                <div id="filterSignContainer">
+                    <div class="activeFilter sexe"></div>
+                    <div class="activeFilter age"></div>
+                </div>
                 <div class="modal" id="filterWord">
                     <!-- Menu caché pour filtrer la vue -->
                     <i class="closeMenu flaticon-cross97" onclick="UI.menu.closeModal()"></i>
                     <div class="filter-container">
-                        <div class="filters">
-                            <p><button class="resetFilters">AUCUN</button></p>
-                        </div>
                         <div class="filters">
                             <p>AGE</p>
                             <div class="agefilter">
@@ -88,15 +89,125 @@
                             <div class="sexfilter">
                                 <button class="filterbuttons sexe" onclick="app.addFilter(event, 'sexe', 'male')">Homme</button>
                                 <button class="filterbuttons sexe" onclick="app.addFilter(event, 'sexe', 'female')">Femme</button>
-                                <button class="filterbuttons sexe" onclick="app.addFilter(event, 'sexe', 'unknown')">Inconnu</button>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </nav>
-
+        
+        <div id="logo">
+        	<img src="res/logo_1.png" />
+	       	<img src="res/logo_2.png" />
+	        <img src="res/logo_3.png" />
+	        <div>
+	        	<p>éclosion</p>
+	        </div>
+        </div>
+        
+        <!-- MAP -->
         <svg id="wordGraph"></svg>
+        
+        <!-- Animation Story Telling -->
+        <svg id="storyTelling">
+	        <g>
+	        	<line x1="720" x2="720" y1="-900" y2="0" style="stroke:#919191; stroke-width:1px;"></line>
+	        	<g>
+		        	<circle class="central"  cy="-50" r="20" style="fill:#72a1e9"></circle>
+		        	
+		        	<circle class="firstDiv"  cy="-50" r="10" style="fill:#72a1e9"></circle>
+		        	<circle class="firstDiv"  cy="-50" r="10" style="fill:#72a1e9"></circle>
+		        	
+		        	<circle class="secondDiv left"  cy="-50" r="5" style="fill:#72a1e9"></circle>
+		        	<circle class="secondDiv left"  cy="-50" r="5" style="fill:#72a1e9"></circle>
+		        	<circle class="secondDiv left"  cy="-50" r="5" style="fill:#72a1e9"></circle>
+		        	<circle class="secondDiv left"  cy="-50" r="5" style="fill:#72a1e9"></circle>
+		        	<circle class="secondDiv right"  cy="-50" r="5" style="fill:#72a1e9"></circle>
+		        	<circle class="secondDiv right"  cy="-50" r="5" style="fill:#72a1e9"></circle>
+		        	<circle class="secondDiv right"  cy="-50" r="5" style="fill:#72a1e9"></circle>
+		        	<circle class="secondDiv right"  cy="-50" r="5" style="fill:#72a1e9"></circle>
+		        	
+		        	<g id="randomCircle">
+			        	<circle  cy="-50" r="7" style="fill:#72a1e9; opacity:0.5;"></circle>
+			        	<circle  cy="-50" r="7" style="fill:#72a1e9; opacity:0.5;"></circle>
+			        	<circle  cy="-50" r="7" style="fill:#72a1e9; opacity:0.5;"></circle>
+			        	<circle  cy="-50" r="7" style="fill:#72a1e9; opacity:0.5;"></circle>
+			        	<circle  cy="-50" r="7" style="fill:#72a1e9; opacity:0.5;"></circle>
+			        	<circle  cy="-50" r="7" style="fill:#72a1e9; opacity:0.5;"></circle>
+			        	<circle  cy="-50" r="7" style="fill:#72a1e9; opacity:0.5;"></circle>
+			        	<circle  cy="-50" r="7" style="fill:#72a1e9; opacity:0.5;"></circle>
+			        	<circle  cy="-50" r="7" style="fill:#72a1e9; opacity:0.5;"></circle>
+			        	<circle  cy="-50" r="7" style="fill:#72a1e9; opacity:0.5;"></circle>
+			        	<circle  cy="-50" r="7" style="fill:#72a1e9; opacity:0.5;"></circle>
+			        	<circle  cy="-50" r="7" style="fill:#72a1e9; opacity:0.5;"></circle>
+			        	<circle  cy="-50" r="7" style="fill:#72a1e9; opacity:0.5;"></circle>
+			        	<circle  cy="-50" r="7" style="fill:#72a1e9; opacity:0.5;"></circle>
+			        	<circle  cy="-50" r="7" style="fill:#72a1e9; opacity:0.5;"></circle>
+			        	<circle  cy="-50" r="7" style="fill:#72a1e9; opacity:0.5;"></circle>
+			        	<circle  cy="-50" r="7" style="fill:#72a1e9; opacity:0.5;"></circle>
+			        	<circle  cy="-50" r="7" style="fill:#72a1e9; opacity:0.5;"></circle>
+			        	<circle  cy="-50" r="7" style="fill:#72a1e9; opacity:0.5;"></circle>
+			        	<circle  cy="-50" r="7" style="fill:#72a1e9; opacity:0.5;"></circle>
+			        	<circle  cy="-50" r="7" style="fill:#72a1e9; opacity:0.5;"></circle>
+			        	<circle  cy="-50" r="7" style="fill:#72a1e9; opacity:0.5;"></circle>
+			        	<circle  cy="-50" r="7" style="fill:#72a1e9; opacity:0.5;"></circle>
+			        	<circle  cy="-50" r="7" style="fill:#72a1e9; opacity:0.5;"></circle>
+			        	<circle  cy="-50" r="7" style="fill:#72a1e9; opacity:0.5;"></circle>
+			        	<circle  cy="-50" r="7" style="fill:#72a1e9; opacity:0.5;"></circle>
+			        	<circle  cy="-50" r="7" style="fill:#72a1e9; opacity:0.5;"></circle>
+			        	<circle  cy="-50" r="7" style="fill:#72a1e9; opacity:0.5;"></circle>
+			        	<circle  cy="-50" r="7" style="fill:#72a1e9; opacity:0.5;"></circle>
+			        	<circle  cy="-50" r="7" style="fill:#72a1e9; opacity:0.5;"></circle>
+			        	<circle  cy="-50" r="7" style="fill:#72a1e9; opacity:0.5;"></circle>
+			        	<circle  cy="-50" r="7" style="fill:#72a1e9; opacity:0.5;"></circle>
+			        	<circle  cy="-50" r="7" style="fill:#72a1e9; opacity:0.5;"></circle>
+			        	<circle  cy="-50" r="7" style="fill:#72a1e9; opacity:0.5;"></circle>
+			        	<circle  cy="-50" r="7" style="fill:#72a1e9; opacity:0.5;"></circle>
+			        	<circle  cy="-50" r="7" style="fill:#72a1e9; opacity:0.5;"></circle>
+			        </g>
+		        	
+		        	<path class="path" id="path" d="" fill="transparent" stroke="#72a1e9" style="opacity:1;stroke-dashoffset="400px";" 
+		        		stroke-width="1" stroke-miterlimit="10"/>
+		        	<path class="path" id="path2" d="" fill="transparent" stroke="#72a1e9" style="opacity:1;stroke-dashoffset="400px";" 
+		        		stroke-width="1" stroke-miterlimit="10"/>
+	        	</g>
+	        	
+	        	<!-- Phrases-->
+		        <text class="phrase" id="phrase1" style="font-size: 24px;opacity:0; fill:#484848">
+		        	Lorsque nous écrivons un mot, en avons nous tous la même représentation ?
+		        </text>
+		        
+		        <text class="phrase words" style="font-size: 24px;opacity:0; fill:#484848">
+		        	Les mots sont porteurs		        
+		        </text>
+		        
+		        <text class="phrase words word" style="font-size: 24px;opacity:0; fill:#484848">
+		        	de sens
+		        </text>
+		        
+		        <text class="phrase words word" style="font-size: 24px;opacity:0; fill:#484848">
+		        	d'idées
+		        </text>
+		        
+		        <text class="last" style="font-size: 32px;opacity:0; fill:#484848">
+		        	Des mots naissent les idées.
+		        </text>
+		        
+		        <text class="last" style="font-size: 32px;opacity:0; fill:#484848">
+		        	A votre tour de faire naître les vôtres ! 
+		        </text>
+	        </g>
+        </svg>
+        <div id="home">
+	       	<img src="res/logo2_1.png" />
+	       	<img src="res/logo2_2.png" />
+	        <img src="res/logo2_3.png" />
+	        <div>
+	        	<p>éclosion</p>
+	        	<a href="" id="startExperience">Commencer l'expérience</a>
+	        </div>
+        </div>
+        <a id="skip" href="">Skip</a>
 
         <div id="globalData">
             <p class="global"><i class="icon-word"></i><span class="words"></span><span class="dataType"> Mots</span></p>
@@ -212,7 +323,6 @@
         <footer id="menufooter">
             <nav>
                 <ul>
-                    <li><a href="http://facebook.com"><i class="icon-facebook"></i></a></li>
                     <li><a href="http://twitter.com"><i class="icon-twitter"></i></a></li>
                     <li><button class="footerbuttons" id="soundOption"><i class="icon-volume-down"></i></button></li>
                     <li><button class="footerbuttons" id="aproposButton">A propos</button></li>
@@ -276,10 +386,7 @@
             </aside>
         </footer>
         <audio src="" id="player"></audio>
-
-        <!-- SDK Facebook pour le partage -->
-        <div id="fb-root"></div>
-
+        
         <script src="js/libs/d3.v3.min.js"></script>
         <script src="js/libs/firebase.js"></script>
         <script src="js/libs/velocity.min.js"></script>
