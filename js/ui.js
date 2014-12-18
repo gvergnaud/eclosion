@@ -1238,7 +1238,6 @@ var UI = {
 					Velocity.RunSequence(phase1Reverse);
 					
 					setTimeout(function(){
-						document.querySelector("#home").style.display = "block";
 						//Lancement de la phase 2
 					 	Velocity.RunSequence(phase2);
 					 	
