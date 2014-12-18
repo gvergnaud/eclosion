@@ -500,9 +500,11 @@ var UI = {
 	        // On remet les propriétés des noeuds à leur état d'origine
 	        nodes.select("text").transition().duration(1000).style("fill", "#4b4b4b").style("font-weight", "400");
 	      
-	        // Changement de couleur des liens
+	        // Changement de couleur des liens et opacité
 	        links.transition().duration(1000).style("stroke", function (o) {
 	            return d.index == o.source.index | d.index == o.target.index ? "#72a1e9" : "#b8b8b8";
+	        }).style("opacity", function (o) {
+	            return d.index == o.source.index | d.index == o.target.index ? "1" : "0";
 	        });
 	        
 	        // On modifie l'apparence du noeud choisi
@@ -513,7 +515,7 @@ var UI = {
 		highlightOff : function(){
 			this.svg.selectAll("text").transition().duration(1000).style("fill", "#4b4b4b").style("font-weight", "400");
 			this.svg.selectAll("circle").transition().duration(1000).style("fill", "#83adec");
-			this.svg.selectAll("line").transition().duration(1000).style("stroke", "#b8b8b8");
+			this.svg.selectAll("line").transition().duration(1000).style("stroke", "#b8b8b8").style("opacity", 1);
 		},
 
 		style: function(){
