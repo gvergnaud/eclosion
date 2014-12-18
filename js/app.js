@@ -154,7 +154,7 @@ var app = {
 
 		app.proposeRandomWord();
 
-		UI.d3.svg.call(d3.behavior.zoom().scaleExtent([UI.d3.zoomMin, UI.d3.zoomMax]).on("zoom", function(){
+		UI.d3.svg.call(d3.behavior.zoom().scale(0.5).scaleExtent([UI.d3.zoomMin, UI.d3.zoomMax]).on("zoom", function(){
 			UI.d3.redrawGraph();
 			UI.d3.defineCursor();
 		}));
@@ -162,7 +162,7 @@ var app = {
 		//si un mot est passé en parametre, on le focus
 		if(app.routeParams.word){
 			setTimeout(function(){
-				app.focusWord( decodeURI(app.routeParams.word) );
+				app.focusWord( decodeURI(app.routeParams.word));
 			}, 1500);
 		}
 

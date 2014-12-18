@@ -152,11 +152,13 @@ var UI = {
 				    self.svg.style("cursor", "-webkit-grabbing");
 			    }).on("dragend", function(){
 				    self.svg.style("cursor", "default");
-			    }));
+			    })
+			    );
 		    	
 		    this.g = this.svg.append('svg:g')
 			   	.style("background-color", "transparent")
 			    .append('svg:g')
+			    .attr("transform", "scale(0.5)")
 			    .style("background-color", "transparent");
 			    
 			this.force
@@ -875,7 +877,7 @@ var UI = {
 	        	
 	        	{
 	        		elements: document.querySelector("#storyTelling line"), 
-	        		properties: { y1:  0, y2 : 900},
+	        		properties: { y1:  0, y2 : window.innerHeight},
 	        		options: {duration: 800, easing: 'easeInOutBack', sequenceQueue : false}
 	        	}, 
 	        	
@@ -1093,7 +1095,7 @@ var UI = {
 	        	
 	        	{
 	        		elements: document.querySelector("#storyTelling>g:first-child>line"), 
-	        		properties: { y1:  -900, y2 : 0},
+	        		properties: { y1:  - (window.innerHeight), y2 : 0},
 	        		options: {duration: 800, easing: 'easeInOutBack'}
 	        	}
 	        ];
