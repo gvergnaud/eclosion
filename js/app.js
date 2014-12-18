@@ -14,6 +14,10 @@ var app = {
 	event: {},
 
 	init: function(){
+	
+		window.addEventListener("load", function(){
+			UI.animation.start();
+		}, false);
 
 		app.getRouteParams();
 
@@ -103,6 +107,17 @@ var app = {
 
         document.getElementById('aproposOverlay').addEventListener("click", function() {
         	UI.about.closeOverlay();
+        }, false);
+        
+        /* Gestion du Story Telling */
+        document.getElementById('startExperience').addEventListener("click", function(e) {
+        	e.preventDefault();
+        	UI.animation.skip();
+        }, false);
+        
+        document.getElementById('skip').addEventListener("click", function(e){
+        	e.preventDefault();
+        	UI.animation.skip();
         }, false);
 	},
 
