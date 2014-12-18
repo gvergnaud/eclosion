@@ -840,12 +840,15 @@ svg{
 }
 
 #home{
-	width:100%;
+	position:absolute;
+	transform: translate(-50%, -50%);
+	-webkit-transform: translate(-50%, -50%);
+	-moz-transform: translate(-50%, -50%);
+	top: 50%;
+	left:50%;
 	text-align: center;
-	padding-top:17%;
 	z-index: 50;
 	opacity: 0;
-	position:relative;
 }
 
 #home>div, #logo>div{
@@ -861,9 +864,9 @@ svg{
 
 #home img, #logo img{
 	position: absolute;
-	top:0;
-	left:15%;
-	width:70%;
+	top: -140px;
+	left: -175px;
+	width:600px;
 }
 
 #home img:first-child, #logo img:first-child{

@@ -17,16 +17,17 @@ var app = {
 		UI.animation.start();
 		
 		/* Gestion du Story Telling */
-        document.getElementById('startExperience').addEventListener("click", launchApp, false);
-        document.getElementById('skip').addEventListener("click", launchApp, false);
-        
-        function launchApp(e){
-	        e.preventDefault();
+        document.getElementById('startExperience').addEventListener("click", function(e){
+        	e.preventDefault();
         	UI.animation.skip();
-        	setTimeout(function(){
-	        	app.init();
-        	}, 900);
-        }
+	        app.init();
+        }, false);
+        document.getElementById('skip').addEventListener("click", function(e){
+        	e.preventDefault();
+        	UI.animation.skip();
+	        app.init();
+        }, false);
+        
 	},
 	
 	init: function(){
