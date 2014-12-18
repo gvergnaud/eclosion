@@ -1,3 +1,4 @@
+'use strict';
 var app = {
 
 	routeParams: {},
@@ -121,6 +122,9 @@ var app = {
         	e.preventDefault();
         	UI.animation.skip();
         }, false);
+
+        // Overlay d'unfo utilisateur
+        document.querySelector('#userInfoOverlay .userInfoForm').addEventListener('submit', app.onUserInfoSubmit, false);		
 	},
 
 	getRouteParams: function(){
@@ -138,6 +142,9 @@ var app = {
 
 		app.event.userContribution = document.createEvent('Event');
 		app.event.userContribution.initEvent('usercontribution', true, true);
+
+		app.event.userInfoSubmit = document.createEvent('Event');
+		app.event.userInfoSubmit.initEvent('userinfosubmit', true, true);
 	},
 
 	onGraphReady: function (e) {
@@ -159,7 +166,7 @@ var app = {
 		}
 
 		//remove l'event listener
-		e.target.removeEventListener(e.type, arguments.callee);
+		e.target.removeEventListener(e.type);
 	},
 
 	onDataUpdate: function(){
@@ -199,6 +206,39 @@ var app = {
 		}
 
 		UI.removeAllNotifications();
+	},
+
+	onUserInfoSubmit: function(e){
+		e.preventDefault();
+
+		var radioMale = document.querySelector('#userInfoOverlay .userSexe.male'),
+			radioFemale = document.querySelector('#userInfoOverlay .userSexe.female'),
+			selectAge = document.querySelector('#userInfoOverlay .userAge'),
+			sexe,
+			age;
+
+		if(radioMale.checked || radioFemale.checked){
+			if(radioMale.checked){
+							
+				sexe = 'male';
+
+			}else if(radioFemale.checked){
+				
+				sexe = 'female';
+			}
+
+			age = selectAge.options[selectAge.selectedIndex].value;
+
+			model.updateUserInfos(sexe, age);
+
+			UI.userInfo.closeOverlay();
+
+			document.dispatchEvent(app.event.userInfoSubmit);
+		}else{
+			
+			UI.notification(document.querySelector('#userInfoOverlay p.error'), 'Veillez spécifier votre sexe');
+		}
+
 	},
 
 	watchData: function(){
@@ -321,39 +361,72 @@ var app = {
 
 	addContribution: function(e){
 		if(e.keyCode == 13){
+
 			if(this.value){
 
 				var contribution = this.value.toLowerCase();
-
 				var proposedWord;
 
-				// si la contribution vien de la fenetre nodeData
-				if(e.target.getAttribute('data-activeWord') === 'activeWord'){
-					proposedWord = app.activeWord;
-				}else{
-					proposedWord = app.proposedWord;
-				}
+				if(model.isAFrenchWord(contribution)){
 
-				model.addContribution(contribution, proposedWord, 
-					function(){ //success
-						app.lastUserContribution = contribution;
-						document.dispatchEvent(app.event.userContribution);
-					},
-					function(error){
-						// si la contribution vien de la fenetre nodeData
-						if(e.target.getAttribute('data-activeWord') === 'activeWord'){
-							UI.notification(document.querySelector('#nodeData .error'), error);
-						}else{
-							UI.notification(document.querySelector('.addWordBox .error'), error);
-						}
+					// si la contribution vien de la fenetre nodeData
+					if(e.target.getAttribute('data-activeWord') === 'activeWord'){
+						proposedWord = app.activeWord;
+					}else{
+						proposedWord = app.proposedWord;
 					}
-				);
+
+					// si les infos d'utilisateur sont remplies
+					if(!(model.user.sexe === 'unknown') && !(model.user.age === 'unknown')){
+										
+						model.addContribution(contribution, proposedWord, 
+							function(){ //success
+								app.lastUserContribution = contribution;
+								document.dispatchEvent(app.event.userContribution);
+							},
+							function(error){}
+						);
+
+					}else{
+
+						UI.userInfo.openOverlay();
+						UI.menu.closeModal();
+
+						document.addEventListener('userinfosubmit', function(e){
+							
+							model.addContribution(contribution, proposedWord, 
+								function(){ //success
+									app.lastUserContribution = contribution;
+									document.dispatchEvent(app.event.userContribution);
+								},
+								function(error){}
+							);
+
+							//remove l'event listener
+							e.target.removeEventListener(e.type);
+						});
+
+					}
+
+					this.value = '';
+
+				}else{
+					if(e.target.getAttribute('data-activeWord') === 'activeWord'){
+						UI.notification(document.querySelector('#nodeData .error'), 'le mot n\'est pas français');
+					}else{
+						UI.notification(document.querySelector('.addWordBox .error'), 'le mot n\'est pas français');
+					}
+				}
 				
-				this.value = '';
-
 			}
-
 		}
+	},
+
+	addUnlinkedWord: function(word){
+		model.addUnlinkedNode(word, function(){
+			app.lastUserContribution = word.toLowerCase();
+			document.dispatchEvent(app.event.userContribution);
+		});
 	},
 
 	addFilter: function(e, filter, value){
@@ -390,6 +463,8 @@ var app = {
 			var matches = model.words.nodes.filter(function (node) {
 				return	node.name.substring(0, value.length) === value;
 			});
+		}else{
+			UI.removeAllNotifications();
 		}
 
 		var list = document.getElementById('searchAutoComplete');
@@ -422,16 +497,33 @@ var app = {
 					
 					if(model.isAFrenchWord(value)){
 
+						var notifElement = document.querySelector('.searchBox p.error');
+
 						UI.notification(
-							document.querySelector('.searchBox p.error'),
-							'Le mot que vous recherchez n\'est pas dans la carte. voulez vous le rajouter ?', 
-							function(){
-								model.addUnlinkedNode(value, function(){
-									app.lastUserContribution = value.toLowerCase();
-									document.dispatchEvent(app.event.userContribution);
-								});
+							notifElement,
+							'Le mot que vous recherchez n\'est pas dans la carte. voulez vous le rajouter ?',
+							function(){ // lorsque l'utilisateur check
+
+								//lorsque son age et son sexe sont bien renseignés
+								if(!(model.user.sexe === 'unknown') && !(model.user.age === 'unknown')){
+									
+									app.addUnlinkedWord(value);
+
+								}else{
+
+									UI.userInfo.openOverlay();
+									UI.menu.closeModal();
+
+									document.addEventListener('userinfosubmit', function(e){
+										app.addUnlinkedWord(value);
+										//remove l'event listener
+										e.target.removeEventListener(e.type);
+									});
+
+								}
+								
 							},
-							function(){
+							function(){ // lorsque l'utilisateur cancel
 								e.target.value = '';
 								e.target.focus();
 							}
@@ -446,7 +538,6 @@ var app = {
 					}
 				}
 			}
-
 		}
 	}
 };
