@@ -340,6 +340,7 @@ var model = {
 			// si l'utilisateur est nouveau
 			if(model.newUser){
 				model.words.contributors += 1;
+				model.newUser = false;
 			}
 
 			var node = model.getNodeFromWord(newWord),
