@@ -573,6 +573,7 @@ var app = {
 		link.setAttribute('data-hashtags', 'eclosion');
 		link.setAttribute("data-text" , 'Si je vous dit '+nodeName+'... Faites naitre les associations autour de ce mot');
 		link.setAttribute("data-count" ,"none");
+		link.setAttribute("data-via", "eclosionLeSite");
 		link.setAttribute("data-url" ,window.location);
 
 		if (parent.hasChildNodes() != false){

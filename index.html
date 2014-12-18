@@ -24,6 +24,16 @@
         <!--[if lt IE 7]>
             <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
+        <div id="fb-root"></div>
+        <script>
+            (function(d, s, id) {
+              var js, fjs = d.getElementsByTagName(s)[0];
+              if (d.getElementById(id)) return;
+              js = d.createElement(s); js.id = id;
+              js.src = "//connect.facebook.net/fr_FR/sdk.js#xfbml=1&appId=381386785356869&version=v2.0";
+              fjs.parentNode.insertBefore(js, fjs);
+            }(document, 'script', 'facebook-jssdk'));
+        </script>
 
         <!-- Menu de navigation gauche -->
         <nav role="navigation" id="lateral-navigation">
@@ -323,7 +333,13 @@
         <footer id="menufooter">
             <nav>
                 <ul>
-                    <li><a href="http://twitter.com"><i class="icon-twitter"></i></a></li>
+                    <li><div class="fb-share-button" data-href="http://eclosion.gabrielvergnaud.com/" data-layout="button"></div></li>
+                    <li><a href="https://twitter.com/share" class="twitter-share-button"
+                      data-dnt="true"
+                      data-count="none"
+                      data-via="eclosionLeSite" height="17px">
+                    Tweet
+                    </a></li>
                     <li><button class="footerbuttons" id="soundOption"><i class="icon-volume-down"></i></button></li>
                     <li><button class="footerbuttons" id="aproposButton">A propos</button></li>
                 </ul>
@@ -350,7 +366,7 @@
                                 <h4>Justine Pascal</h4>
                                 <p class="posteOccupe">UX/UI Designer</p>
                                 <ul class="links">
-                                    <li><a href="" title="Portfolio"><i class="icon-link"></i></a></li>
+                                    <li><a href="https://www.facebook.com/l.php?u=https%3A%2F%2Fwww.behance.net%2Fjustinepascal&h=lAQHUTm4A" title="Portfolio"><i class="icon-link"></i></a></li>
                                     <li><a href="https://twitter.com/justinepascal" title="Twitter"><i class="icon-twitter"></i></a></li>
                                 </ul>
                             </div>
@@ -386,7 +402,7 @@
             </aside>
         </footer>
         <audio src="" id="player"></audio>
-        
+
         <script src="js/libs/d3.v3.min.js"></script>
         <script src="js/libs/firebase.js"></script>
         <script src="js/libs/velocity.min.js"></script>
