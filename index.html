@@ -1,17 +1,15 @@
 <!DOCTYPE html>
-<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
-<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
-<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title>Les mots</title>
+        <title>Eclosion</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        
-        <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
 
+        <!-- Favicon -->
+        <link rel="icon" type="image/png" href="favicon.png" />
+
+        <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
         <link rel="stylesheet" href="css/reset.css">
         <link rel="stylesheet" href="css/styles.css">
 
@@ -19,18 +17,18 @@
         <link rel="stylesheet" href="css/flaticon.css" media="all">
 
         <link href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,400,700' rel='stylesheet' type='text/css'>
-        <link href='http://fonts.googleapis.com/css?family=Fjalla+One' rel='stylesheet' type='text/css'>
+        <link href='http://fonts.googleapis.com/css?family=Fjalla+One' rel='stylesheet' type='text/css'>`
+        <link href='http://fonts.googleapis.com/css?family=Share' rel='stylesheet' type='text/css'>
     </head>
     <body>
         <!--[if lt IE 7]>
             <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
-        <aside id="notifications"></aside>
 
         <!-- Menu de navigation gauche -->
         <nav role="navigation" id="lateral-navigation">
             <!-- Recherche d'un mot -->
-            <div class="optioncontainer">
+            <div class="optioncontainer searchBox">
                 <div class="left-nav" id="searchBox">
                     <i class="flaticons icon-search"></i> 
                 </div>
@@ -40,13 +38,14 @@
                     <i class="closeMenu flaticon-cross97" onclick="UI.menu.closeModal()"></i>
                     <div id="searchWordForm" class="optionsForm">
                         <input type="text" id="searchInput" class="optionsInputText" list="searchAutoComplete" placeholder="Rechercher un mot"/>
-                        <datalist id="searchAutoComplete"></datalist>
+                        <p class="error"></p>
+                        <div id="searchAutoComplete"></div>
                     </div>
                 </div>
             </div>
 
             <!-- Ajout d'un mot -->
-            <div class="optioncontainer">
+            <div class="optioncontainer addWordBox">
                 <div class="left-nav" id="addWordBox">
                     <i class="flaticons icon-edit"></i> 
                 </div>
@@ -54,26 +53,28 @@
                 <div class="modal" id="writeWord">
                     <!-- Menu caché pour l'ajout de mot -->
                     <i class="closeMenu flaticon-cross97" onclick="UI.menu.closeModal()"></i>
-                    <div id="writehWordForm" class="optionsForm">
+                    <div id="writeWordForm" class="optionsForm">
                         <p id="proposedWord">Si je vous dit :&nbsp;<span id="proposedWordText"></span>...</p>
                         <input type="text" class="addContribution optionsInputText" class="optionsInputText" placeholder="Ecrivez le mot qui vous vient à l'esprit" />
+                        <p class="error"></p>
                     </div>
                 </div>
             </div>
 
             <!-- Options de Filtrage -->
-            <div class="optioncontainer">
+            <div class="optioncontainer filterBox">
                 <div class="left-nav" id="filterBox">
                     <i class="flaticons icon-filter"></i> 
                 </div>
                 <div class="optionName" id="optionName3">Filtrer</div>
+                <div id="filterSignContainer">
+                    <div class="activeFilter sexe"></div>
+                    <div class="activeFilter age"></div>
+                </div>
                 <div class="modal" id="filterWord">
                     <!-- Menu caché pour filtrer la vue -->
                     <i class="closeMenu flaticon-cross97" onclick="UI.menu.closeModal()"></i>
                     <div class="filter-container">
-                        <div class="filters">
-                            <p><button class="resetFilters">AUCUN</button></p>
-                        </div>
                         <div class="filters">
                             <p>AGE</p>
                             <div class="agefilter">
@@ -88,15 +89,125 @@
                             <div class="sexfilter">
                                 <button class="filterbuttons sexe" onclick="app.addFilter(event, 'sexe', 'male')">Homme</button>
                                 <button class="filterbuttons sexe" onclick="app.addFilter(event, 'sexe', 'female')">Femme</button>
-                                <button class="filterbuttons sexe" onclick="app.addFilter(event, 'sexe', 'unknown')">Inconnu</button>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </nav>
-
+        
+        <div id="logo">
+        	<img src="res/logo_1.png" />
+	       	<img src="res/logo_2.png" />
+	        <img src="res/logo_3.png" />
+	        <div>
+	        	<p>éclosion</p>
+	        </div>
+        </div>
+        
+        <!-- MAP -->
         <svg id="wordGraph"></svg>
+        
+        <!-- Animation Story Telling -->
+        <svg id="storyTelling">
+	        <g>
+	        	<line x1="720" x2="720" y1="-900" y2="0" style="stroke:#919191; stroke-width:1px;"></line>
+	        	<g>
+		        	<circle class="central"  cy="-50" r="20" style="fill:#72a1e9"></circle>
+		        	
+		        	<circle class="firstDiv"  cy="-50" r="10" style="fill:#72a1e9"></circle>
+		        	<circle class="firstDiv"  cy="-50" r="10" style="fill:#72a1e9"></circle>
+		        	
+		        	<circle class="secondDiv left"  cy="-50" r="5" style="fill:#72a1e9"></circle>
+		        	<circle class="secondDiv left"  cy="-50" r="5" style="fill:#72a1e9"></circle>
+		        	<circle class="secondDiv left"  cy="-50" r="5" style="fill:#72a1e9"></circle>
+		        	<circle class="secondDiv left"  cy="-50" r="5" style="fill:#72a1e9"></circle>
+		        	<circle class="secondDiv right"  cy="-50" r="5" style="fill:#72a1e9"></circle>
+		        	<circle class="secondDiv right"  cy="-50" r="5" style="fill:#72a1e9"></circle>
+		        	<circle class="secondDiv right"  cy="-50" r="5" style="fill:#72a1e9"></circle>
+		        	<circle class="secondDiv right"  cy="-50" r="5" style="fill:#72a1e9"></circle>
+		        	
+		        	<g id="randomCircle">
+			        	<circle  cy="-50" r="7" style="fill:#72a1e9; opacity:0.5;"></circle>
+			        	<circle  cy="-50" r="7" style="fill:#72a1e9; opacity:0.5;"></circle>
+			        	<circle  cy="-50" r="7" style="fill:#72a1e9; opacity:0.5;"></circle>
+			        	<circle  cy="-50" r="7" style="fill:#72a1e9; opacity:0.5;"></circle>
+			        	<circle  cy="-50" r="7" style="fill:#72a1e9; opacity:0.5;"></circle>
+			        	<circle  cy="-50" r="7" style="fill:#72a1e9; opacity:0.5;"></circle>
+			        	<circle  cy="-50" r="7" style="fill:#72a1e9; opacity:0.5;"></circle>
+			        	<circle  cy="-50" r="7" style="fill:#72a1e9; opacity:0.5;"></circle>
+			        	<circle  cy="-50" r="7" style="fill:#72a1e9; opacity:0.5;"></circle>
+			        	<circle  cy="-50" r="7" style="fill:#72a1e9; opacity:0.5;"></circle>
+			        	<circle  cy="-50" r="7" style="fill:#72a1e9; opacity:0.5;"></circle>
+			        	<circle  cy="-50" r="7" style="fill:#72a1e9; opacity:0.5;"></circle>
+			        	<circle  cy="-50" r="7" style="fill:#72a1e9; opacity:0.5;"></circle>
+			        	<circle  cy="-50" r="7" style="fill:#72a1e9; opacity:0.5;"></circle>
+			        	<circle  cy="-50" r="7" style="fill:#72a1e9; opacity:0.5;"></circle>
+			        	<circle  cy="-50" r="7" style="fill:#72a1e9; opacity:0.5;"></circle>
+			        	<circle  cy="-50" r="7" style="fill:#72a1e9; opacity:0.5;"></circle>
+			        	<circle  cy="-50" r="7" style="fill:#72a1e9; opacity:0.5;"></circle>
+			        	<circle  cy="-50" r="7" style="fill:#72a1e9; opacity:0.5;"></circle>
+			        	<circle  cy="-50" r="7" style="fill:#72a1e9; opacity:0.5;"></circle>
+			        	<circle  cy="-50" r="7" style="fill:#72a1e9; opacity:0.5;"></circle>
+			        	<circle  cy="-50" r="7" style="fill:#72a1e9; opacity:0.5;"></circle>
+			        	<circle  cy="-50" r="7" style="fill:#72a1e9; opacity:0.5;"></circle>
+			        	<circle  cy="-50" r="7" style="fill:#72a1e9; opacity:0.5;"></circle>
+			        	<circle  cy="-50" r="7" style="fill:#72a1e9; opacity:0.5;"></circle>
+			        	<circle  cy="-50" r="7" style="fill:#72a1e9; opacity:0.5;"></circle>
+			        	<circle  cy="-50" r="7" style="fill:#72a1e9; opacity:0.5;"></circle>
+			        	<circle  cy="-50" r="7" style="fill:#72a1e9; opacity:0.5;"></circle>
+			        	<circle  cy="-50" r="7" style="fill:#72a1e9; opacity:0.5;"></circle>
+			        	<circle  cy="-50" r="7" style="fill:#72a1e9; opacity:0.5;"></circle>
+			        	<circle  cy="-50" r="7" style="fill:#72a1e9; opacity:0.5;"></circle>
+			        	<circle  cy="-50" r="7" style="fill:#72a1e9; opacity:0.5;"></circle>
+			        	<circle  cy="-50" r="7" style="fill:#72a1e9; opacity:0.5;"></circle>
+			        	<circle  cy="-50" r="7" style="fill:#72a1e9; opacity:0.5;"></circle>
+			        	<circle  cy="-50" r="7" style="fill:#72a1e9; opacity:0.5;"></circle>
+			        	<circle  cy="-50" r="7" style="fill:#72a1e9; opacity:0.5;"></circle>
+			        </g>
+		        	
+		        	<path class="path" id="path" d="" fill="transparent" stroke="#72a1e9" style="opacity:1;stroke-dashoffset="400px";" 
+		        		stroke-width="1" stroke-miterlimit="10"/>
+		        	<path class="path" id="path2" d="" fill="transparent" stroke="#72a1e9" style="opacity:1;stroke-dashoffset="400px";" 
+		        		stroke-width="1" stroke-miterlimit="10"/>
+	        	</g>
+	        	
+	        	<!-- Phrases-->
+		        <text class="phrase" id="phrase1" style="font-size: 24px;opacity:0; fill:#484848">
+		        	Lorsque nous écrivons un mot, en avons nous tous la même représentation ?
+		        </text>
+		        
+		        <text class="phrase words" style="font-size: 24px;opacity:0; fill:#484848">
+		        	Les mots sont porteurs		        
+		        </text>
+		        
+		        <text class="phrase words word" style="font-size: 24px;opacity:0; fill:#484848">
+		        	de sens
+		        </text>
+		        
+		        <text class="phrase words word" style="font-size: 24px;opacity:0; fill:#484848">
+		        	d'idées
+		        </text>
+		        
+		        <text class="last" style="font-size: 32px;opacity:0; fill:#484848">
+		        	Des mots naissent les idées.
+		        </text>
+		        
+		        <text class="last" style="font-size: 32px;opacity:0; fill:#484848">
+		        	A votre tour de faire naître les vôtres ! 
+		        </text>
+	        </g>
+        </svg>
+        <div id="home">
+	       	<img src="res/logo2_1.png" />
+	       	<img src="res/logo2_2.png" />
+	        <img src="res/logo2_3.png" />
+	        <div>
+	        	<p>éclosion</p>
+	        	<a href="" id="startExperience">Commencer l'expérience</a>
+	        </div>
+        </div>
+        <a id="skip" href="">Skip</a>
 
         <div id="globalData">
             <p class="global"><i class="icon-word"></i><span class="words"></span><span class="dataType"> Mots</span></p>
@@ -120,10 +231,11 @@
         <section id="nodeData">
             <header>
                 <div class="close"><i class="flaticon-cross97"></i></div>
-                <h1 class="theme">Theme : <span class="nodeName"></span></h1>
+                <h1 class="theme">Mot : <span class="nodeName"></span></h1>
                 <div class="contribution">
                     <p>Contribuer</p>
-                    <input class="addContribution" data-activeWord="activeWord" type="text" placeholder="ton mot" />
+                    <input class="addContribution" data-activeWord="activeWord" type="text" placeholder="Votre mot" />
+                    <p class="error"></p>
                 </div>
             </header>
             <div class="stats">
@@ -153,9 +265,9 @@
                         <p>Femme <span class="right"><span class="data"></span> %</span></p>
                     </div>
                     
-                    <div class="stat unknown">
+                    <!-- <div class="stat unknown">
                         <p>Non renseigné <span class="right"><span class="data"></span> %</span></p>
-                    </div>
+                    </div> -->
                 </div>
 
                 <div class="statSection ageOccurrence">
@@ -176,22 +288,137 @@
                         <p>+ 45 ans <span class="right"><span class="data"></span> %</span></p>
                     </div>
                     
-                    <div class="stat unknown">
+                    <!-- <div class="stat unknown">
                         <p>Non renseigné <span class="right"><span class="data"></span> %</span></p>
-                    </div>
+                    </div> -->
                 </div>
             </div>
+            <footer>
+                <div class="share">
+                    <p>Partager</p>
+                    <div id="twitterButton"></div>
+                </div>
+            </footer>
         </section>
 
+        <section id="userInfoOverlay" class="active">
+            <form class="userInfoForm">
+                <div>
+                    <h1>Vous êtes</h1>
+                    <p><input type="radio" class="userSexe female" name="userSexe" value="female" /> une femme <input type="radio" class="userSexe male" name="userSexe" value="male" /> un homme</p>
+                    <p class="error"></p>
+                </div>
+                <div>
+                    <h1>Vous avez</h1>
+                    <p><select class="userAge">
+                        <option value="under25">- 25 ans</option>
+                        <option value="25to35">25 - 35 ans</option>
+                        <option value="35to45">35 - 45 ans</option>
+                        <option value="above45">+ 45 ans</option>
+                    </select></p>
+                </div>
+
+                <input type="submit" value="Valider" />
+            </form>
+        </section>
+
+        <footer id="menufooter">
+            <nav>
+                <ul>
+                    <li><a href="https://twitter.com/EclosionLeSite"><i class="icon-twitter"></i></a></li>
+                    <li><button class="footerbuttons" id="soundOption"><i class="icon-volume-down"></i></button></li>
+                    <li><button class="footerbuttons" id="aproposButton">A propos</button></li>
+                </ul>
+            </nav>
+            <aside class="overlay" id="aproposOverlay">
+                <div id="overlay-container">
+                    <div class="contenu">
+                        <h3>Des mots naissent les idées...</h3>
+                        <p>Eclosion est une expérience au cours de laquelle les utilisateurs sont invités à créer des associations de mots.</p>
+                        <p>Culture et personnalité étant propre à chaque individu, nous n'associerons pas toujours les mots de la même façon. Eclosion permet ainsi de représenter les liens qui connectent les mots les uns avec les autres.</p>
+                    </div>
+                    <div class="contenu team">
+                        <h3>L'équipe derrière ce projet</h3>
+                        <section class="flex col2">
+                            <div class="credits">
+                                <h4>Louis Charachon</h4>
+                                <p class="posteOccupe">UX/UI Designer</p>
+                                <ul class="links">
+                                    <li><a href="http://www.louischarachon.com/" title="Portfolio"><i class="icon-link"></i></a></li>
+                                    <li><a href="https://twitter.com/TheWadzy" title="Twitter"><i class="icon-twitter"></i></a></li>
+                                </ul>
+                            </div>
+                            <div class="credits">
+                                <h4>Justine Pascal</h4>
+                                <p class="posteOccupe">UX/UI Designer</p>
+                                <ul class="links">
+                                    <li><a href="https://www.facebook.com/l.php?u=https%3A%2F%2Fwww.behance.net%2Fjustinepascal&h=lAQHUTm4A" title="Portfolio"><i class="icon-link"></i></a></li>
+                                    <li><a href="https://twitter.com/justinepascal" title="Twitter"><i class="icon-twitter"></i></a></li>
+                                </ul>
+                            </div>
+                        </section>
+                        <section class="flex col3">
+                            <div class="credits">
+                                <h4>Valentin Soyer</h4>
+                                <p class="posteOccupe">Front developper</p>
+                                <ul class="links">
+                                    <li><a href="http://www.valentin-soyer.fr/" title="Portfolio"><i class="icon-link"></i></a></li>
+                                    <li><a href="https://twitter.com/valentsoyer" title="Twitter"><i class="icon-twitter"></i></a></li>
+                                </ul>
+                            </div>
+                            <div class="credits">
+                                <h4>Florian Tiar</h4>
+                                <p class="posteOccupe">Front developper</p>
+                                <ul class="links">
+                                    <li><a href="http://tiar-florian.fr" title="Portfolio"><i class="icon-link"></i></a></li>
+                                    <li><a href="https://twitter.com/floriantiar" title="Twitter"><i class="icon-twitter"></i></a></li>
+                                </ul>
+                            </div>
+                            <div class="credits">
+                                <h4>Gabriel Vergnaud</h4>
+                                <p class="posteOccupe">Front developper</p>
+                                <ul class="links">
+                                    <li><a href="http://gabrielvergnaud.com/" title="Portfolio"><i class="icon-link"></i></a></li>
+                                    <li><a href="https://twitter.com/GabrielVergnaud" title="Twitter"><i class="icon-twitter"></i></a></li>
+                                </ul>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            </aside>
+        </footer>
+        <audio src="res/son.mp3" id="player" loop="true"></audio>
         <script src="js/libs/d3.v3.min.js"></script>
         <script src="js/libs/firebase.js"></script>
         <script src="js/libs/velocity.min.js"></script>
         <script src="js/libs/velocity.ui.min.js"></script>
+        <script src="js/libs/draggabily.js"></script>
         <script src="js/libs/countup.min.js"></script>
         
+        <!-- Twitter -->
+        <script>window.twttr = (function (d, s, id) {
+          var t, js, fjs = d.getElementsByTagName(s)[0];
+          if (d.getElementById(id)) return;
+          js = d.createElement(s); js.id = id;
+          js.src= "https://platform.twitter.com/widgets.js";
+          fjs.parentNode.insertBefore(js, fjs);
+          return window.twttr || (t = { _e: [], ready: function (f) { t._e.push(f) } });
+        }(document, "script", "twitter-wjs"));
+        </script>
+
+        <!-- GOOGLE ANALYTICS -->
+        <script>
+            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+            })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+            ga('create', 'UA-50091718-1');
+            ga('send', 'pageview');
+        </script>
+
         <script src="js/model.js"></script>
         <script src="js/ui.js"></script>
         <script src="js/app.js"></script>
-
     </body>
 </html>

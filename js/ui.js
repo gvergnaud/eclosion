@@ -1,24 +1,19 @@
+'use strict';
 var UI = {
-    
-    currentNotifications: [], //tableau qui contient toutes les notifications en cours
-	
+    	
 	init: function(){
-		this.wordGraph = document.querySelector('#wordGraph');
 
-		this.setSVGSize();
+		this.d3.style();
 		this.nodeData.style();
-		UI.menu.styleModal();
+		UI.menu.style();
+
+		UI.activateZoomCursor();
 
 		window.addEventListener('resize', function(){
-			UI.setSVGSize();
+			UI.d3.style();
 			UI.nodeData.style();
-			UI.menu.styleModal();
+			UI.menu.style();
 		}, false);
-	},
-
-	setSVGSize: function(){
-		this.wordGraph.style.width = window.innerWidth;
-		this.wordGraph.style.height = window.innerHeight;
 	},
 	
 	printWord: function(word){
@@ -48,14 +43,11 @@ var UI = {
 		        	{
 		        		elements: this.element, 
 		        		properties: {right: 0},
-		        		options: {duration: 250, easing: 'easeInOutBack'}
+		        		options: {duration: 250, easing : "easeIn"}
 		        	}
 		        ];
 		        
 				this.element.style.display = 'block';
-
-			    // var addContribution = document.querySelectorAll('.addContribution');
-			    // addContribution[1].focus();
 
 				Velocity.RunSequence(openAnim);
 
@@ -69,7 +61,7 @@ var UI = {
 		        	{
 		        		elements: this.element, 
 		        		properties: {right: '-350px'},
-		        		options: {duration: 250, easing: 'easeInOutBack'}
+		        		options: {duration: 250, easing: 'easeOut'}
 		        	}
 		        ];
 
@@ -86,6 +78,7 @@ var UI = {
 			
 
 			this.element.querySelector('.nodeName').innerText = nodeData.name;
+			this.element.querySelector('.addContribution').setAttribute('placeholder', 'Si je vous dis ' + nodeData.name + '...');
 
 			//affiche le nombre d'utilisation du mot
 			var occurrence = new countUp(this.element.querySelector('div.occurrence>p.data'), 1, nodeData.occurrence, 0, 1, {useEasing : false});
@@ -98,14 +91,12 @@ var UI = {
 			//affiche le nombre dutilisation par sexe
 			this.element.querySelector('div.sexeOccurrence>div.male .data').innerText = nodeData.sexeOccurrence.male;
 			this.element.querySelector('div.sexeOccurrence>div.female .data').innerText = nodeData.sexeOccurrence.female;
-			this.element.querySelector('div.sexeOccurrence>div.unknown .data').innerText = nodeData.sexeOccurrence.unknown;
 
 			//affiche le nombre dutilisation par age
 			this.element.querySelector('div.ageOccurrence>div.under25 .data').innerText = nodeData.ageOccurrence['under25'];
 			this.element.querySelector('div.ageOccurrence>div.from25to35 .data').innerText = nodeData.ageOccurrence['25to35'];
 			this.element.querySelector('div.ageOccurrence>div.from35to45 .data').innerText = nodeData.ageOccurrence['35to45'];
 			this.element.querySelector('div.ageOccurrence>div.above45 .data').innerText = nodeData.ageOccurrence['above45'];
-			this.element.querySelector('div.ageOccurrence>div.unknown .data').innerText = nodeData.ageOccurrence.unknown;
 
 			//affiche les mots les plus associés à celui la
 			var associatedDataElm = this.element.querySelector('div.mostAssociatedWords>div.associatedWordsContainer');
@@ -126,70 +117,16 @@ var UI = {
 			this.element.querySelector('div.stats').style.maxHeight = window.innerHeight - 260 + 'px';
 		}
 	},
-
-	notification: function(type, msg){
-        //Si le message n'est pas déjà dans la liste d'attente
-        if(UI.currentNotifications.indexOf(msg) === -1){
-
-            //si il n'y a rien dans la liste d'attente, on affiche la notif
-            if(UI.currentNotifications.length === 0){
-                //on met le messsage en liste d'attente
-                UI.currentNotifications.push(msg);
-
-
-                var notifContainer = document.querySelector('aside#notifications');
-                var newNotif = document.createElement('p');
-
-                newNotif.innerHTML = msg;
-
-                newNotif.classList.add('notification');
-                if(type){
-                    newNotif.classList.add(type);
-                }
-
-                notifContainer.innerHTML = '';
-                notifContainer.style.display = 'block';
-                notifContainer.appendChild(newNotif);
-
-                setTimeout(function(){	
-                    newNotif.classList.add('show');
-                }, 100);
-
-                setTimeout(function(){
-                    //on cache la notif 
-                    newNotif.classList.remove('show');
-
-                    setTimeout(function(){
-
-                        notifContainer.style.display = 'none';
-                    	newNotif.parentNode.removeChild(newNotif);
-                        //on retire le message de la liste d'attente
-                        UI.currentNotifications.splice(UI.currentNotifications.indexOf(msg), 1);
-                    }, 650);
-
-
-                }, 3000);
-
-                newNotif.addEventListener('click', function(){
-                    notifContainer.style.display = 'none';
-                    newNotif.parentNode.removeChild(newNotif);
-                    //on retire le message de la liste d'attente
-                    UI.currentNotifications.splice(UI.currentNotifications.indexOf(msg), 1);
-                });
-
-            }else{
-                setTimeout(function(){
-                    UI.notification(type, msg);
-                }, 1000);
-            }
-        }
-    },
 	
 	// D3.js 
 	d3: {
+		wordGraph: document.querySelector('#wordGraph'),
 		previousWords : false,
 		nodeSizeCoefficient : 4,
-		collision : 3,
+		collision : 10,
+		zoomMin : 0.25,
+		zoomMax : 3,
+		translate : [0, 0],
 		
 		createGraph: function(words){
 			var self = this;
@@ -197,13 +134,13 @@ var UI = {
 			var width = window.innerWidth,
 				height = window.innerHeight;
 	
-			UI.wordGraph.innerHTML = '';
+			UI.d3.wordGraph.innerHTML = '';
 	
 			var color = d3.scale.category20();
 	
 			this.force = d3.layout.force()
 				.gravity(.05)
-			    .charge(-5000)
+			    .charge(-3000)
 			    .linkDistance(30)
 			    .size([width, height]);
 			
@@ -215,7 +152,8 @@ var UI = {
 				    self.svg.style("cursor", "-webkit-grabbing");
 			    }).on("dragend", function(){
 				    self.svg.style("cursor", "default");
-			    }));
+			    })
+			    );
 		    	
 		    this.g = this.svg.append('svg:g')
 			   	.style("background-color", "transparent")
@@ -234,7 +172,7 @@ var UI = {
 				.data(words.links)
 				.enter().append("line")
 				.attr("class", "link")
-				.style("stroke", "#dfdede")
+				.style("stroke", "#b8b8b8")
 				.style("stroke-width", function(d) { return Math.sqrt(d.value); });
 				
 			// Création des noeuds
@@ -252,10 +190,12 @@ var UI = {
 			node.append("circle")
 	         	.attr("class", "node")
 	         	.attr("pointer-events", "drag")
-	         	.style('fill', "#b8b8b8")
-	         	.style("cursor", "pointer")
+	         	.style('fill', "#83adec")
 	         	.attr("r", function(d){
 	         		var nbLinks = Math.sqrt(d.nbLinks);
+	         		if(nbLinks <= 0)
+	         			nbLinks = 1;
+	         			
 	         		if(nbLinks * (nbLinks * self.nodeSizeCoefficient) <= 60)
 	         			return nbLinks * (nbLinks * self.nodeSizeCoefficient); 
 	         		else
@@ -267,10 +207,18 @@ var UI = {
 			// Ajout d'un texte pour chaque noeud
 			node.append("text")
 			     .attr("text-anchor", "middle")
-			     .style("font-size", function(d) {return Math.sqrt(d.nbLinks) * 10 + "px"; })
+			     .style("font-size", function(d) {
+			     	var nbLinks = Math.sqrt(d.nbLinks);
+			     	if(nbLinks <= 0)
+			     		nbLinks = 1;
+			     	return nbLinks * 10 + "px"; 
+			     })
 			     .style("fill", "#4b4b4b")
 			     .attr("transform",function(d) {
-			           return "translate(0," + -(Math.sqrt(d.nbLinks) * (Math.sqrt(d.nbLinks) * self.nodeSizeCoefficient + 2)) + ")";
+				     	var nbLinks = Math.sqrt(d.nbLinks);
+				     	if(nbLinks <= 0)
+				     		nbLinks = 1;
+			           return "translate(0," + -(nbLinks * (nbLinks * self.nodeSizeCoefficient + 2)) + ")";
 			        })
 			     .text(function(d) {
 			       	return d.name.charAt(0).toUpperCase() + d.name.substring(1).toLowerCase();
@@ -281,25 +229,23 @@ var UI = {
 					.attr("y1", function(d) { return d.source.y; })
 					.attr("x2", function(d) { return d.target.x; })
 					.attr("y2", function(d) { return d.target.y; });
-	
-				node.attr("cx", function(d) { return d.x; })
+
+				 node.attr("cx", function(d) { return d.x; })
 					.attr("cy", function(d) { return d.y; })
 					.attr("transform", function(d) {
 			            return "translate(" + d.x + "," + d.y + ")";
 			        }); 
-			    node.each(self.collide(0.5));
 			});
 			
 			this.previousWords = words;
 			
-			self.defineZoom();
+			self.defineCursor();
 			
 			document.dispatchEvent(app.event.graphReady);
 		},
 		
 		redrawGraph : function(){
-			var self = this;
-			
+			this.translate = d3.event.translate;
 			this.svg.select("g").select("g").attr("transform",
 			  "translate(" + d3.event.translate + ")"
 			  + " scale(" + d3.event.scale + ")"
@@ -311,7 +257,7 @@ var UI = {
 				var self = this;
 				
 				// Si il y a eu ajout d'un nouveau noeud
-				if(this.previousWords.nodes.length < words.nodes.length){
+				if(this.previousWords.nodes.length < words.nodes.length && this.previousWords.links.length < words.links.length){
 				
 					// Ajout du dernier Node et du dernier links
 					this.previousWords.nodes.push(words.nodes[words.nodes.length - 1]);
@@ -323,6 +269,11 @@ var UI = {
 				
 					// Ajout du dernier links
 					this.previousWords.links.push(words.links[words.links.length - 1]);
+				}
+				
+				else if(this.previousWords.nodes.length < words.nodes.length){
+					// Ajout du dernier Node
+					this.previousWords.nodes.push(words.nodes[words.nodes.length - 1]);
 				}
 				
 				var link = this.svg.select(".links").selectAll(".link")
@@ -352,6 +303,10 @@ var UI = {
 		            .style('fill', "#3177df")
 					.attr("r", function(d) {
 						var nbLinks = Math.sqrt(d.nbLinks);
+						
+						if(nbLinks <= 0)
+							nbLinks = 1;
+							
 						if(nbLinks * (nbLinks * self.nodeSizeCoefficient) <= 60)
 		         			return nbLinks * (nbLinks * self.nodeSizeCoefficient); 
 		         		else
@@ -361,10 +316,21 @@ var UI = {
 		
 		        nodeEnter.append("text")
 		            .attr("text-anchor", "middle")
-				    .style("font-size", function(d) {return Math.sqrt(d.nbLinks) * 10 + "px";})
+				    .style("font-size", function(d) {
+				    	var nbLinks = Math.sqrt(d.nbLinks);
+				    	
+				    	if(nbLinks <= 0)
+				    		nbLinks = 1;
+				    		
+				    	return nbLinks * 10 + "px";
+				    })
 				    .style("fill", "#3177df")
 				    .attr("transform",function(d) {
-			            return "translate(0," + -(Math.sqrt(d.nbLinks) * (Math.sqrt(d.nbLinks) * self.nodeSizeCoefficient + 2)) + ")";
+				    	var nbLinks = Math.sqrt(d.nbLinks);
+				     	if(nbLinks <= 0)
+				     		nbLinks = 1;
+				     		
+			            return "translate(0," + -(nbLinks * (nbLinks * self.nodeSizeCoefficient + 2)) + ")";
 			        })
 				    .text(function(d) {
 					    return d.name.charAt(0).toUpperCase() + d.name.substring(1).toLowerCase();
@@ -384,26 +350,31 @@ var UI = {
 		            node.attr("cx", function(d) { return d.x; })
 						.attr("cy", function(d) { return d.y; })
 						.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
-					node.each(self.collide(0.5));
 		        });
 			
 			    this.force.start();
 			    
+			    
 			}
 		},
 		
-		defineZoom : function(){
-			var value;
-			if(d3.event != null && d3.event.scale != undefined){
-				value = d3.event.scale;
-			}else{
-				value = 1;
-			}
+		defineCursor : function(){
+			var self = this;
+			
+			if(d3.event != null && d3.event.scale != undefined)
+				var scale = d3.event.scale;
+			else
+				var scale = 1;
 			
 			var zoombarHeight = document.getElementById("zoom").offsetHeight;
 			
 			// Déplacement du cursor
-			document.querySelector("#cursor").style.top = ((100 - ((value - 0.5) * 100 / 2.5))) - ((100 * 7.5) / zoombarHeight) + "%";
+			document.querySelector("#cursor").style.top = ((100 - ((scale - self.zoomMin) * 100 / (self.zoomMax - self.zoomMin)))) - ((100 * 7.5) / zoombarHeight) + "%";
+		},
+		
+		defineZoom : function(scale){
+			var self = this;
+			this.svg.select("g").select("g").attr("transform","translate(" + self.translate + ")" + " scale(" + scale + ")");
 		},
 		
 		searchNode : function(selectedVal){
@@ -419,7 +390,6 @@ var UI = {
 	            return d.name == selectedVal;
 	        });
 	        
-	        UI.d3.highlightOn(selected);
 	        
 	        // Si la recherche a donné quelque chose
 	        if(selected[0].length > 0){
@@ -438,16 +408,19 @@ var UI = {
 				);
 				
 				// On redéfini le zoom avec ses nouvelles valeurs d'origines
-				this.svg.call(d3.behavior.zoom().translate([x, y]).scaleExtent([0.5, 3]).on("zoom", function(){
+				this.svg.call(d3.behavior.zoom().translate([x, y]).scaleExtent([self.zoomMin, self.zoomMax]).on("zoom", function(){
 			    	UI.d3.redrawGraph();
-			    	UI.d3.defineZoom();
+			    	UI.d3.defineCursor();
 			    }));
 			    
+			    // On met notre node et ses liens en highlight
+			    UI.d3.highlightOn(selected);
+			    
 			}else{
-				UI.notification('error', "Pas de mots trouvés");
+				console.log('UI le mot ne epeut pas être selectionné');
 			}
 			
-			self.defineZoom();
+			self.defineCursor();
 		},
 		
 		selectNode : function(node){
@@ -468,45 +441,40 @@ var UI = {
 				 "translate(" + x + " ," + y + ")"
 			);
 			
-			self.defineZoom();
+			self.defineCursor();
 			
 			// On redéfini le zoom avec ses nouvelles valeurs
-			this.svg.call(d3.behavior.zoom().translate([x, y]).scaleExtent([0.5, 3]).on("zoom", function(){
+			this.svg.call(d3.behavior.zoom().translate([x, y]).scaleExtent([self.zoomMin, self.zoomMax]).on("zoom", function(){
 		    	UI.d3.redrawGraph();
-		    	UI.d3.defineZoom();
+		    	UI.d3.defineCursor();
 		    }));
         	
         	self.force.resume();
 		},
 		
-		collide : function(alpha) {
-			var self = this;
-			var	radius = 8; 
-			var quadtree = d3.geom.quadtree(self.previousWords.nodes);
-			return function(d) {
-			    var rb = 2 * radius + self.collision,
-			        nx1 = d.x - rb,
-			        nx2 = d.x + rb,
-			        ny1 = d.y - rb,
-			        ny2 = d.y + rb;
-			        
-			    quadtree.visit(function(quad, x1, y1, x2, y2) {
-					if (quad.point && (quad.point !== d)) {
-						var x = d.x - quad.point.x,
-							y = d.y - quad.point.y,
-							l = Math.sqrt(x * x + y * y);
-						if (l < rb) {
-							l = (l - rb) / l * alpha;
-							d.x -= x *= l;
-							d.y -= y *= l;
-							quad.point.x += x;
-							quad.point.y += y;
-						}
+		collide : function(node) {
+			var r = node.radius + 16,
+				nx1 = node.x - r,
+				nx2 = node.x + r,
+				ny1 = node.y - r,
+				ny2 = node.y + r;
+			return function(quad, x1, y1, x2, y2) {
+				if (quad.point && (quad.point !== node)) {
+					var x = node.x - quad.point.x,
+					  	y = node.y - quad.point.y,
+					  	l = Math.sqrt(x * x + y * y),
+					  	r = node.radius + quad.point.radius;
+					if (l < r) {
+						l = (l - r) / l * .5;
+						node.x -= x *= l;
+						node.y -= y *= l;
+						quad.point.x += x;
+						quad.point.y += y;
 					}
-					return x1 > nx2 || x2 < nx1 || y1 > ny2 || y2 < ny1;
-			    });
-			};
-		},
+				}
+				return x1 > nx2 || x2 < nx1 || y1 > ny2 || y2 < ny1;
+			};		
+    	},
 		
 		highlightOn : function(node){
 			var self = this;
@@ -514,7 +482,7 @@ var UI = {
 			var links = d3.selectAll(".links>line");
         		
 			var linkedByIndex = {};
-			for (i = 0; i < self.previousWords.length; i++) {
+			for (var i = 0; i < self.previousWords.length; i++) {
 			    linkedByIndex[i + "," + i] = 1;
 			};
 			
@@ -522,7 +490,7 @@ var UI = {
 			    linkedByIndex[d.source.index + "," + d.target.index] = 1;
 			});
 			
-	        d = node.node().__data__;
+	        var d = node.node().__data__;
 	        
 	        // Changement de couleur des cercles des noeuds
 	        nodes.select("circle").transition().duration(1000).style("fill", function (o) {
@@ -532,9 +500,11 @@ var UI = {
 	        // On remet les propriétés des noeuds à leur état d'origine
 	        nodes.select("text").transition().duration(1000).style("fill", "#4b4b4b").style("font-weight", "400");
 	      
-	        // Changement de couleur des liens
+	        // Changement de couleur des liens et opacité
 	        links.transition().duration(1000).style("stroke", function (o) {
 	            return d.index == o.source.index | d.index == o.target.index ? "#72a1e9" : "#b8b8b8";
+	        }).style("opacity", function (o) {
+	            return d.index == o.source.index | d.index == o.target.index ? "1" : "0";
 	        });
 	        
 	        // On modifie l'apparence du noeud choisi
@@ -544,8 +514,61 @@ var UI = {
 		
 		highlightOff : function(){
 			this.svg.selectAll("text").transition().duration(1000).style("fill", "#4b4b4b").style("font-weight", "400");
-			this.svg.selectAll("circle").transition().duration(1000).style("fill", "#b8b8b8");
-			this.svg.selectAll("line").transition().duration(1000).style("stroke", "#b8b8b8");
+			this.svg.selectAll("circle").transition().duration(1000).style("fill", "#83adec");
+			this.svg.selectAll("line").transition().duration(1000).style("stroke", "#b8b8b8").style("opacity", 1);
+		},
+
+		style: function(){
+			UI.d3.wordGraph.style.width = window.innerWidth;
+			UI.d3.wordGraph.style.height = window.innerHeight;
+		}
+	},
+
+	about: {
+		overlayApropos: document.querySelector('#aproposOverlay'),
+		overlayContainer: document.querySelector('#overlay-container'),
+
+		openOverlay: function() {
+			var self = this;
+			Velocity(self.overlayApropos, "fadeIn", 800);
+
+	    	var openAnim = [
+	        	{
+	        		elements: UI.about.overlayContainer, 
+	        		properties: { marginTop: '0', opacity: 1},
+	        		options: {duration: 500, easing: 'easeInOutBack'}
+	        	}
+	        ];
+			Velocity.RunSequence(openAnim);
+
+		},
+		closeOverlay: function() {
+			var overlayContainer = document.querySelector('#overlay-container');
+			
+			var self = this;
+			Velocity(self.overlayApropos, "fadeOut", 800);
+
+	    	var closeAnim = [
+	        	{
+	        		elements: UI.about.overlayContainer, 
+	        		properties: { marginTop: '100px', opacity: 0},
+	        		options: {duration: 500, easing: 'easeInOutBack'}
+	        	}
+	        ];
+
+			Velocity.RunSequence(closeAnim);
+		},
+		
+		soundMute : function(){
+			if(document.querySelector("#soundOption>i").classList.contains("icon-volume-down")){
+				document.querySelector("#player").muted = true;
+				document.querySelector("#soundOption>i").classList.add("icon-volume-off");
+				document.querySelector("#soundOption>i").classList.remove("icon-volume-down");
+			}else{
+				document.querySelector("#player").muted = false;
+				document.querySelector("#soundOption>i").classList.remove("icon-volume-off");
+				document.querySelector("#soundOption>i").classList.add("icon-volume-down");
+			}
 		}
 	},
 
@@ -563,49 +586,55 @@ var UI = {
 
 	    opened: false,
 
-	    styleModal: function() {
+	    style: function() {
 	    	if(UI.menu.opened){
-	    		UI.menu.menuElement.style.width =  window.innerWidth + "px";
+	    		UI.menu.menuElement.style.width = window.innerWidth + "px";
+	    		UI.menu.menuElement.querySelector('.activeTab').style.width = window.innerWidth -70 + "px";
 	    	}
 	    },
 
 		closeModal: function() {
+			if(UI.menu.opened){
+		    	var closeAnim = [
+		        	{
+		        		elements: UI.menu.allModals, 
+		        		properties: { left: - window.innerWidth + 'px'},
+		        		options: {duration: 250, easing: 'easeInOutBack'}
+		        	}
+		        ];
+				Velocity.RunSequence(closeAnim);
+				
 
-	    	var closeAnim = [
-	        	{
-	        		elements: UI.menu.allModals, 
-	        		properties: {left: '-1875px'},
-	        		options: {duration: 250, easing: 'easeInOutBack'}
-	        	}	        	
-	        ];
-			Velocity.RunSequence(closeAnim);
+				setTimeout(function(){
+					[].forEach.call(UI.menu.allModals, function(element){
+		        		element.classList.remove('activeTab');
+		        	});
+		        	UI.menu.removeAllClickStyle();
 
-			setTimeout(function(){
-				[].forEach.call(UI.menu.allModals, function(element){
-	        		element.classList.remove('activeTab');
-	        	});
-
-	        	UI.menu.menuElement.style.width = '70px';
-	       		UI.menu.opened = false;
-			}, 250);
+		        	UI.menu.menuElement.style.width = '70px';
+		       		UI.menu.opened = false;
+				}, 250);
+			}
 
 		},
 
 		openModal: function(modal){
 
-        	[].forEach.call(UI.menu.allModals, function(element){
-        		element.classList.remove('activeTab');
-        	});
+        	var openTab = document.querySelector('.activeTab');
+        	
+        	if(openTab){
+        		openTab.classList.remove('activeTab');
+        	}
 
 			var openAnim = [
 	        	{
 	        		elements: UI.menu.allModals,
-	        		properties: {left: "-1875px"},
+	        		properties: {left: - window.innerWidth + 'px'},
 	        		options: {duration: 0, easing: 'easeInOutBack'}
 	        	},
 	        	{
 	        		elements: modal,
-	        		properties: {left: "70px", opacity: "0.9", right: 0},
+	        		properties: {left: "0", width: window.innerWidth + 'px'},
 	        		options: {duration: 250, easing: 'easeInOutBack'}
 	        	}
 	        ];
@@ -651,6 +680,18 @@ var UI = {
 	        }
 
 		},
+		
+		addClickStyle : function(element){
+			UI.menu.removeAllClickStyle();
+			element.parentNode.classList.add("optionClick");
+		},
+		
+		removeAllClickStyle : function(element){
+			var elements = document.getElementsByClassName("optioncontainer");
+			[].forEach.call(elements, function(element){
+				element.classList.remove('optionClick');
+			});
+		},
 
 		addActiveFilter: function(element){
 
@@ -681,6 +722,542 @@ var UI = {
 			[].forEach.call(filters, function(filter){
 				filter.classList.remove('active');
 			});
+		}
+	},
+
+	userInfo: {
+
+		element: document.getElementById('userInfoOverlay'),
+
+		openOverlay: function() {
+			
+			Velocity(this.element, 'fadeIn');
+
+		},
+
+		closeOverlay: function() {
+
+			Velocity(this.element, 'fadeOut');
+			
+		}
+	},
+
+	// Gestion du drag du zoom
+	activateZoomCursor: function(){
+		var draggie = new Draggabilly( document.querySelector('#cursor'), {
+		  axis: 'y',
+		  containment: '#zoomBar'
+		});
+		
+		
+		draggie.on( 'dragMove', function(instance, event, pointer){
+			var zoombarHeight = document.getElementById("zoom").offsetHeight;
+			if(instance.position.y < 0)
+				instance.position.y = 0;
+				
+			app.scale =  - (((Math.floor(instance.position.y) * 100 / (zoombarHeight - 15) + ((100 * 7.5) / zoombarHeight) - 100) 
+				* (UI.d3.zoomMax - UI.d3.zoomMin) / 100 + UI.d3.zoomMin)) + 0.56;
+				
+			UI.d3.defineZoom(app.scale);
+		});
+		
+		draggie.on("dragEnd", function(){
+			UI.d3.svg.call(d3.behavior.zoom().scale(app.scale).translate(UI.d3.translate).scaleExtent([UI.d3.zoomMin, UI.d3.zoomMax]).on("zoom", function(){
+				UI.d3.redrawGraph();
+				UI.d3.defineCursor();
+			}));
+		});
+	},
+
+	notification: function(element, msg, checkCallback, cancelCallback){
+
+		element.innerHTML = msg;
+
+		if(checkCallback){
+			var checkIcon = document.createElement('i');
+			checkIcon.classList.add('icon-check');
+
+			checkIcon.addEventListener('click', function(){
+				element.innerHTML = '';
+				checkCallback.call(this);
+			}, false);
+
+			element.appendChild(checkIcon);
+		}
+		
+		var cancelIcon = document.createElement('i');
+		cancelIcon.classList.add('icon-cancel');
+		
+		cancelIcon.addEventListener('click', function(){
+
+			if(cancelCallback){
+				cancelCallback.call(this);
+			}
+			element.innerHTML = '';
+
+		}, false);
+
+		element.appendChild(cancelIcon);
+	},
+
+	removeAllNotifications: function(){
+		document.querySelector('.searchBox p.error').innerHTML = '';
+		document.querySelector('#nodeData .error').innerHTML = '';
+		document.querySelector('.addWordBox .error').innerHTML = '';
+	},
+	
+	animation : {
+		start : function(){
+		
+			// Set the attributes of circles, line and Text
+			var circles = document.querySelectorAll("circle");
+			for(var i = 0; i < circles.length; i++){
+				circles[i].setAttribute("cx", window.innerWidth / 2);
+			}
+			
+			var randomCircle = document.querySelectorAll("#randomCircle>circle");
+			for(var i = 0; i < randomCircle.length; i ++){
+				randomCircle[i].setAttribute("cy", window.innerHeight + 10);
+			}
+			
+			document.querySelector("#storyTelling line").setAttribute("x1", window.innerWidth / 2);
+			document.querySelector("#storyTelling line").setAttribute("x2", window.innerWidth / 2);
+			document.querySelector("#storyTelling line").setAttribute("y1", -(window.innerHeight));
+			document.querySelector("#storyTelling line").setAttribute("y1", 0);
+			
+			var text = document.querySelectorAll(".phrase");
+        	for(var i = 0; i < text.length; i++){
+	        	var self = this;
+	        	text[i].setAttribute("transform", "translate(" + ((window.innerWidth / 2) - (text[i]
+        		.clientWidth / 2)) + "," + 85 * window.innerHeight / 100 + ")");
+        	}
+        	
+        	var beginning = document.querySelectorAll(".words")[0];
+        	var firstEnd = document.querySelectorAll(".word")[0];
+        	var secondEnd = document.querySelectorAll(".word")[1];
+        	var sizeTotal = beginning.clientWidth + firstEnd.clientWidth;
+        	
+        	beginning.setAttribute("transform", "translate("+ ((window.innerWidth / 2) - (sizeTotal / 2)) + "," + 85 * window.innerHeight / 100 +")");
+        	firstEnd.setAttribute("transform", "translate("+ (((window.innerWidth / 2) - (sizeTotal / 2)) + beginning.clientWidth + 10)
+        		+ "," + 85 * window.innerHeight / 100 +")");
+        	secondEnd.setAttribute("transform", "translate("+ (((window.innerWidth / 2) - (sizeTotal / 2)) + beginning.clientWidth + 10)
+        		+ "," + 85 * window.innerHeight / 100 +")");
+        	
+        	beginning = document.querySelectorAll(".last")[0];
+        	var end = document.querySelectorAll(".last")[1];
+        	sizeTotal = beginning.clientWidth + end.clientWidth;
+        	
+        	beginning.setAttribute("transform", "translate("+ ((window.innerWidth / 2) - (sizeTotal / 2)) + "," + 50 * window.innerHeight / 100 +")");
+        	end.setAttribute("transform", "translate("+ (((window.innerWidth / 2) - (sizeTotal / 2)) + beginning.clientWidth + 10)
+        		+ "," + 50 * window.innerHeight / 100 +")");
+        	
+        	// Valeurs de références
+        	var valLeftX = document.querySelectorAll(".firstDiv")[0].cx.animVal.value - (window.innerWidth / 4);
+        	var valLeftY = window.innerHeight / 2;
+        	var valRightX = document.querySelectorAll(".firstDiv")[1].cx.animVal.value + (window.innerWidth / 4);
+        	var valRightY = window.innerHeight / 2;
+        	
+        	var distance = 100;
+        	var r = 40;
+        	
+        	
+        	// SEQUENCES
+		    var phase1 = [
+	        	
+	        	{
+	        		elements: document.querySelectorAll("#storyTelling>g:first-child>g>circle"), 
+	        		properties: { cy : window.innerHeight / 2 - 20},
+	        		options: {duration: 600, easing: 'easeInOutBack', sequenceQueue : false}
+	        	},
+	        	
+	        	{
+	        		elements: document.querySelector("#phrase1"), 
+	        		properties: { opacity:1 },
+	        		options: {duration: 600, easing: 'easeInOutBack', delay : 600, sequenceQueue : false}
+	        	},
+	        	
+	        	{
+	        		elements: document.querySelectorAll("#phrase1"), 
+	        		properties: { opacity: 0},
+	        		options: {duration: 800, easing: 'easeInOutBack', delay : 700}
+	        	},
+	        	
+	        	{
+	        		elements: document.querySelectorAll("#storyTelling>g:first-child>g>circle:first-child"), 
+	        		properties: { opacity: 0},
+	        		options: {duration: 500, easing: 'easeInOutBack', sequenceQueue : false}
+	        	},
+	        	
+	        	{
+	        		elements: document.querySelector("#storyTelling line"), 
+	        		properties: { y1:  0, y2 : window.innerHeight},
+	        		options: {duration: 800, easing: 'easeInOutBack', sequenceQueue : false}
+	        	}, 
+	        	
+	        	// Animation des 2 noeuds provenant du noeud central
+	        	{
+		        	elements: document.querySelectorAll(".firstDiv")[0], 
+	        		properties: { cx: document.querySelectorAll(".firstDiv")[0].cx.animVal.value - (window.innerWidth / 4)},
+	        		options: {duration: 800, easing: 'easeInOutBack', sequenceQueue : false}
+	        	},
+	        	
+	        	{
+		        	elements: document.querySelectorAll(".firstDiv")[1], 
+	        		properties: { cx: document.querySelectorAll(".firstDiv")[1].cx.animVal.value + (window.innerWidth / 4)},
+	        		options: {duration: 800, easing: 'easeInOutBack', sequenceQueue : false}
+	        	},
+	        	
+	        	// Animation des 8 noeuds enfants
+	        	
+	        	{
+		        	elements: document.querySelectorAll(".left"), 
+	        		properties: { cx: document.querySelectorAll(".firstDiv")[0].cx.animVal.value - (window.innerWidth / 4)},
+	        		options: {duration: 800, easing: 'easeInOutBack', sequenceQueue : false}
+	        	},
+	        	
+	        	{
+		        	elements: document.querySelectorAll(".right"), 
+	        		properties: { cx: document.querySelectorAll(".firstDiv")[1].cx.animVal.value + (window.innerWidth / 4)},
+	        		options: {duration: 800, easing: 'easeInOutBack', sequenceQueue : false}
+	        	},
+	        	
+	        	// Animation des nodes de gauche et de droite
+	        	{
+		        	elements: document.querySelectorAll(".left")[0], 
+	        		properties: { 
+	        			cx: valLeftX - distance,
+		        		cy : valLeftY - (distance + r)
+	        		},
+	        		options: {duration: 200, easing: 'easeInOutBack'}
+	        	},
+	        	
+	        	{
+		        	elements: document.querySelectorAll(".right")[0], 
+	        		properties: { 
+		        		cy : valRightY - (distance + r)
+	        		},
+	        		options: {duration: 200, easing: 'easeInOutBack', sequenceQueue : false}
+	        	},
+	        	
+	        	{
+		        	elements: document.querySelectorAll(".left")[1], 
+	        		properties: { 
+	        			cx: valLeftX + distance,
+		        		cy : valLeftY - (distance + r)
+	        		},
+	        		options: {duration: 200, easing: 'easeInOutBack', sequenceQueue : false, delay:50, }
+	        	},
+	        	
+	        	{
+		        	elements: document.querySelectorAll(".right")[1], 
+	        		properties: { 
+	        			cx: valRightX + distance,
+	        		},
+	        		options: {duration: 200, easing: 'easeInOutBack', sequenceQueue : false, delay:50, }
+	        	},
+	        	
+	        	{
+		        	elements: document.querySelectorAll(".left")[2], 
+	        		properties: { 
+	        			cx: valLeftX - distance,
+		        		cy : valLeftY + distance
+	        		},
+	        		options: {duration: 200, easing: 'easeInOutBack', sequenceQueue : false, delay:50, }
+	        	},
+	        	
+	        	{
+		        	elements: document.querySelectorAll(".right")[2], 
+	        		properties: { 
+		        		cy : valRightY + distance
+	        		},
+	        		options: {duration: 200, easing: 'easeInOutBack', sequenceQueue : false, delay:50, }
+	        	},
+	        	
+	        	{
+		        	elements: document.querySelectorAll(".left")[3], 
+	        		properties: { 
+	        			cx: valLeftX + distance,
+		        		cy : valLeftY + distance
+	        		},
+	        		options: {duration: 200, easing: 'easeInOutBack', sequenceQueue : false, delay:50, }
+	        	},
+	        	
+	        	{
+		        	elements: document.querySelectorAll(".right")[3], 
+	        		properties: { 
+	        			cx: valRightX - distance,
+	        		},
+	        		options: {duration: 200, easing: 'easeInOutBack', sequenceQueue : false, delay:50, }
+	        	},
+	        	
+	        	{
+		        	elements: document.querySelectorAll(".firstDiv"), 
+	        		properties: { opacity : 0},
+	        		options: {duration: 500, easing: 'easeInOutBack', delay : 100}
+	        	}
+	        ];
+	        
+	        // Sequence inverse
+	        var phase1Reverse = [
+	        	{
+		        	elements: document.querySelectorAll(".path"), 
+	        		properties: { opacity : 0},
+	        		options: {duration: 500, easing: 'easeInOutBack'}
+	        	},
+	        	
+	        	{
+		        	elements: document.querySelectorAll(".firstDiv"), 
+	        		properties: { opacity : 1},
+	        		options: {duration: 500, easing: 'easeInOutBack'}
+	        	},
+	        	
+	        	{
+		        	elements: document.querySelectorAll(".right")[3], 
+	        		properties: { 
+	        			cx: valRightX
+	        		},
+	        		options: {duration: 200, easing: 'easeInOutBack', sequenceQueue : false, delay:50, }
+	        	},
+	        	
+	        	{
+		        	elements: document.querySelectorAll(".left")[3], 
+	        		properties: { 
+	        			cx: valLeftX,
+		        		cy : valLeftY - r / 2
+	        		},
+	        		options: {duration: 200, easing: 'easeInOutBack', sequenceQueue : false, delay:50, }
+	        	},
+	        	
+	        	{
+		        	elements: document.querySelectorAll(".right")[2], 
+	        		properties: { 
+		        		cy : valRightY - r / 2
+	        		},
+	        		options: {duration: 200, easing: 'easeInOutBack', sequenceQueue : false, delay:50, }
+	        	},
+	        	
+	        	{
+		        	elements: document.querySelectorAll(".left")[2], 
+	        		properties: { 
+	        			cx: valLeftX,
+		        		cy : valLeftY - r / 2
+	        		},
+	        		options: {duration: 200, easing: 'easeInOutBack', sequenceQueue : false, delay:50, }
+	        	},
+	        	
+	        	
+	        	{
+		        	elements: document.querySelectorAll(".right")[1], 
+	        		properties: { 
+	        			cx: valRightX,
+	        		},
+	        		options: {duration: 200, easing: 'easeInOutBack', sequenceQueue : false, delay:50, }
+	        	},
+	        	
+	        	{
+		        	elements: document.querySelectorAll(".left")[1], 
+	        		properties: { 
+	        			cx: valLeftX,
+		        		cy : valLeftY - r / 2
+	        		},
+	        		options: {duration: 200, easing: 'easeInOutBack', sequenceQueue : false, delay:50, }
+	        	},
+	        	
+	        	
+	        	{
+		        	elements: document.querySelectorAll(".right")[0], 
+	        		properties: { 
+		        		cy : valRightY - r / 2
+	        		},
+	        		options: {duration: 200, easing: 'easeInOutBack', sequenceQueue : false, delay : 50}
+	        	},
+	        	
+	        	{
+		        	elements: document.querySelectorAll(".left")[0], 
+	        		properties: { 
+	        			cx: valLeftX,
+		        		cy : valLeftY - r / 2
+	        		},
+	        		options: {duration: 200, easing: 'easeInOutBack', delay: 50}
+	        	},
+	        	
+	        	{
+		        	elements: document.querySelectorAll(".firstDiv"), 
+	        		properties: { cx: window.innerWidth / 2 },
+	        		options: {duration: 800, easing: 'easeInOutBack'}
+	        	},
+	        	
+	        	{
+		        	elements: document.querySelectorAll(".left"), 
+	        		properties: { cx: window.innerWidth / 2},
+	        		options: {duration: 800, easing: 'easeInOutBack', sequenceQueue : false}
+	        	},
+	        	
+	        	{
+		        	elements: document.querySelectorAll(".right"), 
+	        		properties: { cx: window.innerWidth / 2},
+	        		options: {duration: 800, easing: 'easeInOutBack', sequenceQueue : false}
+	        	},
+	        	
+	        	{
+	        		elements: document.querySelectorAll("#storyTelling>g:first-child>g>circle:first-child"), 
+	        		properties: { opacity: 1},
+	        		options: {duration: 800, easing: 'easeInOutBack', delay : 100, sequenceQueue : false}
+	        	},
+	        	
+	        	
+	        	{
+	        		elements: document.querySelector("#storyTelling>g:first-child>line"), 
+	        		properties: { y1:  -(window.innerHeight), y2 : 0},
+	        		options: {duration: 800, easing: 'easeInOutBack'}
+	        	}
+	        ];
+	        
+	        var phase2 = [
+				{
+					elements: document.querySelectorAll("text.words")[0], 
+					properties: { opacity:1 },
+					options: {duration: 800, easing: 'easeInOutBack', delay : 800}
+				},
+				
+				{
+					elements: document.querySelectorAll(".word")[0], 
+					properties: { opacity:1 },
+					options: {duration: 800, easing: 'easeInOutBack', sequenceQueue: false}
+				},
+				
+				{
+					elements: document.querySelectorAll(".word")[0], 
+					properties: { opacity:0 },
+					options: {duration: 800, easing: 'easeInOutBack', delay : 800}
+				},
+				
+				{
+					elements: document.querySelectorAll(".word")[1], 
+					properties: { opacity:1 },
+					options: {duration: 800, easing: 'easeInOutBack', sequenceQueue: false}
+				},
+				
+				{
+					elements: document.querySelectorAll("text.words"), 
+					properties: { opacity:0 },
+					options: {duration: 800, easing: 'easeInOutBack', delay : 1000}
+				},
+				
+				
+				{
+					elements: document.querySelectorAll("#randomCircle>circle"), 
+					properties: { 
+						cx : function() { return Math.floor(Math.random() * window.innerWidth)},
+						cy : function() { return Math.floor(Math.random() * window.innerHeight)}
+					},
+					options: {duration: 4000, easing: 'easeInOutBack', sequenceQueue : false, queueName : "test"}
+				},
+				
+				{
+	        		elements: document.querySelectorAll("#storyTelling>g:first-child>g>circle"), 
+	        		properties: { opacity:0},
+	        		options: {duration: 1000, easing: 'easeInOutBack', sequenceQueue : false}
+	        	},
+				
+				{
+					elements: document.querySelectorAll(".last")[0], 
+					properties: { opacity:1 },
+					options: {duration: 500, easing: 'easeInOutBack', sequenceQueue : false}
+				},
+				
+				{
+					elements: document.querySelectorAll(".last")[1], 
+					properties: { opacity:1 },
+					options: {duration: 500, easing: 'easeInOutBack', delay : 500}
+				},
+				
+				{
+					elements: document.querySelectorAll(".last"), 
+					properties: {opacity:0 },
+					options: {duration: 1000, easing: 'easeInOutBack', delay : 1500}
+				},
+				
+				{
+					elements: document.querySelectorAll("#randomCircle>circle"), 
+					properties: { opacity: 0},
+					options: {duration: 1000, easing: 'easeInOutBack', sequenceQueue : false}
+				},
+				
+				{
+					elements: document.querySelector("#home"), 
+					properties: { opacity: 1},
+					options: {duration: 600, easing: 'easeInOutBack'}
+				},
+				
+				{
+					elements: document.querySelector("#home a"), 
+					properties: { translateY: "20px"},
+					options: {duration: 800, easing: 'easeInOutBack', sequenceQueue : false}
+				}
+				
+			];
+	        
+	        /* Gestion de Lancement des Animations */
+	        // Lancement de la phase 1
+	        Velocity.RunSequence(phase1);
+	        
+	        // Apparition du skip après 2s d'animation
+	        setTimeout(function(){
+		        Velocity(document.querySelector("#skip"), "fadeIn", 500);
+	        }, 1000);
+				
+	        setTimeout(function(){
+	        	
+	        	// First Path
+	        	var d = " M " + (valLeftX - distance) + " " + (valLeftY - (distance + r))+ " L " + (valLeftX + distance) + " " + (valLeftY - (distance + r))
+	        	+ " L " + (valLeftX + distance) + " " + (valLeftY + distance) + " L " + (valLeftX - distance) + " " + (valLeftY + distance) 
+	        	+ " L " + (valLeftX - distance) + " " + (valLeftY - (distance + r));
+	        	
+	        	document.querySelector("#path").setAttribute("d", d);
+	        	document.getElementById("storyTelling").appendChild(path);
+	        	
+	        	// Second Path
+	        	var d2 = " M " + valRightX + " " + (valRightY - (distance + r)) + " L " + (valRightX + distance) + " " + (valRightY - r / 2)
+	        	+ " L " + valRightX + " " + (valRightY + distance) + " L " + (valRightX - distance) + " " + (valRightY - r / 2)
+	        	+ " L " + valRightX + " " + (valRightY - (distance + r));
+	        	
+	        	document.querySelector("#path2").setAttribute("d", d2);
+	        	document.getElementById("storyTelling").appendChild(path);
+	        	
+	        	// Animate Paths
+	        	var dash = 1000;
+				Velocity(document.querySelectorAll(".path"),{
+					  	strokeWidth: 1,
+					    strokeDashoffset: 0,
+					    strokeDasharray: dash
+					}
+				, 1000);
+				
+				setTimeout(function(){
+	        	
+		        	// Lancement de la phase 1 à l'envers
+					Velocity.RunSequence(phase1Reverse);
+					
+					setTimeout(function(){
+						//Lancement de la phase 2
+					 	Velocity.RunSequence(phase2);
+					 	
+					 	setTimeout(function(){
+						 	Velocity(document.querySelector("#skip"), "fadeOut", 800);
+					 	}, 5500);
+					 	
+					}, 2500);
+					
+				}, 1200);
+		    }, 3200);
+		},
+		
+		skip : function(){
+			Velocity(document.querySelector("#skip"), "fadeOut", 800);
+			Velocity(document.querySelector("#home"), "fadeOut", 800);
+			Velocity(document.querySelector("#storyTelling"), {opacity:0}, 800);
+			Velocity(document.querySelector("#storyTelling"), "fadeOut", 900);
 		}
 	}
 };
