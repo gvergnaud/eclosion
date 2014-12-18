@@ -56,6 +56,7 @@ var app = {
 				
 			app.scale =  - (((Math.floor(instance.position.y) * 100 / (zoombarHeight - 15) + ((100 * 7.5) / zoombarHeight) - 100) 
 				* (UI.d3.zoomMax - UI.d3.zoomMin) / 100 + UI.d3.zoomMin)) + 0.56;
+			document.querySelector("#cursor").classList.add("grab");
 				
 			UI.d3.defineZoom(app.scale);
 		});
@@ -65,6 +66,7 @@ var app = {
 				UI.d3.redrawGraph();
 				UI.d3.defineCursor();
 			}));
+			document.querySelector("#cursor").classList.remove("grab");
 		});
 		
 		// Fermeture de la fenetre droite au clic sur la croix

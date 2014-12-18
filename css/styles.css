@@ -736,7 +736,7 @@ svg{
 #home{
 	width:100%;
 	text-align: center;
-	padding-top:20%;
+	padding-top:17%;
 	z-index: 50;
 	opacity: 0;
 	position:relative;
@@ -785,7 +785,7 @@ svg{
 	opacity:1;
 	font-weight: 500;
 	display: block;
-	width:325px;
+	width:235px;
 	margin: auto;
 	text-decoration: none;
 	font-family: "Open Sans";
@@ -828,6 +828,10 @@ svg{
 	font-size: 20px;
 	position: relative;
 	top:40px;
+}
+
+#cursor.grab{
+	cursor: -webkit-grabbing;
 }
 
 
