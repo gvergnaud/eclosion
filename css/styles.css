@@ -80,6 +80,7 @@ p.error{
 p.error i{
 	color: #AFAFAF;
 	font-size: 1.2rem;
+	padding: 0 4px;
 	border: 1px solid #AFAFAF;
 	border-radius: 1.2rem;
 	margin-left: 10px;
