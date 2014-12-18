@@ -958,7 +958,7 @@ div#twitterButton {
 	position: absolute;
 	top: 15px;
 	left: -30px;
-	z-index:30;
+	z-index: 20;
 	text-align: center;
 }
 

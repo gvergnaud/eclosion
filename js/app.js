@@ -55,33 +55,6 @@ var app = {
 		//lorsque l'utilisateur ajoute un mot
 		document.addEventListener('usercontribution', app.onUserContribution, false);
 		
-		// Gestion du drag du zoom
-		var draggie = new Draggabilly( document.querySelector('#cursor'), {
-		  axis: 'y',
-		  containment: '#zoomBar'
-		});
-		
-		
-		draggie.on( 'dragMove', function(instance, event, pointer){
-			var zoombarHeight = document.getElementById("zoom").offsetHeight;
-			if(instance.position.y < 0)
-				instance.position.y = 0;
-				
-			app.scale =  - (((Math.floor(instance.position.y) * 100 / (zoombarHeight - 15) + ((100 * 7.5) / zoombarHeight) - 100) 
-				* (UI.d3.zoomMax - UI.d3.zoomMin) / 100 + UI.d3.zoomMin)) + 0.56;
-			document.querySelector("#cursor").classList.add("grab");
-				
-			UI.d3.defineZoom(app.scale);
-		});
-		
-		draggie.on("dragEnd", function(){
-			UI.d3.svg.call(d3.behavior.zoom().scale(app.scale).translate(UI.d3.translate).scaleExtent([UI.d3.zoomMin, UI.d3.zoomMax]).on("zoom", function(){
-				UI.d3.redrawGraph();
-				UI.d3.defineCursor();
-			}));
-			document.querySelector("#cursor").classList.remove("grab");
-		});
-		
 		// Fermeture de la fenetre droite au clic sur la croix
 		document.querySelector("#nodeData .close").addEventListener("click", app.blurWord, false);
 

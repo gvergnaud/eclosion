@@ -590,6 +590,7 @@ var UI = {
 	    	if(UI.menu.opened){
 	    		UI.menu.menuElement.style.width = window.innerWidth + "px";
 	    		UI.menu.menuElement.querySelector('.activeTab').style.width = window.innerWidth -70 + "px";
+	    		UI.menu.menuElement.querySelector('.activeTab').style.left = "70px";
 	    	}
 	    },
 
@@ -695,17 +696,52 @@ var UI = {
 
 		addActiveFilter: function(element){
 
-			UI.menu.removeActiveFilter(element);
 
+			var filterSign = document.createElement('div');
+			filterSign.innerText = element.innerText;
+			filterSign.classList.add('filterSign');
+
+			var closeIcon = document.createElement('i');
+			closeIcon.classList.add('icon-cancel');
+			filterSign.appendChild(closeIcon);
+
+			if(element.classList.contains('sexe')){
+				
+				UI.menu.removeActiveFilter('sexe');
+
+				filterSign.addEventListener('click', function(){
+					app.resetFilters('sexe');
+				}, false);
+
+				document.querySelector('.activeFilter.sexe').innerHTML = '';
+				document.querySelector('.activeFilter.sexe').appendChild(filterSign);
+
+			}else{
+
+				UI.menu.removeActiveFilter('age');
+
+				filterSign.addEventListener('click', function(){
+					app.resetFilters('age');
+				}, false);
+
+				document.querySelector('.activeFilter.age').innerHTML = '';
+				document.querySelector('.activeFilter.age').appendChild(filterSign);
+			}
+			
 			element.classList.add('active');
 		},
 
-		removeActiveFilter: function(element){
+		removeActiveFilter: function(filter){
 			var filters;
 
-			if(element.classList.contains('sexe')){
+			if(filter === 'sexe'){
+
+				document.querySelector('.activeFilter.sexe').innerHTML = '';
 				filters = document.querySelectorAll('#lateral-navigation .filterbuttons.sexe');
+
 			}else{
+
+				document.querySelector('.activeFilter.age').innerHTML = '';
 				filters = document.querySelectorAll('#lateral-navigation .filterbuttons.age');
 			}
 
