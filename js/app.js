@@ -546,7 +546,7 @@ var app = {
 		link.setAttribute('class', 'twitter-share-button');
 		link.setAttribute('id', 'custom-twitter-button');
 		link.setAttribute('data-hashtags', 'eclosion');
-		link.setAttribute("data-text" , 'Poursuivez cette liste de mot avec le mot suivant : #'+nodeName);
+		link.setAttribute("data-text" , 'Si je vous dit '+nodeName+'... Faites naitre les associations autour de ce mot');
 		link.setAttribute("data-count" ,"none");
 		link.setAttribute("data-url" ,window.location);
 
