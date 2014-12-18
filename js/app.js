@@ -14,11 +14,23 @@ var app = {
 
 	event: {},
 
-	init: function(){
+	startStoryTelling : function(){
+		UI.animation.start();
+		
+		/* Gestion du Story Telling */
+        document.getElementById('startExperience').addEventListener("click", launchApp, false);
+        document.getElementById('skip').addEventListener("click", launchApp, false);
+        
+        function launchApp(e){
+	        e.preventDefault();
+        	UI.animation.skip();
+        	setTimeout(function(){
+	        	app.init();
+        	}, 900);
+        }
+	},
 	
-		window.addEventListener("load", function(){
-			UI.animation.start();
-		}, false);
+	init: function(){
 
 		app.getRouteParams();
 
@@ -110,17 +122,6 @@ var app = {
 
         document.getElementById('aproposOverlay').addEventListener("click", function() {
         	UI.about.closeOverlay();
-        }, false);
-        
-        /* Gestion du Story Telling */
-        document.getElementById('startExperience').addEventListener("click", function(e) {
-        	e.preventDefault();
-        	UI.animation.skip();
-        }, false);
-        
-        document.getElementById('skip').addEventListener("click", function(e){
-        	e.preventDefault();
-        	UI.animation.skip();
         }, false);
 
         // Overlay d'unfo utilisateur
@@ -542,4 +543,6 @@ var app = {
 	}
 };
 
-app.init();
+window.addEventListener("load", function(){
+	app.startStoryTelling();
+});

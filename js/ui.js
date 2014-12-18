@@ -526,8 +526,8 @@ var UI = {
 		overlayContainer: document.querySelector('#overlay-container'),
 
 		openOverlay: function() {
-
-			this.overlayApropos.classList.add('active');
+			var self = this;
+			Velocity(self.overlayApropos, "fadeIn", 800);
 
 	    	var openAnim = [
 	        	{
@@ -541,8 +541,9 @@ var UI = {
 		},
 		closeOverlay: function() {
 			var overlayContainer = document.querySelector('#overlay-container');
-
-			UI.about.overlayApropos.classList.remove('active');
+			
+			var self = this;
+			Velocity(self.overlayApropos, "fadeOut", 800);
 
 	    	var closeAnim = [
 	        	{
@@ -1135,7 +1136,7 @@ var UI = {
 						cx : function() { return Math.floor(Math.random() * window.innerWidth)},
 						cy : function() { return Math.floor(Math.random() * window.innerHeight)}
 					},
-					options: {duration: 4000, easing: 'easeInOutBack', sequenceQueue : false}
+					options: {duration: 4000, easing: 'easeInOutBack', sequenceQueue : false, queueName : "test"}
 				},
 				
 				{
@@ -1183,7 +1184,6 @@ var UI = {
 			];
 	        
 	        /* Gestion de Lancement des Animations */
-	        
 	        // Lancement de la phase 1
 	        Velocity.RunSequence(phase1);
 	        
@@ -1240,9 +1240,10 @@ var UI = {
 		},
 		
 		skip : function(){
-			Velocity(document.querySelector("#storyTelling"), "fadeOut", 800);
 			Velocity(document.querySelector("#skip"), "fadeOut", 800);
 			Velocity(document.querySelector("#home"), "fadeOut", 800);
+			Velocity(document.querySelector("#storyTelling"), {opacity:0}, 800);
+			Velocity(document.querySelector("#storyTelling"), "fadeOut", 900);
 		}
 	}
 };
