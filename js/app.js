@@ -66,9 +66,6 @@ var app = {
 		// lorsque l'utilisateur tape un caractère dans l'espace recherche
 		document.querySelector('#searchInput').addEventListener('keyup', app.searchNode, false);
 
-		// lorsque l'utilisateur tape un caractère dans l'espace recherche
-		//document.querySelector('div.filters button.resetFilters').addEventListener('click', app.resetFilters, false);
-	
 		/* Gestion des fenêtres du menu */
         document.getElementById('searchBox').addEventListener("click", function(){
         	UI.menu.searchBoxView();
