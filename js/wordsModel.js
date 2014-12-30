@@ -1,6 +1,8 @@
 var Words = (function(User){
 	'use strict';
 
+	var wordsModel = {};
+
 	// PRIVATE
 	var _firebase = new Firebase('https://torid-inferno-6438.firebaseio.com/mots');
 
@@ -120,375 +122,374 @@ var Words = (function(User){
 
 
 	// PUBLIC
-	return {
 
-		// GET
-		get: function(){
-			return _words;
-		},
+	// GET
+	wordsModel.get = function(){
+		return _words;
+	};
 
-		watchData: function(callback){
-			_firebase.on('value', function (snapshot) {
-				//GET DATA
-				_words = snapshot.val();
-				callback.call(this, snapshot.val());
-			});
-		},
+	wordsModel.watchData = function(callback){
+		_firebase.on('value', function (snapshot) {
+			//GET DATA
+			_words = snapshot.val();
+			callback.call(this, snapshot.val());
+		});
+	};
 
-		getDataOnce: function(callback){
-			_firebase.once("value", function (snapshot) {
-				//GET DATA
-				_words = snapshot.val();
-				callback.call(this, snapshot.val());
-			});
-		},
+	wordsModel.getDataOnce = function(callback){
+		_firebase.once("value", function (snapshot) {
+			//GET DATA
+			_words = snapshot.val();
+			callback.call(this, snapshot.val());
+		});
+	};
 
-		getRandomWord: function(){
-			return _words.nodes[Math.ceil(Math.random()*(_words.nodes.length))-1].name;
-		},
+	wordsModel.getRandomWord = function(){
+		return _words.nodes[Math.ceil(Math.random()*(_words.nodes.length))-1].name;
+	};
 
-		getNodeFromWord: function(word){
+	wordsModel.getNodeFromWord = function(word){
 
-			var node = false;
+		var node = false;
 
-			var BreakException = {};
+		var BreakException = {};
 
-			try {
+		try {
 
-				_words.nodes.forEach(function(element, index){
-					if(word.toLowerCase() === element.name.toLowerCase()){
-						node = element;
-						throw BreakException;
-					}
-				});
-
-			} catch(e) {
-
-			    if (e !== BreakException) throw e;
-			}
-
-			return node;
-		},
-
-		getNodeFromIndex: function(index){
-
-			var node = false;
-
-			var BreakException = {};
-
-			try {
-
-				_words.nodes.forEach(function(element, index){
-					if(index === element.index){
-						node = element;
-						throw BreakException;
-					}
-				});
-
-			} catch(e) {
-
-			    if (e !== BreakException) throw e;
-			}
-
-			return node;
-		},
-
-		getAllLinksFromNode: function(node){
-
-			var links = _words.links.filter(function (link) {
-				return link.source === node.index || link.target === node.index;
-			});
-
-			return links;
-		},
-
-		getNodeOccurrence: function(node){
-
-			var occurrence = 0,
-				links = this.getAllLinksFromNode(node);
-
-			links.forEach(function(link){
-				occurrence += link.value;
-			});
-
-			return occurrence;
-		},
-
-		getMostAssociatedWords: function(node){
-			var mostAssociatedWords = [],
-				links = this.getAllLinksFromNode(node),
-				BreakException = {};
-
-
-			links.sort(function(a, b) { //on trie le tableau par value décroissante
-				return b.value - a.value;
-			});
-
-			/*var totalOccurrence = 0;
-
-			links.forEach(function(link){
-				totalOccurrence += link.value;
-			});*/
-
-			try{
-				links.forEach(function(link){
-					var word = {};
-
-					if(link.source !== node.index){
-						word.name = _words.nodes[link.source].name;
-						word.occurrence = link.value;
-						//word.occurrencePercentage = Math.round(link.value * 100 / totalOccurrence);
-					}else{
-						word.name = _words.nodes[link.target].name;
-						word.occurrence = link.value;
-						//word.occurrencePercentage = Math.round(link.value * 100 / totalOccurrence);
-					}
-					mostAssociatedWords.push(word);
-
-					if(mostAssociatedWords.length === 5){
-						throw BreakException;
-					}
-				});
-			} catch(e) {
-				if (e !== BreakException) throw e;
-			}
-
-			return mostAssociatedWords;
-		},
-
-		getSexeOccurrence: function(node){
-			var total = node.sexe.female + node.sexe.male + node.sexe.unknown;
-
-			var sexeOccurrence = {
-				female: Math.round(node.sexe.female * 100 / total),
-				male: Math.round(node.sexe.male * 100 / total),
-				unknown: Math.round(node.sexe.unknown * 100 / total),
-			};
-
-			return sexeOccurrence;
-		},
-
-		getAgeOccurrence: function(node){
-			var total = node.age.unknown + node.age.under25 + node.age['25to35'] + node.age['35to45'] + node.age.above45;
-
-			var ageOccurrence = {
-				unknown: Math.round(node.age.unknown * 100 / total),
-				under25: Math.round(node.age.under25 * 100 / total),
-				'25to35': Math.round(node.age['25to35'] * 100 / total),
-				'35to45': Math.round(node.age['35to45'] * 100 / total),
-				above45: Math.round(node.age.above45 * 100 / total),
-			};
-
-			return ageOccurrence;
-		},
-
-		// ADD
-		addContribution: function(newWord, proposedWord, successCallback, errorCallback){
-
-			if(!newWord || !proposedWord) { console.log('argument manquant pour addContribution'); return; }
-
-			if(this.isAFrenchWord(newWord)){ //le mot est français
-
-				console.log('le mot est français');
-				
-				// si l'utilisateur est nouveau
-				if(this.newUser){
-					_words.contributors += 1;
-					this.newUser = false;
+			_words.nodes.forEach(function(element, index){
+				if(word.toLowerCase() === element.name.toLowerCase()){
+					node = element;
+					throw BreakException;
 				}
+			});
 
-				var node = this.getNodeFromWord(newWord),
-					proposedNode = this.getNodeFromWord(proposedWord);
+		} catch(e) {
 
-				if(node){ //le mot est déjà present dans le tableau nodes
+		    if (e !== BreakException) throw e;
+		}
 
-					console.log('le mot est déjà present dans le tableau nodes');
+		return node;
+	};
 
-					var link = this.areLinked(node, proposedNode);
+	wordsModel.getNodeFromIndex = function(index){
 
-					if(link){// les deux mots sont déjà liés entre eux
+		var node = false;
 
-						console.log('les deux mots sont déjà liés entre eux');
+		var BreakException = {};
 
-						//on ajoute 1 à la value de la liaison link
-						_updateLink(link);
-						_saveData();
+		try {
 
-						successCallback.call(this);
+			_words.nodes.forEach(function(element, index){
+				if(index === element.index){
+					node = element;
+					throw BreakException;
+				}
+			});
 
-					}else{ //les deux mots ne sont pas liés entre eux
+		} catch(e) {
 
-						//on ajoute une liaison entre les deux mots
+		    if (e !== BreakException) throw e;
+		}
 
-						if(node.index > proposedNode.index){
-							_createLink(node, proposedNode);
-							_saveData();
-						}else{
-							_createLink(proposedNode, node);
-							_saveData();
-						}
+		return node;
+	};
 
-						successCallback.call(this);
-					}
-				}else{ //le mot n'est n'est pas présent dans le tableau nodes
+	wordsModel.getAllLinksFromNode = function(node){
 
-					//on ajoute le mot dans le tableau nodes, et on ajoute une liaison entre newWord et proposedWord
-					var newNode = _createNode(newWord);
+		var links = _words.links.filter(function (link) {
+			return link.source === node.index || link.target === node.index;
+		});
 
-					_createLink(newNode, proposedNode);
+		return links;
+	};
 
+	wordsModel.getNodeOccurrence = function(node){
+
+		var occurrence = 0,
+			links = this.getAllLinksFromNode(node);
+
+		links.forEach(function(link){
+			occurrence += link.value;
+		});
+
+		return occurrence;
+	};
+
+	wordsModel.getMostAssociatedWords = function(node){
+		var mostAssociatedWords = [],
+			links = this.getAllLinksFromNode(node),
+			BreakException = {};
+
+
+		links.sort(function(a, b) { //on trie le tableau par value décroissante
+			return b.value - a.value;
+		});
+
+		/*var totalOccurrence = 0;
+
+		links.forEach(function(link){
+			totalOccurrence += link.value;
+		});*/
+
+		try{
+			links.forEach(function(link){
+				var word = {};
+
+				if(link.source !== node.index){
+					word.name = _words.nodes[link.source].name;
+					word.occurrence = link.value;
+					//word.occurrencePercentage = Math.round(link.value * 100 / totalOccurrence);
+				}else{
+					word.name = _words.nodes[link.target].name;
+					word.occurrence = link.value;
+					//word.occurrencePercentage = Math.round(link.value * 100 / totalOccurrence);
+				}
+				mostAssociatedWords.push(word);
+
+				if(mostAssociatedWords.length === 5){
+					throw BreakException;
+				}
+			});
+		} catch(e) {
+			if (e !== BreakException) throw e;
+		}
+
+		return mostAssociatedWords;
+	};
+
+	wordsModel.getSexeOccurrence = function(node){
+		var total = node.sexe.female + node.sexe.male + node.sexe.unknown;
+
+		var sexeOccurrence = {
+			female: Math.round(node.sexe.female * 100 / total),
+			male: Math.round(node.sexe.male * 100 / total),
+			unknown: Math.round(node.sexe.unknown * 100 / total),
+		};
+
+		return sexeOccurrence;
+	};
+
+	wordsModel.getAgeOccurrence = function(node){
+		var total = node.age.unknown + node.age.under25 + node.age['25to35'] + node.age['35to45'] + node.age.above45;
+
+		var ageOccurrence = {
+			unknown: Math.round(node.age.unknown * 100 / total),
+			under25: Math.round(node.age.under25 * 100 / total),
+			'25to35': Math.round(node.age['25to35'] * 100 / total),
+			'35to45': Math.round(node.age['35to45'] * 100 / total),
+			above45: Math.round(node.age.above45 * 100 / total),
+		};
+
+		return ageOccurrence;
+	};
+
+	// ADD
+	wordsModel.addContribution = function(newWord, proposedWord, successCallback, errorCallback){
+
+		if(!newWord || !proposedWord) { console.log('argument manquant pour addContribution'); return; }
+
+		if(this.isAFrenchWord(newWord)){ //le mot est français
+
+			console.log('le mot est français');
+			
+			// si l'utilisateur est nouveau
+			if(User.newUser){
+				_words.contributors += 1;
+				User.newUser = false;
+			}
+
+			var node = this.getNodeFromWord(newWord),
+				proposedNode = this.getNodeFromWord(proposedWord);
+
+			if(node){ //le mot est déjà present dans le tableau nodes
+
+				console.log('le mot est déjà present dans le tableau nodes');
+
+				var link = this.areLinked(node, proposedNode);
+
+				if(link){// les deux mots sont déjà liés entre eux
+
+					console.log('les deux mots sont déjà liés entre eux');
+
+					//on ajoute 1 à la value de la liaison link
+					_updateLink(link);
 					_saveData();
 
 					successCallback.call(this);
+
+				}else{ //les deux mots ne sont pas liés entre eux
+
+					//on ajoute une liaison entre les deux mots
+
+					if(node.index > proposedNode.index){
+						_createLink(node, proposedNode);
+						_saveData();
+					}else{
+						_createLink(proposedNode, node);
+						_saveData();
+					}
+
+					successCallback.call(this);
 				}
-			}else{ //le mot n'est pas français
+			}else{ //le mot n'est n'est pas présent dans le tableau nodes
 
-				var error = 'le mot n\'est pas français';
-				console.log(error);
-				errorCallback.call(this, error);
+				//on ajoute le mot dans le tableau nodes, et on ajoute une liaison entre newWord et proposedWord
+				var newNode = _createNode(newWord);
+
+				_createLink(newNode, proposedNode);
+
+				_saveData();
+
+				successCallback.call(this);
 			}
-		},
+		}else{ //le mot n'est pas français
 
-		addUnlinkedNode: function(word, callback){
-			
-			this.createNode(word, function(newNode){
-				var user = User.get();
-				newNode.age[user.age] += 1;
-				newNode.sexe[user.sexe] += 1;
+			var error = 'le mot n\'est pas français';
+			console.log(error);
+			errorCallback.call(this, error);
+		}
+	};
+
+	wordsModel.addUnlinkedNode = function(word, callback){
+		
+		_createNode(word, function(newNode){
+			var user = User.get();
+			newNode.age[user.age] += 1;
+			newNode.sexe[user.sexe] += 1;
+		});
+
+		_saveData();
+
+		if(callback){
+			callback.call(this);
+		}
+	};
+
+	// TEST
+	wordsModel.isAFrenchWord = function(word){
+		//TODO check si le mot est français, api google translate ?
+		function isFrench(){
+			var drapeau = false;
+			var ligne = 0;
+			// Répéter tant que le mot n'a pas été trouvé ou que le dictionnaire n'a pas été lu entièrement.
+			while(drapeau === false && ligne < _dico.length){
+				if (_dico[ligne].trim() == word) { // Si mot trouvé
+					drapeau = true; // drapeau pour sortir de la boucle si on a trouvé le mot
+				}
+				ligne++; 
+			}
+				
+			return drapeau;
+		}
+
+		if(_dico){
+			return isFrench();
+		}
+	};
+
+	wordsModel.areLinked = function(node, proposedNode){
+
+		function areLinked(source, target){
+			var link = false;
+
+			var BreakException = {};
+
+			try {
+
+				_words.links.forEach(function(element, index){
+					if(element.source === source && element.target === target){
+						link = {
+							index: index,
+							element: element
+						};
+						throw BreakException;
+					}
+				});
+
+			} catch(e) {
+
+			    if (e !== BreakException) throw e;
+			}
+
+			return link;
+		}
+		
+		if(node.index > proposedNode.index){
+			return areLinked(node.index, proposedNode.index);
+		}else{
+			return areLinked(proposedNode.index, node.index);
+		}
+	};
+
+	//ApplyFilters
+	wordsModel.applyFilters = function(words, filters, callback){
+
+		//Compatibilité IE pour la methode filter de Array
+
+		var filteredWords = {};
+
+		if(filters.sexe && filters.age){
+
+			filteredWords.nodes = words.nodes.filter(function (node) {
+				return	node.sexe && node.sexe[filters.sexe] > 0  &&
+						node.age && node.age[filters.age] > 0;
 			});
 
-			_saveData();
+		}else if(filters.sexe){
 
-			if(callback){
-				callback.call(this);
-			}
-		},
+			filteredWords.nodes = words.nodes.filter(function (node) {
+				return	node.sexe && node.sexe[filters.sexe] > 0;
+			});
 
-		// TEST
-		isAFrenchWord: function(word){
-			//TODO check si le mot est français, api google translate ?
-			function isFrench(){
-				var drapeau = false;
-				var ligne = 0;
-				// Répéter tant que le mot n'a pas été trouvé ou que le dictionnaire n'a pas été lu entièrement.
-				while(drapeau === false && ligne < _dico.length){
-					if (_dico[ligne].trim() == word) { // Si mot trouvé
-						drapeau = true; // drapeau pour sortir de la boucle si on a trouvé le mot
-					}
-					ligne++; 
-				}
-					
-				return drapeau;
-			}
+		}else if(filters.age){
 
-			if(_dico){
-				return isFrench();
-			}
-		},
+			filteredWords.nodes = words.nodes.filter(function (node) {
+				return	node.age && node.age[filters.age] > 0;
+			});
+		}
 
-		areLinked: function(node, proposedNode){
+		filteredWords.links = words.links.filter(function (link) {
 
-			function areLinked(source, target){
-				var link = false;
-
+			return	(function(link){
+				var ok = false;
 				var BreakException = {};
-
-				try {
-
-					_words.links.forEach(function(element, index){
-						if(element.source === source && element.target === target){
-							link = {
-								index: index,
-								element: element
-							};
+				try{
+					filteredWords.nodes.forEach(function(node, index){
+						if(link.source === node.index){
+							link.source = index;
+							ok = true;
 							throw BreakException;
 						}
 					});
-
 				} catch(e) {
-
-				    if (e !== BreakException) throw e;
+					if (e !== BreakException) throw e;
 				}
+				return ok;
+			})(link) 
 
-				return link;
-			}
-			
-			if(node.index > proposedNode.index){
-				return areLinked(node.index, proposedNode.index);
-			}else{
-				return areLinked(proposedNode.index, node.index);
-			}
-		},
+			&&
 
-		//ApplyFilters
-		applyFilters: function(words, filters, callback){
+			(function(link){
+				var ok = false;
+				var BreakException = {};
+				try{
+					filteredWords.nodes.forEach(function(node, index){
+						if(link.target === node.index){
+							link.target = index;
+							ok = true;
+							throw BreakException;
+						}
+					});
+				} catch(e) {
+					if (e !== BreakException) throw e;
+				}
+				return ok;
+			})(link);
+		});
 
-			//Compatibilité IE pour la methode filter de Array
-
-			var filteredWords = {};
-
-			if(filters.sexe && filters.age){
-
-				filteredWords.nodes = words.nodes.filter(function (node) {
-					return	node.sexe && node.sexe[filters.sexe] > 0  &&
-							node.age && node.age[filters.age] > 0;
-				});
-
-			}else if(filters.sexe){
-
-				filteredWords.nodes = words.nodes.filter(function (node) {
-					return	node.sexe && node.sexe[filters.sexe] > 0;
-				});
-
-			}else if(filters.age){
-
-				filteredWords.nodes = words.nodes.filter(function (node) {
-					return	node.age && node.age[filters.age] > 0;
-				});
-			}
-
-			filteredWords.links = words.links.filter(function (link) {
-
-				return	(function(link){
-					var ok = false;
-					var BreakException = {};
-					try{
-						filteredWords.nodes.forEach(function(node, index){
-							if(link.source === node.index){
-								link.source = index;
-								ok = true;
-								throw BreakException;
-							}
-						});
-					} catch(e) {
-						if (e !== BreakException) throw e;
-					}
-					return ok;
-				})(link) 
-
-				&&
-
-				(function(link){
-					var ok = false;
-					var BreakException = {};
-					try{
-						filteredWords.nodes.forEach(function(node, index){
-							if(link.target === node.index){
-								link.target = index;
-								ok = true;
-								throw BreakException;
-							}
-						});
-					} catch(e) {
-						if (e !== BreakException) throw e;
-					}
-					return ok;
-				})(link);
-			});
-
-			callback.call(this, filteredWords);
-		}
-
+		callback.call(this, filteredWords);
 	};
+
+	return wordsModel;
 
 })(User);

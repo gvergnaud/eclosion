@@ -1,6 +1,8 @@
 var User = (function(){
 	'use strict';
 
+	var userModel = {};
+
 	// PRIVATE
 	var _user = false;
 
@@ -15,7 +17,7 @@ var User = (function(){
 				sexe: 'unknown'
 			};
 
-			model.newUser = true;
+			userModel.newUser = true;
 		}
 
 		_user = user;
@@ -23,44 +25,43 @@ var User = (function(){
 	})();
 
 	// PUBLIC
-	return {
-
-		get: function(){
-			return _user;
-		},
-
-		update: function(sexe, age){
-			_user.sexe = sexe;
-			_user.age = age;
-			localStorage.setItem('EchoUser', JSON.stringify(_user));
-		},
-
-		getAgeRange: function(age){
-			var ageRange;
-
-			if(age === 'unknown'){
-
-				ageRange = 'unknown';
-
-			}else if(age < 25){
-
-				ageRange = 'under25';
-
-			}else if(25 <= age < 35){
-				
-				ageRange = '25to35';
-
-			}else if(35 <= age < 45){
-				
-				ageRange = '35to45';
-
-			}else if(45 <= age){
-
-				ageRange = 'above45';
-			}
-
-			return ageRange;
-		}
+	userModel.get = function(){
+		return _user;
 	};
+
+	userModel.update = function(sexe, age){
+		_user.sexe = sexe;
+		_user.age = age;
+		localStorage.setItem('EchoUser', JSON.stringify(_user));
+	};
+
+	userModel.getAgeRange = function(age){
+		var ageRange;
+
+		if(age === 'unknown'){
+
+			ageRange = 'unknown';
+
+		}else if(age < 25){
+
+			ageRange = 'under25';
+
+		}else if(25 <= age < 35){
+			
+			ageRange = '25to35';
+
+		}else if(35 <= age < 45){
+			
+			ageRange = '35to45';
+
+		}else if(45 <= age){
+
+			ageRange = 'above45';
+		}
+
+		return ageRange;
+	};
+
+	return userModel;
 
 })();
