@@ -78,17 +78,17 @@
                         <div class="filters">
                             <p>AGE</p>
                             <div class="agefilter">
-                                <button class="filterbuttons age" onclick="App.addFilter(event, 'age', 'under25')">-25 ans</button>
-                                <button class="filterbuttons age" onclick="App.addFilter(event, 'age', '25to35')">25-35 ans</button>
-                                <button class="filterbuttons age" onclick="App.addFilter(event, 'age', '35to45')">35-45 ans</button>
-                                <button class="filterbuttons age" onclick="App.addFilter(event, 'age', 'above45')">+45 ans</button>
+                                <button class="filterbuttons age" onclick="App.toggleFilter(event, 'age', 'under25')">-25 ans</button>
+                                <button class="filterbuttons age" onclick="App.toggleFilter(event, 'age', '25to35')">25-35 ans</button>
+                                <button class="filterbuttons age" onclick="App.toggleFilter(event, 'age', '35to45')">35-45 ans</button>
+                                <button class="filterbuttons age" onclick="App.toggleFilter(event, 'age', 'above45')">+45 ans</button>
                             </div>
                         </div>
                         <div class="filters">
                             <p>SEXE</p>
                             <div class="sexfilter">
-                                <button class="filterbuttons sexe" onclick="App.addFilter(event, 'sexe', 'male')">Homme</button>
-                                <button class="filterbuttons sexe" onclick="App.addFilter(event, 'sexe', 'female')">Femme</button>
+                                <button class="filterbuttons sexe" onclick="App.toggleFilter(event, 'sexe', 'male')">Homme</button>
+                                <button class="filterbuttons sexe" onclick="App.toggleFilter(event, 'sexe', 'female')">Femme</button>
                             </div>
                         </div>
                     </div>
@@ -418,9 +418,21 @@
         </script>
 
         
-        <script src="js/userModel.js"></script>
-        <script src="js/wordsModel.js"></script>
-        <script src="js/ui.js"></script>
+        <script src="js/models/userModel.js"></script>
+        <script src="js/models/wordsModel.js"></script>
+        <script src="js/models/filtersModel.js"></script>
+
+        <script src="js/views/ui.js"></script>
+        <script src="js/views/aboutView.js"></script>
+        <script src="js/views/globalDataView.js"></script>
+        <script src="js/views/graphView.js"></script>
+        <script src="js/views/menuView.js"></script>
+        <script src="js/views/nodeDataView.js"></script>
+        <script src="js/views/userInfosView.js"></script>
+        <script src="js/views/storyTellingView.js"></script>
+        
+        <script src="js/route.js"></script>
+
         <script src="js/appCtrl.js"></script>
     </body>
 </html>

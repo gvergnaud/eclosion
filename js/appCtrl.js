@@ -1,24 +1,20 @@
-var App = (function(Words, User, UI){
+var App = (function(Words, User, UI, Route, Filters){
 
 	// PRIVATE
-	var _routeParams = {};
-
 	var _proposedWord = false;
 
 	var _activeWord = false;
-
-	var _filters = {
-		age: false,
-		sexe: false
-	};
+	
 
 	// PUBLIC
 	var app = {
 
+		lastUserContribution: false,
+
 		event: {},
 
 		startStoryTelling : function(){
-			UI.animation.start();
+			UI.storyTelling.start();
 			
 			/* Gestion du Story Telling */
 	        document.getElementById('startExperience').addEventListener("click", function(e){
@@ -36,10 +32,6 @@ var App = (function(Words, User, UI){
 		},
 		
 		init: function(){
-
-			app.getRouteParams();
-
-			UI.init();
 
 			app.createCustomEvents();
 
@@ -101,9 +93,13 @@ var App = (function(Words, User, UI){
 	        document.querySelector('#userInfoOverlay .userInfoForm').addEventListener('submit', app.onUserInfoSubmit, false);		
 		},
 
-		getRouteParams: function(){
-			var hashtab = window.location.hash.split('/');
-			_routeParams.word = hashtab[1];
+		checkRoute: function(){
+			//si un mot est passé en parametre, on le focus
+			if(Route.params().word){
+				setTimeout(function(){
+					app.focusWord( decodeURI(Route.params().word) );
+				}, 2000);
+			}
 		},
 
 		createCustomEvents: function(){
@@ -122,25 +118,18 @@ var App = (function(Words, User, UI){
 		},
 
 		onGraphReady: function (e) {
-
-			app.graphCreated = true;
 			
 			// Lancement du son
 			document.querySelector("#player").play();
 
 			app.proposeRandomWord();
 
-			UI.d3.svg.call(d3.behavior.zoom().scaleExtent([UI.d3.zoomMin, UI.d3.zoomMax]).on("zoom", function(){
-				UI.d3.redrawGraph();
-				UI.d3.defineCursor();
+			UI.graph.svg.call(d3.behavior.zoom().scaleExtent([UI.graph.zoomMin, UI.graph.zoomMax]).on("zoom", function(){
+				UI.graph.redrawGraph();
+				UI.graph.defineCursor();
 			}));
 
-			//si un mot est passé en parametre, on le focus
-			if(_routeParams.word){
-				setTimeout(function(){
-					app.focusWord( decodeURI(_routeParams.word));
-				}, 1500);
-			}
+			app.checkRoute();
 
 			//remove l'event listener
 			e.target.removeEventListener(e.type, arguments.callee);
@@ -149,7 +138,7 @@ var App = (function(Words, User, UI){
 		onDataUpdate: function(){
 
 			//on affiche les données globales
-			UI.printGlobalData(Words.get().nodes.length,  Words.get().links.length, Words.get().contributors);
+			UI.globalData.print(Words.get().nodes.length,  Words.get().links.length, Words.get().contributors);
 			
 			//si le panneau est ouvert, et qu'il y a un mot actif, on update les données
 			if(_activeWord){
@@ -159,15 +148,15 @@ var App = (function(Words, User, UI){
 			}
 
 			//au click sur un node, on ouvre le panneau droit et on recupérer toutes les données de ce node
-			UI.d3.svg.selectAll(".nodes>g>circle").on("mouseup", 	function(node){
+			UI.graph.svg.selectAll(".nodes>g>circle").on("mouseup", 	function(node){
 				if(d3.event.defaultPrevented == false){
-					UI.d3.selectNode(d3.select(this.parentNode));
+					UI.graph.selectNode(d3.select(this.parentNode));
 					app.focusWord(node.name);
 				}
 			});
 			
 			// On désactive le double click sur les noeuds
-			UI.d3.svg.selectAll(".nodes>g>circle").on("dblclick", 	function(node){
+			UI.graph.svg.selectAll(".nodes>g>circle").on("dblclick", 	function(node){
 				d3.event.stopPropagation();
 			});
 		},
@@ -175,9 +164,10 @@ var App = (function(Words, User, UI){
 		onUserContribution: function (e) {
 			setTimeout(function(){
 				app.focusWord(app.lastUserContribution);
-			}, 1500);
+			}, 2000);
 
 			app.proposeRandomWord();
+
 			if(UI.menu.opened){
 				UI.menu.closeModal();
 			}
@@ -220,29 +210,17 @@ var App = (function(Words, User, UI){
 
 		watchData: function(){
 			Words.watchData(function(words){
-				//CrÃ©e le graph avec D3.js
-				if(_filters.sexe || _filters.age){
 
-					Words.applyFilters(words, _filters, function(filteredWords){
-						
-						if(!app.graphCreated){ //si le graph n'est pas crÃ©Ã© on le crÃ©e
-							UI.d3.createGraph( filteredWords );
-							app.graphCreated = true;
-
-						}else{ //si il est crÃ©Ã© on update
-							UI.d3.updateGraph( filteredWords );
-						}
-					});
-
-				}else{
-					if(!app.graphCreated){ //si le graph n'est pas crÃ©Ã© on le crÃ©e
-						UI.d3.createGraph( words );
-						app.graphCreated = true;
+				Filters.apply(words, function(filteredWords){
+					
+					if(!UI.graph.created){ //si le graph n'est pas crÃ©Ã© on le crÃ©e
+						UI.graph.createGraph( filteredWords );
+						UI.graph.created = true;
 
 					}else{ //si il est crÃ©Ã© on update
-						UI.d3.updateGraph( words );
+						UI.graph.updateGraph( filteredWords );
 					}
-				}
+				});
 
 				document.dispatchEvent(app.event.dataUpdate);
 			});
@@ -251,28 +229,17 @@ var App = (function(Words, User, UI){
 
 		reloadData: function(){
 			Words.getDataOnce(function(words){
-				if(_filters.sexe || _filters.age){
 
-					Words.applyFilters(words, _filters, function(filteredWords){
-								
-						UI.d3.createGraph( filteredWords );
+				Filters.apply(words, function(filteredWords){
+							
+					UI.graph.createGraph( filteredWords );
 
-						//redraw pour eviter les problèmes de zoom
-						UI.d3.svg.call(d3.behavior.zoom().scaleExtent([UI.d3.zoomMin, UI.d3.zoomMax]).on("zoom", function(){
-							UI.d3.redrawGraph();
-							UI.d3.defineCursor();
-						}));
-					});
-
-				}else{
-					UI.d3.createGraph( words );
-					
 					//redraw pour eviter les problèmes de zoom
-					UI.d3.svg.call(d3.behavior.zoom().scaleExtent([UI.d3.zoomMin, UI.d3.zoomMax]).on("zoom", function(){
-						UI.d3.redrawGraph();
-						UI.d3.defineCursor();
+					UI.graph.svg.call(d3.behavior.zoom().scaleExtent([UI.graph.zoomMin, UI.graph.zoomMax]).on("zoom", function(){
+						UI.graph.redrawGraph();
+						UI.graph.defineCursor();
 					}));
-				}
+				});
 
 				document.dispatchEvent(app.event.dataUpdate);
 			});
@@ -312,7 +279,7 @@ var App = (function(Words, User, UI){
 
 		//User interaction
 		focusWord: function(word){
-			UI.d3.searchNode(word);
+			UI.graph.searchNode(word);
 			var selectedNode = Words.getNodeFromWord(word);
 
 			app.getNodeData(selectedNode, function(nodeData){
@@ -322,7 +289,7 @@ var App = (function(Words, User, UI){
 			});
 			UI.menu.closeModal();
 
-			history.pushState({}, word, '#/' + encodeURI(word));
+			Route.set({word: word});
 
 			/* Social share */
 			app.twitterShareWord(word);
@@ -330,10 +297,10 @@ var App = (function(Words, User, UI){
 
 		blurWord: function(){
 			UI.nodeData.closeSection();
-			UI.d3.highlightOff();
+			UI.graph.highlightOff();
 			_activeWord = false;
 			
-			history.pushState({}, 'Home', window.location.href.split('#')[0]);
+			Route.flush();
 		},
 
 		addContribution: function(e){
@@ -410,46 +377,36 @@ var App = (function(Words, User, UI){
 		},
 
 		addUnlinkedWord: function(word){
-			Words.addUnlinkedNode(word, function(){
-				app.lastUserContribution = word.toLowerCase();
+			var contribution = word.toLowerCase();
+
+			Words.addUnlinkedNode(contribution, function(){
+				app.lastUserContribution = contribution;
 				document.dispatchEvent(app.event.userContribution);
 			});
 		},
 
-		addFilter: function(e, filter, value){
-
-			var filterType;
-
-			if(e.target.classList.contains('sexe')){
-				filterType = 'sexe';
-			}else{
-				filterType = 'age';
-			}
+		toggleFilter: function(e, filterType, value){
 
 			if(!e.target.classList.contains('active')){
 				UI.menu.addActiveFilter(e.target);
-				_filters[filter] = value;
+				Filters.set(filterType, value);
 
 			}else{
 				UI.menu.removeActiveFilter(filterType);
-				_filters[filter] = false;
+				Filters.set(filterType, false);
 			}
 
 			app.reloadData();		
 		},
 
-		resetFilters: function(filter){
-			if(!filter){
-				_filters.sexe = false;
-				_filters.age = false;
-				UI.menu.removeAllActiveFilter();
-			}else{
-				_filters[filter] = false;
-				UI.menu.removeActiveFilter(filter);
+		removeFilter: function(filterType){
+
+			if(filterType){
+				Filters.set(filterType, false);
+				UI.menu.removeActiveFilter(filterType);
 			}
 			
-			app.reloadData();		
-			
+			app.reloadData();	
 		},
 
 		searchNode: function(e){
@@ -563,8 +520,13 @@ var App = (function(Words, User, UI){
 
 	return app;
 
-})(Words, User, UI);
+})(Words, User, UI, Route, Filters);
 
 window.addEventListener("load", function(){
-	App.startStoryTelling();
+	if(User.newUser){
+		App.startStoryTelling();
+	}else{
+		UI.storyTelling.skip();
+		App.init();
+	}
 });
