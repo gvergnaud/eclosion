@@ -35,15 +35,15 @@ UI.graph = (function(){
 					instance.position.y = 0;
 					
 				App.scale =  - (((Math.floor(instance.position.y) * 100 / (zoombarHeight - 15) + ((100 * 7.5) / zoombarHeight) - 100) 
-					* (UI.d3.zoomMax - UI.d3.zoomMin) / 100 + UI.d3.zoomMin)) + 0.56;
+					* (View.zoomMax - View.zoomMin) / 100 + View.zoomMin)) + 0.56;
 					
-				UI.d3.defineZoom(App.scale);
+				View.defineZoom(App.scale);
 			});
 			
 			draggie.on("dragEnd", function(){
-				UI.d3.svg.call(d3.behavior.zoom().scale(App.scale).translate(UI.d3.translate).scaleExtent([UI.d3.zoomMin, UI.d3.zoomMax]).on("zoom", function(){
-					UI.d3.redrawGraph();
-					UI.d3.defineCursor();
+				View.svg.call(d3.behavior.zoom().scale(App.scale).translate(View.translate).scaleExtent([View.zoomMin, View.zoomMax]).on("zoom", function(){
+					View.redrawGraph();
+					View.defineCursor();
 				}));
 			});
 		},
@@ -442,6 +442,7 @@ UI.graph = (function(){
 	};
 
 	//initialisation
+	View.activateZoomCursor();
 	View.style();
 	window.addEventListener('resize', function(){
 		View.style();
