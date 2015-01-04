@@ -98,7 +98,7 @@ var App = (function(Words, User, UI, Route, Filters){
 			if(Route.params().word){
 				setTimeout(function(){
 					app.focusWord( decodeURI(Route.params().word) );
-				}, 2000);
+				}, 3000);
 			}
 		},
 
