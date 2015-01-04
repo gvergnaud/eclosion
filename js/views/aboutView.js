@@ -42,11 +42,11 @@ UI.about = (function(){
 		
 		soundMute : function(){
 			if(document.querySelector("#soundOption>i").classList.contains("icon-volume-down")){
-				document.querySelector("#player").muted = true;
+				document.querySelector("#player").pause();
 				document.querySelector("#soundOption>i").classList.add("icon-volume-off");
 				document.querySelector("#soundOption>i").classList.remove("icon-volume-down");
 			}else{
-				document.querySelector("#player").muted = false;
+				document.querySelector("#player").play();
 				document.querySelector("#soundOption>i").classList.remove("icon-volume-off");
 				document.querySelector("#soundOption>i").classList.add("icon-volume-down");
 			}

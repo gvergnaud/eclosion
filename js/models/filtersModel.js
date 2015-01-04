@@ -21,7 +21,7 @@ var Filters = (function(){
 			// si aucun filtre est actif, on execute le callback tout de suite
 			if(_filters.sexe === false && _filters.age === false) { 
 				
-				callback.call(this, words); 
+				callback.call(this, words);
 				
 			}else{
 

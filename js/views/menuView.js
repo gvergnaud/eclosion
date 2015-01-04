@@ -132,26 +132,36 @@ UI.menu = (function(){
 			filterSign.innerText = element.innerText;
 			filterSign.classList.add('filterSign');
 
+			filterSign.addEventListener('click', function(){
+				View.filterWordBoxView();
+			}, false);
+
 			var closeIcon = document.createElement('i');
 			closeIcon.classList.add('icon-cancel');
+
 			filterSign.appendChild(closeIcon);
 
+			//Si il sagit de du filtre sexe
 			if(element.classList.contains('sexe')){
 				
 				View.removeActiveFilter('sexe');
 
-				filterSign.addEventListener('click', function(){
+				closeIcon.addEventListener('click', function(e){
+					e.stopPropagation();
 					App.removeFilter('sexe');
 				}, false);
 
 				document.querySelector('.activeFilter.sexe').innerHTML = '';
 				document.querySelector('.activeFilter.sexe').appendChild(filterSign);
+			
 
+			//Si il sagit de du filtre age
 			}else{
 
 				View.removeActiveFilter('age');
 
-				filterSign.addEventListener('click', function(){
+				closeIcon.addEventListener('click', function(e){
+					e.stopPropagation();
 					App.removeFilter('age');
 				}, false);
 

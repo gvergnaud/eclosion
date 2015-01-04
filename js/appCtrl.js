@@ -119,9 +119,6 @@ var App = (function(Words, User, UI, Route, Filters){
 
 		onGraphReady: function (e) {
 			
-			// Lancement du son
-			document.querySelector("#player").play();
-
 			app.proposeRandomWord();
 
 			UI.graph.svg.call(d3.behavior.zoom().scaleExtent([UI.graph.zoomMin, UI.graph.zoomMax]).on("zoom", function(){

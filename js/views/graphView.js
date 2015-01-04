@@ -138,7 +138,10 @@ UI.graph = (function(){
 				     	var nbLinks = Math.sqrt(d.nbLinks);
 				     	if(nbLinks <= 0)
 				     		nbLinks = 1;
-			           return "translate(0," + -(nbLinks * (nbLinks * self.nodeSizeCoefficient + 2)) + ")";
+				     	if(nbLinks * (nbLinks * self.nodeSizeCoefficient) <= 70)
+		         			return "translate(0," + -(nbLinks * (nbLinks * self.nodeSizeCoefficient + 2)) + ")"; 
+		         		else
+		         			return "translate(0, -70)";
 			        })
 			     .text(function(d) {
 			       	return d.name.charAt(0).toUpperCase() + d.name.substring(1).toLowerCase();

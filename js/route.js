@@ -7,8 +7,15 @@ var Route = (function(){
 	var _root = '#';
 
 	var _getParams = function(){
-		var hashtab = window.location.hash.split('/');
-		_routeParams.word = hashtab[1];
+		var hashtab = window.location.hash.substring(1).split('/');
+
+		if(hashtab[0] === 'mapbase'){
+			_routeParams.mapbase = hashtab[1];
+			_routeParams.word = hashtab[2];
+			
+		}else{
+			_routeParams.word = hashtab[0];
+		}
 	};
 
 
@@ -16,7 +23,6 @@ var Route = (function(){
 	var route = {
 
 		params: function(){
-			_getParams();
 			return _routeParams;
 		},
 
@@ -24,21 +30,26 @@ var Route = (function(){
 			var path = _root;
 
 			if(params.mapbase){
-				path += '/' + params.mapbase;
+				path += 'mapbase/' + params.mapbase + '/';
 			}
 
 			if(params.word){
-				path += '/' + encodeURI(params.word);
+				path += encodeURI(params.word);
 			}
 
 			history.pushState({}, null, path);
+
+			_getParams();
 		},
 
 		flush: function(){
 			history.pushState({}, 'Home', window.location.href.split('#')[0]);
+
+			_getParams();
 		}
 	};
 
+	_getParams();
 
 	return route;
 

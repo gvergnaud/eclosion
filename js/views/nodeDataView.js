@@ -50,6 +50,7 @@ UI.nodeData = (function(){
 		        ];
 
 				Velocity.RunSequence(closeAnim);
+				
 				setTimeout(function(){
 					View.element.style.display = 'none';
 				}, 250);
