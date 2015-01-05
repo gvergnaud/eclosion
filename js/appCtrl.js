@@ -19,13 +19,13 @@ var App = (function(Words, User, UI, Route, Filters){
 			/* Gestion du Story Telling */
 	        document.getElementById('startExperience').addEventListener("click", function(e){
 	        	e.preventDefault();
-	        	UI.animation.skip();
+	        	UI.storyTelling.skip();
 		        app.init();
 	        }, false);
 
 	        document.getElementById('skip').addEventListener("click", function(e){
 	        	e.preventDefault();
-	        	UI.animation.skip();
+	        	UI.storyTelling.skip();
 		        app.init();
 	        }, false);
 	        
