@@ -1,4 +1,4 @@
-UI.userInfos = (function(){
+UI.userInfoOverlay = (function(){
 	'use strict';
 
 	// PRIVATE
@@ -8,13 +8,13 @@ UI.userInfos = (function(){
 
 		element: document.getElementById('userInfoOverlay'),
 
-		openOverlay: function() {
+		open: function() {
 			
 			Velocity(this.element, 'fadeIn');
 
 		},
 
-		closeOverlay: function() {
+		close: function() {
 
 			Velocity(this.element, 'fadeOut');
 			

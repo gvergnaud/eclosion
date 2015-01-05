@@ -195,7 +195,7 @@ var App = (function(Words, User, UI, Route, Filters){
 
 				User.update(sexe, age);
 
-				UI.userInfo.closeOverlay();
+				UI.userInfoOverlay.close();
 
 				document.dispatchEvent(app.event.userInfoSubmit);
 			}else{
@@ -332,7 +332,7 @@ var App = (function(Words, User, UI, Route, Filters){
 
 							}else{
 
-								UI.userInfo.openOverlay();
+								UI.userInfoOverlay.open();
 								UI.menu.closeModal();
 
 								document.addEventListener('userinfosubmit', function(e){
@@ -463,7 +463,7 @@ var App = (function(Words, User, UI, Route, Filters){
 
 									}else{
 
-										UI.userInfo.openOverlay();
+										UI.userInfoOverlay.open();
 										UI.menu.closeModal();
 
 										document.addEventListener('userinfosubmit', function(e){
