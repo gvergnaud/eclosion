@@ -259,8 +259,6 @@ var Words = (function(User){
 			if(!newWord || !proposedWord) { console.log('argument manquant pour addContribution'); return; }
 
 			if(this.isAFrenchWord(newWord)){ //le mot est français
-
-				console.log('le mot est français');
 				
 				// si l'utilisateur est nouveau
 				if(User.newUser){
@@ -273,13 +271,9 @@ var Words = (function(User){
 
 				if(node){ //le mot est déjà present dans le tableau nodes
 
-					console.log('le mot est déjà present dans le tableau nodes');
-
 					var link = this.areLinked(node, proposedNode);
 
 					if(link){// les deux mots sont déjà liés entre eux
-
-						console.log('les deux mots sont déjà liés entre eux');
 
 						//on ajoute 1 à la value de la liaison link
 						_updateLink(link);
