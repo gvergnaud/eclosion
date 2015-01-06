@@ -35,6 +35,8 @@ var App = (function(Words, User, UI, Route, Filters){
 
 			app.createCustomEvents();
 
+			app.connectToMapbase();
+
 			app.watchData();
 			
 			//lorsque le graph principale a été crée
@@ -93,13 +95,23 @@ var App = (function(Words, User, UI, Route, Filters){
 	        document.querySelector('#userInfoOverlay .userInfoForm').addEventListener('submit', app.onUserInfoSubmit, false);		
 		},
 
-		checkRoute: function(){
+		checkWordRoute: function(){
 			//si un mot est passé en parametre, on le focus
 			if(Route.params().word){
 				setTimeout(function(){
 					app.focusWord( decodeURI(Route.params().word) );
 				}, 3000);
 			}
+		},
+
+		connectToMapbase:function(){
+			//si un mot est passé en parametre, on le focus
+			var mapbase = Route.params().mapbase;
+			if(!mapbase){
+				mapbase = 'mots';
+			}
+
+			Words.connect(mapbase);
 		},
 
 		createCustomEvents: function(){
@@ -126,7 +138,7 @@ var App = (function(Words, User, UI, Route, Filters){
 				UI.graph.defineCursor();
 			}));
 
-			app.checkRoute();
+			app.checkWordRoute();
 
 			//remove l'event listener
 			e.target.removeEventListener(e.type, arguments.callee);

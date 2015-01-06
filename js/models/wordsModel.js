@@ -2,7 +2,7 @@ var Words = (function(User){
 	'use strict';
 
 	// PRIVATE
-	var _firebase = new Firebase('https://torid-inferno-6438.firebaseio.com/mots');
+	var _firebase = false;
 
 	var _words = false;
 
@@ -96,6 +96,10 @@ var Words = (function(User){
 
 		get: function(){
 			return _words;
+		},
+
+		connect: function(mapbase){
+			_firebase = new Firebase('https://torid-inferno-6438.firebaseio.com/' + mapbase);
 		},
 
 		watchData: function(callback){
@@ -342,7 +346,7 @@ var Words = (function(User){
 					}
 					ligne++; 
 				}
-					
+
 				return drapeau;
 			}
 
