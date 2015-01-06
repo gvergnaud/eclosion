@@ -89,6 +89,14 @@ var Words = (function(User){
 		xmlhttp.send(null);
 	};
 
+	var _formateAsWordsObject = function(words){
+		if(!words.links){ words.links = []; }
+		if(!words.nodes){ words.nodes = []; }
+		if(!words.contributors){ words.contributors = 0; }
+
+		return words;
+	}
+
 
 	// PUBLIC
 
@@ -105,16 +113,16 @@ var Words = (function(User){
 		watchData: function(callback){
 			_firebase.on('value', function (snapshot) {
 				//GET DATA
-				_words = snapshot.val();
-				callback.call(this, snapshot.val());
+				_words = _formateAsWordsObject( snapshot.val() );
+				callback.call(this, _formateAsWordsObject( snapshot.val() ));
 			});
 		},
 
 		getDataOnce: function(callback){
 			_firebase.once("value", function (snapshot) {
 				//GET DATA
-				_words = snapshot.val();
-				callback.call(this, snapshot.val());
+				_words = _formateAsWordsObject( snapshot.val() );
+				callback.call(this, _formateAsWordsObject( snapshot.val() ));
 			});
 		},
 
