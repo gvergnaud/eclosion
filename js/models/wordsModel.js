@@ -50,7 +50,6 @@ var Words = (function(User){
 		var user = User.get();
 
 		//incrémente le nb de laison des nodes cocernés
-
 		_words.nodes[sourceNode.index].nbLinks += 1;
 		_words.nodes[targetNode.index].nbLinks += 1;
 
@@ -90,6 +89,7 @@ var Words = (function(User){
 	};
 
 	var _formateAsWordsObject = function(words){
+		if(!words){ words = {}; }
 		if(!words.links){ words.links = []; }
 		if(!words.nodes){ words.nodes = []; }
 		if(!words.contributors){ words.contributors = 0; }
@@ -102,6 +102,8 @@ var Words = (function(User){
 
 	var wordsModel = {
 
+		ignoreDico: false,
+
 		get: function(){
 			return _words;
 		},
@@ -113,6 +115,7 @@ var Words = (function(User){
 		watchData: function(callback){
 			_firebase.on('value', function (snapshot) {
 				//GET DATA
+				console.log(_formateAsWordsObject( snapshot.val() ));
 				_words = _formateAsWordsObject( snapshot.val() );
 				callback.call(this, _formateAsWordsObject( snapshot.val() ));
 			});
@@ -127,7 +130,8 @@ var Words = (function(User){
 		},
 
 		getRandomWord: function(){
-			return _words.nodes[Math.ceil(Math.random()*(_words.nodes.length))-1].name;
+			if(_words.nodes.length)
+				return _words.nodes[Math.ceil(Math.random()*(_words.nodes.length))-1].name;
 		},
 
 		getNodeFromWord: function(word){
@@ -270,7 +274,7 @@ var Words = (function(User){
 
 			if(!newWord || !proposedWord) { console.log('argument manquant pour addContribution'); return; }
 
-			if(this.isAFrenchWord(newWord)){ //le mot est français
+			if(this.isAFrenchWord(newWord) || this.ignoreDico){ //le mot est français
 				
 				// si l'utilisateur est nouveau
 				if(User.newUser){

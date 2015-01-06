@@ -107,8 +107,11 @@ var App = (function(Words, User, UI, Route, Filters){
 		connectToMapbase:function(){
 			//si un mot est passé en parametre, on le focus
 			var mapbase = Route.params().mapbase;
+			
 			if(!mapbase){
 				mapbase = 'mots';
+			}else{
+				Words.ignoreDico = true;
 			}
 
 			Words.connect(mapbase);
@@ -171,9 +174,18 @@ var App = (function(Words, User, UI, Route, Filters){
 		},
 
 		onUserContribution: function (e) {
-			setTimeout(function(){
-				app.focusWord(app.lastUserContribution);
-			}, 2000);
+			//si un mot est actif, on refocus le mot actif
+			if(_activeWord){
+				setTimeout(function(){
+					app.focusWord(_activeWord);
+				}, 2000);
+			}
+			//sinon on focus le nouveau mot
+			else{
+				setTimeout(function(){
+					app.focusWord(app.lastUserContribution);
+				}, 2000);
+			}
 
 			app.proposeRandomWord();
 
@@ -320,67 +332,69 @@ var App = (function(Words, User, UI, Route, Filters){
 					var contribution = this.value.toLowerCase();
 					var linkedWord;
 
-					if(Words.isAFrenchWord(contribution)){
 
-						// si la contribution vien de la fenetre nodeData
-						if(e.target.getAttribute('data-activeWord') === 'activeWord'){
-							linkedWord = _activeWord;
+					// si la contribution vien de la fenetre nodeData
+					if(e.target.getAttribute('data-activeWord') === 'activeWord'){
+						linkedWord = _activeWord;
+					}else{
+						linkedWord = _proposedWord;
+					}
+
+					//si le mot tapé par l'utilisateur n'est pas le mot proposé
+					if(contribution !== linkedWord){
+						// si les infos d'utilisateur sont remplies
+						if(!(User.get().sexe === 'unknown') && !(User.get().age === 'unknown')){
+											
+							Words.addContribution(contribution, linkedWord, 
+								function(){ //success
+									app.lastUserContribution = contribution;
+									document.dispatchEvent(app.event.userContribution);
+								},
+								function(error){
+									if(e.target.getAttribute('data-activeWord') === 'activeWord'){
+										UI.notification(document.querySelector('#nodeData .error'), 'le mot n\'est pas français');
+									}else{
+										UI.notification(document.querySelector('.addWordBox .error'), 'le mot n\'est pas français');
+									}
+								}
+							);
+
 						}else{
-							linkedWord = _proposedWord;
-						}
 
-						//si le mot tapé par l'utilisateur n'est pas le mot proposé
-						if(contribution !== linkedWord){
-							// si les infos d'utilisateur sont remplies
-							if(!(User.get().sexe === 'unknown') && !(User.get().age === 'unknown')){
-												
+							UI.userInfoOverlay.open();
+							UI.menu.closeModal();
+
+							document.addEventListener('userinfosubmit', function(e){
+								
 								Words.addContribution(contribution, linkedWord, 
 									function(){ //success
 										app.lastUserContribution = contribution;
 										document.dispatchEvent(app.event.userContribution);
 									},
-									function(error){}
+									function(error){
+										if(e.target.getAttribute('data-activeWord') === 'activeWord'){
+											UI.notification(document.querySelector('#nodeData .error'), 'le mot n\'est pas français');
+										}else{
+											UI.notification(document.querySelector('.addWordBox .error'), 'le mot n\'est pas français');
+										}
+									}
 								);
 
-							}else{
+								//remove l'event listener
+								e.target.removeEventListener(e.type, arguments.callee);
+							});
 
-								UI.userInfoOverlay.open();
-								UI.menu.closeModal();
-
-								document.addEventListener('userinfosubmit', function(e){
-									
-									Words.addContribution(contribution, linkedWord, 
-										function(){ //success
-											app.lastUserContribution = contribution;
-											document.dispatchEvent(app.event.userContribution);
-										},
-										function(error){}
-									);
-
-									//remove l'event listener
-									e.target.removeEventListener(e.type, arguments.callee);
-								});
-
-							}
-
-							this.value = '';
-						
-						}else{
-							if(e.target.getAttribute('data-activeWord') === 'activeWord'){
-								UI.notification(document.querySelector('#nodeData .error'), 'Choisissez un mot différent !');
-							}else{
-								UI.notification(document.querySelector('.addWordBox .error'), 'Choisissez un mot différent !');
-							}
 						}
 
+						this.value = '';
+					
 					}else{
 						if(e.target.getAttribute('data-activeWord') === 'activeWord'){
-							UI.notification(document.querySelector('#nodeData .error'), 'le mot n\'est pas français');
+							UI.notification(document.querySelector('#nodeData .error'), 'Choisissez un mot différent !');
 						}else{
-							UI.notification(document.querySelector('.addWordBox .error'), 'le mot n\'est pas français');
+							UI.notification(document.querySelector('.addWordBox .error'), 'Choisissez un mot différent !');
 						}
-					}
-					
+					}				
 				}
 			}
 		},
@@ -459,7 +473,7 @@ var App = (function(Words, User, UI, Route, Filters){
 
 					}else{
 						
-						if(Words.isAFrenchWord(value)){
+						if(Words.isAFrenchWord(value) || Route.params().mapbase){
 
 							var notifElement = document.querySelector('.searchBox p.error');
 
