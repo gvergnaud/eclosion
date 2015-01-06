@@ -31,6 +31,8 @@ var Route = (function(){
 
 			if(params.mapbase){
 				path += 'mapbase/' + params.mapbase + '/';
+			}else if(_routeParams.mapbase){
+				path += 'mapbase/' + _routeParams.mapbase + '/';
 			}
 
 			if(params.word){
@@ -43,7 +45,14 @@ var Route = (function(){
 		},
 
 		flush: function(){
-			history.pushState({}, 'Home', window.location.href.split('#')[0]);
+
+			var path = _root;
+
+			if(_routeParams.mapbase){
+				history.pushState({}, 'Home', path += 'mapbase/' + _routeParams.mapbase + '/');
+			}else{
+				history.pushState({}, 'Home', window.location.href.split('#')[0]);
+			}
 
 			_getParams();
 		}
