@@ -52,16 +52,25 @@ UI.graph = (function(){
 			var self = this;
 			
 			var width = window.innerWidth,
-				height = window.innerHeight;
-	
+				height = window.innerHeight,
+				gravity,
+				charge = -4000,
+				linkDistance = 15;
+
+			//gere la gravité en fonction du nombre de mots presents
+			if(words.nodes.length > 100)
+				gravity	= .01;
+			else
+				gravity = 1 / words.nodes.length;
+
 			View.wordGraph.innerHTML = '';
 	
 			var color = d3.scale.category20();
 	
 			this.force = d3.layout.force()
-				.gravity(.01)
-			    .charge(-4000)
-			    .linkDistance(15)
+				.gravity(gravity)
+			    .charge(charge)
+			    .linkDistance(linkDistance)
 			    .size([width, height]);
 			
 			// Création du SVG

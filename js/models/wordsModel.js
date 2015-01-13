@@ -115,7 +115,6 @@ var Words = (function(User){
 		watchData: function(callback){
 			_firebase.on('value', function (snapshot) {
 				//GET DATA
-				console.log(_formateAsWordsObject( snapshot.val() ));
 				_words = _formateAsWordsObject( snapshot.val() );
 				callback.call(this, _formateAsWordsObject( snapshot.val() ));
 			});

@@ -105,12 +105,14 @@ var App = (function(Words, User, UI, Route, Filters){
 		},
 
 		connectToMapbase:function(){
-			//si un mot est passé en parametre, on le focus
 			var mapbase = Route.params().mapbase;
+			var defaultMapbase = 'mots';
 			
 			if(!mapbase){
-				mapbase = 'mots';
+				//
+				mapbase = defaultMapbase;
 			}else{
+				// si le mapbase est privé on ignore le dictionnaire
 				Words.ignoreDico = true;
 			}
 
@@ -292,7 +294,7 @@ var App = (function(Words, User, UI, Route, Filters){
 		},
 
 		proposeRandomWord: function(){
-			//rÃ©cupÃ¨re un mot au hasard pour faire contribuer l'utilisateur
+			//récupère un mot au hasard pour faire contribuer l'utilisateur
 			_proposedWord = Words.getRandomWord();
 
 			UI.printWord(_proposedWord);
