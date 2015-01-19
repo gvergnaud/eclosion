@@ -14,6 +14,7 @@ UI.graph = (function(){
 		zoomMax : 3,
 		translate : [0, 0],
 
+		//status
 		created: false,
 
 		style: function(){
@@ -53,15 +54,11 @@ UI.graph = (function(){
 			
 			var width = window.innerWidth,
 				height = window.innerHeight,
-				gravity,
 				charge = -4000,
 				linkDistance = 15;
 
 			//gere la gravité en fonction du nombre de mots presents
-			if(words.nodes.length > 100)
-				gravity	= .01;
-			else
-				gravity = 1 / words.nodes.length;
+			var gravity = (words.nodes.length < 100) && (words.nodes.length >= 1) ? (1 / words.nodes.length) : .01;
 
 			View.wordGraph.innerHTML = '';
 	
@@ -459,7 +456,6 @@ UI.graph = (function(){
 	window.addEventListener('resize', function(){
 		View.style();
 	}, false);
-
 
 	return View;
 

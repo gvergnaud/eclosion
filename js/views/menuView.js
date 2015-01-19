@@ -114,12 +114,12 @@ UI.menu = (function(){
 
 		},
 		
-		addClickStyle : function(element){
+		addClickStyle: function(element){
 			View.removeAllClickStyle();
 			element.parentNode.classList.add("optionClick");
 		},
 		
-		removeAllClickStyle : function(element){
+		removeAllClickStyle: function(element){
 			var elements = document.getElementsByClassName("optioncontainer");
 			[].forEach.call(elements, function(element){
 				element.classList.remove('optionClick');
