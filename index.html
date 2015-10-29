@@ -54,7 +54,7 @@
                     <!-- Menu caché pour l'ajout de mot -->
                     <i class="closeMenu flaticon-cross97" onclick="UI.menu.closeModal()"></i>
                     <div id="writeWordForm" class="optionsForm">
-                        <p id="proposedWord">Si je vous dit :&nbsp;<span id="proposedWordText"></span>...</p>
+                        <p id="proposedWord">Si je vous dis :&nbsp;<span id="proposedWordText"></span>...</p>
                         <input type="text" class="addContribution optionsInputText" class="optionsInputText" placeholder="Ecrivez le mot qui vous vient à l'esprit" />
                         <p class="error"></p>
                     </div>
@@ -78,17 +78,17 @@
                         <div class="filters">
                             <p>AGE</p>
                             <div class="agefilter">
-                                <button class="filterbuttons age" onclick="app.addFilter(event, 'age', 'under25')">-25 ans</button>
-                                <button class="filterbuttons age" onclick="app.addFilter(event, 'age', '25to35')">25-35 ans</button>
-                                <button class="filterbuttons age" onclick="app.addFilter(event, 'age', '35to45')">35-45 ans</button>
-                                <button class="filterbuttons age" onclick="app.addFilter(event, 'age', 'above45')">+45 ans</button>
+                                <button class="filterbuttons age" onclick="App.toggleFilter(event, 'age', 'under25')">-25 ans</button>
+                                <button class="filterbuttons age" onclick="App.toggleFilter(event, 'age', '25to35')">25-35 ans</button>
+                                <button class="filterbuttons age" onclick="App.toggleFilter(event, 'age', '35to45')">35-45 ans</button>
+                                <button class="filterbuttons age" onclick="App.toggleFilter(event, 'age', 'above45')">+45 ans</button>
                             </div>
                         </div>
                         <div class="filters">
                             <p>SEXE</p>
                             <div class="sexfilter">
-                                <button class="filterbuttons sexe" onclick="app.addFilter(event, 'sexe', 'male')">Homme</button>
-                                <button class="filterbuttons sexe" onclick="app.addFilter(event, 'sexe', 'female')">Femme</button>
+                                <button class="filterbuttons sexe" onclick="App.toggleFilter(event, 'sexe', 'male')">Homme</button>
+                                <button class="filterbuttons sexe" onclick="App.toggleFilter(event, 'sexe', 'female')">Femme</button>
                             </div>
                         </div>
                     </div>
@@ -204,7 +204,7 @@
 	        <img src="res/logo2_3.png" />
 	        <div>
 	        	<p>éclosion</p>
-	        	<a href="" id="startExperience">Commencer l'expérience</a>
+	        	<a href="" id="startExperience">Accéder au site</a>
 	        </div>
         </div>
         <a id="skip" href="">Passer</a>
@@ -388,13 +388,6 @@
             </aside>
         </footer>
         <audio src="res/son.mp3" id="player" loop="true"></audio>
-        <script src="js/libs/d3.v3.min.js"></script>
-        <script src="js/libs/firebase.js"></script>
-        <script src="js/libs/velocity.min.js"></script>
-        <script src="js/libs/velocity.ui.min.js"></script>
-        <script src="js/libs/draggabily.js"></script>
-        <script src="js/libs/countup.min.js"></script>
-        
         <!-- Twitter -->
         <script>window.twttr = (function (d, s, id) {
           var t, js, fjs = d.getElementsByTagName(s)[0];
@@ -416,9 +409,30 @@
             ga('create', 'UA-50091718-1');
             ga('send', 'pageview');
         </script>
+        
+        <script src="js/libs/d3.v3.min.js"></script>
+        <script src="js/libs/firebase.js"></script>
+        <script src="js/libs/velocity.min.js"></script>
+        <script src="js/libs/velocity.ui.min.js"></script>
+        <script src="js/libs/draggabily.js"></script>
+        <script src="js/libs/countup.min.js"></script>
 
-        <script src="js/model.js"></script>
-        <script src="js/ui.js"></script>
-        <script src="js/app.js"></script>
+        
+        <script src="js/models/userModel.js"></script>
+        <script src="js/models/wordsModel.js"></script>
+        <script src="js/models/filtersModel.js"></script>
+
+        <script src="js/views/ui.js"></script>
+        <script src="js/views/aboutView.js"></script>
+        <script src="js/views/globalDataView.js"></script>
+        <script src="js/views/graphView.js"></script>
+        <script src="js/views/menuView.js"></script>
+        <script src="js/views/nodeDataView.js"></script>
+        <script src="js/views/userInfosView.js"></script>
+        <script src="js/views/storyTellingView.js"></script>
+        
+        <script src="js/route.js"></script>
+
+        <script src="js/appCtrl.js"></script>
     </body>
 </html>
