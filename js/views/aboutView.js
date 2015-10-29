@@ -8,6 +8,8 @@ UI.about = (function(){
 
 		overlayApropos: document.querySelector('#aproposOverlay'),
 		overlayContainer: document.querySelector('#overlay-container'),
+		soundButton: document.querySelector("#soundOption>i"),
+		soundPlayer: document.querySelector("#player"),
 
 		openOverlay: function() {
 			var self = this;
@@ -41,17 +43,21 @@ UI.about = (function(){
 		},
 		
 		soundMute : function(){
-			if(document.querySelector("#soundOption>i").classList.contains("icon-volume-down")){
-				document.querySelector("#player").pause();
-				document.querySelector("#soundOption>i").classList.add("icon-volume-off");
-				document.querySelector("#soundOption>i").classList.remove("icon-volume-down");
+			if(this.soundButton.classList.contains("icon-volume-down")){
+				this.soundPlayer.pause();
+				this.soundButton.classList.add("icon-volume-off");
+				this.soundButton.classList.remove("icon-volume-down");
 			}else{
-				document.querySelector("#player").play();
-				document.querySelector("#soundOption>i").classList.remove("icon-volume-off");
-				document.querySelector("#soundOption>i").classList.add("icon-volume-down");
+				this.soundPlayer.play();
+				this.soundButton.classList.remove("icon-volume-off");
+				this.soundButton.classList.add("icon-volume-down");
 			}
 		}
 	};
+
+	(function Init(){
+		View.soundPlayer.play();
+	})();
 
 	return View;
 
